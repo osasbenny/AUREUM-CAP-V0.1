@@ -26,7 +26,7 @@ No existing RDS databases or SQS queues were present in `eu-north-1` during insp
 | S3 | `aureum-cap-v01-assets-795804715712` | Private CAP imports, campaign exports, audits, snapshots, and reports | Private, Block Public Access, SSE-S3 | Created |
 | SQS | `aureum-cap-v01-lead-processing` | Standard processing queue for CAP jobs | Owner-only access, SQS-managed encryption | Created |
 | SQS | `aureum-cap-v01-lead-processing-dlq` | Dead-letter queue for failed processing jobs | Owner-only access, SQS-managed encryption | Created |
-| RDS PostgreSQL | `aureum-cap-v01-db` | CAP source-of-truth database | PostgreSQL 18.3, `db.t4g.micro`, 20 GB, Single-AZ, encrypted, private, port 5432, no Multi-AZ | Backing-up / not yet Available |
+| RDS PostgreSQL | `aureum-cap-v01-db` | CAP source-of-truth database | PostgreSQL 18.3, `db.t4g.micro`, 20 GB, Single-AZ, encrypted, private, port 5432, no Multi-AZ | **Available** |
 
 RDS credentials are managed by AWS Secrets Manager; the generated password was not displayed or stored in source control. The RDS instance is being provisioned in the default VPC with a default security group and is **not publicly accessible**.
 
@@ -50,7 +50,7 @@ SES still showed **Verification pending** immediately after the DNS changes. DNS
 - **EventBridge rules:** pending a validated worker/API target; no schedule was activated without a consumer.
 - **CloudWatch alarms:** pending worker and delivery metrics; baseline AWS-managed RDS/SQS metrics are available.
 - **Hunter/OpenAI secrets:** no Hunter credential was supplied; the repository only contains server-side placeholders and no provider call is enabled.
-- **Database schema/migrations:** `db/schema.sql` is committed and syntax-checked; application requires the RDS endpoint and managed secret before applying it.
+- **Database schema/migrations:** RDS is now Available. `db/apply-schema.sh` and `db/verify-schema.sql` are committed; apply them only from a VPC-connected runner using the managed Secrets Manager value.
 - **Server/API boundary:** dynamic `/health`, `/readiness`, and dry-run `/api/v1/pilot/summary` are implemented; business API, authentication, and worker endpoints remain pending.
 - **DLQ redrive wiring:** queues exist; source-queue redrive policy should be attached after the worker retry policy is finalized.
 - **SES domain verification:** DKIM records are saved in cPanel; wait for DNS propagation and refresh SES until the identity becomes verified.
@@ -58,9 +58,8 @@ SES still showed **Verification pending** immediately after the DNS changes. DNS
 
 ## Next steps
 
-1. Wait for `aureum-cap-v01-db` to become available and capture its endpoint without exposing the password.
-2. Apply CAP PostgreSQL schema and migrations.
-3. Implement the server-side API and least-privilege worker role.
+1. Use a VPC-connected runner to apply `db/apply-schema.sh` with the managed Secrets Manager credential and run its verification query.
+2. Implement the server-side API and least-privilege worker role.
 4. Attach the DLQ redrive policy and add disabled EventBridge schedules.
 5. Add CloudWatch alarms for queue age/failures and RDS availability.
 6. Wait for SES DKIM verification, then request production access only after suppression and dry-run controls are reviewed.

@@ -7,10 +7,10 @@
 | Area | Status | Notes |
 |---|---|---|
 | Lead import | READY | 100 records normalized from supplied PDF |
-| PostgreSQL schema | READY TO APPLY | `db/schema.sql` covers the documented source-of-truth model; apply after RDS becomes Available |
+| PostgreSQL schema | READY TO APPLY | `db/schema.sql`, `db/apply-schema.sh`, and `db/verify-schema.sql` are prepared; run from a VPC-connected runner |
 | Server/API boundary | IMPROVED | Dynamic `/health`, `/readiness`, and dry-run `/api/v1/pilot/summary` endpoints implemented; business API/auth still required |
 | AWS S3/SQS foundation | READY | Private bucket, processing queue, and DLQ created |
-| RDS PostgreSQL | PROVISIONING | `aureum-cap-v01-db`, private `db.t4g.micro`, PostgreSQL 18.3, Single-AZ |
+| RDS PostgreSQL | AVAILABLE | `aureum-cap-v01-db`, private `db.t4g.micro`, PostgreSQL 18.3, Single-AZ; endpoint is available in AWS |
 | Deduplication | IMPROVED | Deterministic seed validation now checks normalized business keys; database-backed dedupe remains server work |
 | Website verification | BLOCKED | Needs approved verifier/provider and evidence storage |
 | Hunter enrichment | BLOCKED | Credential and provider adapter not configured |
@@ -26,7 +26,7 @@
 
 ## Remaining task list to reach 100% production CAP V0.1
 
-- [ ] Wait for RDS to become `Available`, retrieve its endpoint from AWS, and apply `db/schema.sql` using the managed secret.
+- [ ] Apply `db/schema.sql` from a VPC-connected runner using the managed secret, then run `db/verify-schema.sql`.
 - [x] Add deterministic seed validation; database-backed deduplication and audit events remain.
 - [ ] Implement website verification with stored evidence, timestamps, status, and retry policy.
 - [ ] Implement replaceable Hunter adapter, email verification, rate-limit handling, and secret retrieval.
