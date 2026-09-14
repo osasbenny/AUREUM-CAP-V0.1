@@ -26,7 +26,7 @@ No existing RDS databases or SQS queues were present in `eu-north-1` during insp
 | S3 | `aureum-cap-v01-assets-795804715712` | Private CAP imports, campaign exports, audits, snapshots, and reports | Private, Block Public Access, SSE-S3 | Created |
 | SQS | `aureum-cap-v01-lead-processing` | Standard processing queue for CAP jobs | Owner-only access, SQS-managed encryption | Created |
 | SQS | `aureum-cap-v01-lead-processing-dlq` | Dead-letter queue for failed processing jobs | Owner-only access, SQS-managed encryption | Created |
-| RDS PostgreSQL | `aureum-cap-v01-db` | CAP source-of-truth database | PostgreSQL 18.3, `db.t4g.micro`, 20 GB, Single-AZ, encrypted, private, port 5432, no Multi-AZ | Creating |
+| RDS PostgreSQL | `aureum-cap-v01-db` | CAP source-of-truth database | PostgreSQL 18.3, `db.t4g.micro`, 20 GB, Single-AZ, encrypted, private, port 5432, no Multi-AZ | Backing-up / not yet Available |
 
 RDS credentials are managed by AWS Secrets Manager; the generated password was not displayed or stored in source control. The RDS instance is being provisioned in the default VPC with a default security group and is **not publicly accessible**.
 
@@ -41,8 +41,9 @@ A sending domain or email identity must be supplied and verified before SES can 
 - **IAM runtime role/policies:** pending final API/worker target; no broad policies were created.
 - **EventBridge rules:** pending a validated worker/API target; no schedule was activated without a consumer.
 - **CloudWatch alarms:** pending worker and delivery metrics; baseline AWS-managed RDS/SQS metrics are available.
-- **Hunter/OpenAI secrets:** not supplied; no credentials were entered or exposed.
-- **Database schema/migrations:** pending RDS availability and application API implementation.
+- **Hunter/OpenAI secrets:** no Hunter credential was supplied; the repository only contains server-side placeholders and no provider call is enabled.
+- **Database schema/migrations:** `db/schema.sql` is committed and syntax-checked; application requires the RDS endpoint and managed secret before applying it.
+- **Server/API boundary:** `/health` and `/readiness` are implemented; business API, authentication, and worker endpoints remain pending.
 - **DLQ redrive wiring:** queues exist; source-queue redrive policy should be attached after the worker retry policy is finalized.
 
 ## Next steps
