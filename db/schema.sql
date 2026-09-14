@@ -1,0 +1,36 @@
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+CREATE EXTENSION IF NOT EXISTS citext;
+
+CREATE TABLE IF NOT EXISTS organizations (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), name text NOT NULL, legal_name text, industry text, business_type text, size_band text, country text DEFAULT 'US', region text, city text, website text, source text NOT NULL DEFAULT 'supplied_pdf', source_url text, created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now());
+CREATE INDEX IF NOT EXISTS organizations_website_idx ON organizations(website);
+CREATE TABLE IF NOT EXISTS people (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), organization_id uuid REFERENCES organizations(id), first_name text, last_name text, role text, email citext, phone text, linkedin_url text, source text, created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now());
+CREATE TABLE IF NOT EXISTS contacts (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), person_id uuid REFERENCES people(id), organization_id uuid REFERENCES organizations(id), email citext, phone text, verification_status text NOT NULL DEFAULT 'not_checked', verification_source text, verified_at timestamptz);
+CREATE INDEX IF NOT EXISTS contacts_email_idx ON contacts(email);
+CREATE TABLE IF NOT EXISTS campaigns (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), name text NOT NULL UNIQUE, target_country text, target_industries jsonb NOT NULL DEFAULT '[]', target_size text, buyer_roles jsonb NOT NULL DEFAULT '[]', offer text, min_lead_score numeric(5,2) DEFAULT 0, channel text NOT NULL DEFAULT 'email', status text NOT NULL DEFAULT 'DRAFT', start_at timestamptz, end_at timestamptz, created_at timestamptz NOT NULL DEFAULT now());
+CREATE TABLE IF NOT EXISTS prospects (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), organization_id uuid REFERENCES organizations(id), person_id uuid REFERENCES people(id), campaign_id uuid NOT NULL REFERENCES campaigns(id), lifecycle_stage text NOT NULL DEFAULT 'IMPORTED', lead_score numeric(5,2), intent_score numeric(5,2), contact_quality_score numeric(5,2), status text NOT NULL DEFAULT 'ACTIVE', suppression_status text NOT NULL DEFAULT 'CLEAR', created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now());
+CREATE INDEX IF NOT EXISTS prospects_campaign_status_idx ON prospects(campaign_id,status);
+CREATE INDEX IF NOT EXISTS prospects_score_idx ON prospects(lead_score);
+CREATE TABLE IF NOT EXISTS products (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), name text NOT NULL UNIQUE, category text, revenue_lane text, price_model text, target_profiles jsonb NOT NULL DEFAULT '{}', landing_url text, active boolean NOT NULL DEFAULT true);
+CREATE TABLE IF NOT EXISTS product_fit (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), prospect_id uuid NOT NULL REFERENCES prospects(id), product_id uuid NOT NULL REFERENCES products(id), fit_score numeric(5,2) NOT NULL, evidence jsonb NOT NULL DEFAULT '{}', recommendation text, created_at timestamptz NOT NULL DEFAULT now(), UNIQUE(prospect_id,product_id));
+CREATE TABLE IF NOT EXISTS website_audits (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), organization_id uuid NOT NULL REFERENCES organizations(id), audit_version text NOT NULL, score numeric(5,2), findings jsonb NOT NULL DEFAULT '{}', opportunities jsonb NOT NULL DEFAULT '{}', technology jsonb NOT NULL DEFAULT '{}', audited_at timestamptz NOT NULL DEFAULT now());
+CREATE TABLE IF NOT EXISTS offers (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), prospect_id uuid NOT NULL REFERENCES prospects(id), product_id uuid NOT NULL REFERENCES products(id), offer_type text, value numeric(12,2), reasoning text, generated_text text, approved boolean NOT NULL DEFAULT false, created_at timestamptz NOT NULL DEFAULT now());
+CREATE TABLE IF NOT EXISTS messages (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), prospect_id uuid NOT NULL REFERENCES prospects(id), campaign_id uuid NOT NULL REFERENCES campaigns(id), product_id uuid REFERENCES products(id), provider_message_id text, subject text, body text, status text NOT NULL DEFAULT 'DRAFT', sent_at timestamptz, delivered_at timestamptz, opened_at timestamptz, replied_at timestamptz);
+CREATE INDEX IF NOT EXISTS messages_prospect_status_idx ON messages(prospect_id,status);
+CREATE TABLE IF NOT EXISTS responses (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), prospect_id uuid NOT NULL REFERENCES prospects(id), message_id uuid REFERENCES messages(id), classification text NOT NULL DEFAULT 'UNKNOWN', confidence numeric(5,2), summary text, received_at timestamptz NOT NULL DEFAULT now());
+CREATE TABLE IF NOT EXISTS opportunities (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), prospect_id uuid NOT NULL REFERENCES prospects(id), product_id uuid NOT NULL REFERENCES products(id), estimated_value numeric(12,2), probability numeric(5,2), expected_revenue numeric(12,2), stage text NOT NULL DEFAULT 'DISCOVERED', owner text, created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now());
+CREATE TABLE IF NOT EXISTS deals (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), opportunity_id uuid NOT NULL REFERENCES opportunities(id), value numeric(12,2), currency char(3) NOT NULL DEFAULT 'USD', status text NOT NULL DEFAULT 'OPEN', won_at timestamptz, lost_at timestamptz, loss_reason text);
+CREATE TABLE IF NOT EXISTS purchases (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), person_id uuid REFERENCES people(id), organization_id uuid REFERENCES organizations(id), product_id uuid NOT NULL REFERENCES products(id), order_reference text, amount numeric(12,2), currency char(3) NOT NULL DEFAULT 'USD', source_campaign_id uuid REFERENCES campaigns(id), purchased_at timestamptz NOT NULL DEFAULT now());
+CREATE TABLE IF NOT EXISTS suppression_list (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), email citext, phone text, reason text NOT NULL, source text, created_at timestamptz NOT NULL DEFAULT now());
+CREATE UNIQUE INDEX IF NOT EXISTS suppression_email_idx ON suppression_list(email) WHERE email IS NOT NULL;
+CREATE TABLE IF NOT EXISTS events (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), event_type text NOT NULL, entity_type text NOT NULL, entity_id uuid, payload jsonb NOT NULL DEFAULT '{}', occurred_at timestamptz NOT NULL DEFAULT now());
+CREATE INDEX IF NOT EXISTS events_entity_idx ON events(entity_type,entity_id,occurred_at);
+
+INSERT INTO products(name,category,revenue_lane,price_model,target_profiles) VALUES
+('Premium Website Development','web','high_ticket','project','{"SME":true,"local_business":true}'),
+('AuraPOS','saas','recurring','subscription','{"restaurant":true}'),
+('AuraReach','saas','recurring','subscription','{"agency":true,"freelancer":true}'),
+('FaithConnect','saas','recurring','subscription','{"church":true}'),
+('Business Automation','services','high_ticket','project','{"manual_processes":true}'),
+('Custom Software','services','high_ticket','project','{"organization":true}')
+ON CONFLICT (name) DO NOTHING;
+INSERT INTO campaigns(name,target_country,target_industries,offer,min_lead_score,status) VALUES ('CAP V0.1 — Campaign 001 — Houston Website Opportunity','US','["car wash","lawn care","roofing","window tinting","real estate","plumbing","carpentry","barber shop"]','Premium Website Development',60,'DRAFT') ON CONFLICT (name) DO NOTHING;

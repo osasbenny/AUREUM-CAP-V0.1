@@ -13,9 +13,16 @@ Build verification:
 
 ```bash
 pnpm build
+pnpm check
 ```
 
-The app is intentionally static in this pilot cut. It does not send email, call Hunter/OpenAI, or mutate production AWS resources. The UI communicates those gates explicitly so the console cannot be mistaken for a live outreach system.
+The browser console is safe by default: it does not send email, call Hunter/OpenAI, or mutate production AWS resources. The server boundary exposes `/health` and `/readiness`; provider credentials and database connection strings are server-only environment variables.
+
+## Database
+
+`db/schema.sql` is the first PostgreSQL migration for the documented source-of-truth model. It includes organizations, people, contacts, campaigns, prospects, products, product fit, website audits, offers, messages, responses, opportunities, deals, purchases, suppression, and events, together with the critical indexes and safe starter products/campaign.
+
+Apply it only after RDS reports `Available`, using the managed database secret from AWS Secrets Manager. Never place the generated RDS password in Git, Vercel client variables, or the browser.
 
 ## Pilot operating rules
 
@@ -32,14 +39,18 @@ The app is intentionally static in this pilot cut. It does not send email, call 
 
 ## Production integration boundary
 
-The next production slice should add a server-side API and PostgreSQL persistence, then managed secrets, provider adapters, queue workers, SES identity verification, EventBridge scheduling, and CloudWatch events. No provider credential belongs in the browser or repository.
+`.env.example` documents the server-only configuration for AWS, PostgreSQL, Hunter, OpenAI, and SES. `server/index.mjs` reports whether each dependency is configured and deliberately keeps outbound sending disabled unless both `CAP_SEND_ENABLED=true` and `SES_FROM_EMAIL` are present. Provider adapters, migrations, queue workers, authentication, and operator approval APIs remain required before live outreach.
 
 ## Deployment
 
-This is a Vite static build and can be deployed to Vercel as a production project. Configure the project root as the repository root and use:
+The static console is deployed to Vercel as a production project. Configure the project root as the repository root and use:
 
 - Build command: `pnpm build`
 - Output directory: `dist`
 - Install command: `pnpm install`
 
-No environment variables are required for this static review console.
+No environment variables are required for the static review console. Do not expose server secrets as `VITE_*` variables.
+
+## AWS foundation
+
+See [`AWS_SETUP.md`](./AWS_SETUP.md) for the verified S3, SQS, RDS, SES, cost-control, and remaining-integration status.
