@@ -50,7 +50,7 @@ SES still showed **Verification pending** immediately after the DNS changes. DNS
 - **EventBridge rules:** pending a validated worker/API target; no schedule was activated without a consumer.
 - **CloudWatch alarms:** pending worker and delivery metrics; baseline AWS-managed RDS/SQS metrics are available.
 - **Hunter/OpenAI secrets:** no Hunter credential was supplied; the repository only contains server-side placeholders and no provider call is enabled.
-- **Database schema/migrations:** RDS is now Available. `db/apply-schema.sh` and `db/verify-schema.sql` are committed; apply them only from a VPC-connected runner using the managed Secrets Manager value.
+- **Database schema/migrations:** RDS is now Available. `db/apply-schema.sh` and `db/verify-schema.sql` are committed; apply them only from a VPC-connected runner using the managed Secrets Manager value. AWS CloudShell was opened and confirmed unsuitable because it is not connected to the private RDS VPC; the RDS Query Editor is unavailable under the current free-plan limitation.
 - **Server/API boundary:** dynamic `/health`, `/readiness`, and dry-run `/api/v1/pilot/summary` are implemented; business API, authentication, and worker endpoints remain pending.
 - **DLQ redrive wiring:** queues exist; source-queue redrive policy should be attached after the worker retry policy is finalized.
 - **SES domain verification:** DKIM records are saved in cPanel; wait for DNS propagation and refresh SES until the identity becomes verified.
