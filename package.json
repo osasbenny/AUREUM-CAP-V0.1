@@ -8,7 +8,9 @@
     "build": "vite build",
     "preview": "vite preview --host 0.0.0.0",
     "api": "node server/index.mjs",
-    "check": "node --check server/index.mjs"
+    "check": "node --check server/index.mjs",
+    "validate:pilot": "node scripts/validate-pilot.mjs",
+    "smoke": "npm run check && npm run validate:pilot && npm run build"
   },
   "devDependencies": {"vite":"^7.1.7"}
 }

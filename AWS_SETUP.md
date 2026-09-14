@@ -51,9 +51,10 @@ SES still showed **Verification pending** immediately after the DNS changes. DNS
 - **CloudWatch alarms:** pending worker and delivery metrics; baseline AWS-managed RDS/SQS metrics are available.
 - **Hunter/OpenAI secrets:** no Hunter credential was supplied; the repository only contains server-side placeholders and no provider call is enabled.
 - **Database schema/migrations:** `db/schema.sql` is committed and syntax-checked; application requires the RDS endpoint and managed secret before applying it.
-- **Server/API boundary:** `/health` and `/readiness` are implemented; business API, authentication, and worker endpoints remain pending.
+- **Server/API boundary:** dynamic `/health`, `/readiness`, and dry-run `/api/v1/pilot/summary` are implemented; business API, authentication, and worker endpoints remain pending.
 - **DLQ redrive wiring:** queues exist; source-queue redrive policy should be attached after the worker retry policy is finalized.
 - **SES domain verification:** DKIM records are saved in cPanel; wait for DNS propagation and refresh SES until the identity becomes verified.
+- **Worker/incident operations:** queue contract, retry guidance, DLQ handling, and incident procedure are documented in `WORKER_RUNBOOK.md`; no consumer or schedule is enabled.
 
 ## Next steps
 
