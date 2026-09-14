@@ -99,3 +99,14 @@ curl http://127.0.0.1:8899/api/v1/pilot/summary
 ```
 
 **Conclusion:** CAP V0.1 is a strong foundation at approximately **25% of the requested production definition of done**. The next milestone is not visual polish; it is deploying the API, applying PostgreSQL, and making the approval-controlled processing pipeline durable and observable.
+
+## 90% threshold assessment
+
+The requested 90% threshold cannot be claimed from the current repository state. The added login footer and configurable API base URL improve presentation and deployment readiness, but they do not satisfy production workflow checklist items. Reaching 90% requires completing the P0 and P1 items above and verifying them in the deployed environment, especially PostgreSQL persistence, API deployment, SQS processing, SES event handling, suppression enforcement, and the controlled dry run. The project remains assessed at **25% against the supplied Definition of Done** until those gates are objectively verified.
+
+## Latest non-functional improvements
+
+- Login footer now uses `new Date().getFullYear()` so the copyright year updates automatically.
+- Footer attribution links to `https://instagram.com/osas.codes` with `noopener noreferrer`.
+- The Vercel frontend now supports a non-secret `VITE_API_BASE_URL` for a separately deployed backend.
+- No backend credentials or environment variable names are exposed in the public login interface.
