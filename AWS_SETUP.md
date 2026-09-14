@@ -5,6 +5,10 @@
 **Region:** Europe (Stockholm), `eu-north-1`  
 **Project:** Aureum CAP V0.1
 
+## Account and cost controls
+
+The AWS console shows **$100 USD in account credits** with 177 days remaining. The approved configuration uses the RDS free-tier-sized `db.t4g.micro`, Single-AZ, 20 GB storage, private access, no NAT Gateway, no Multi-AZ, and SES sandbox only.
+
 ## Existing relevant resources discovered
 
 Three existing S3 buckets were present and were not modified:
@@ -13,33 +17,40 @@ Three existing S3 buckets were present and were not modified:
 - `aureum-aurastudio-prod-assets-795804715712`
 - `aureum-silo-prod-assets-795804715712`
 
-No existing RDS databases and no existing SQS queues were present in `eu-north-1` during inspection.
+No existing RDS databases or SQS queues were present in `eu-north-1` during inspection.
 
 ## CAP resources created
 
-| Service | Resource | Purpose | Cost category | Status |
+| Service | Resource | Purpose | Configuration | Status |
 |---|---|---|---|---|
-| S3 | `aureum-cap-v01-assets-795804715712` | Private CAP imports, campaign exports, audits, snapshots, and reports | Low usage-based storage/request cost | Created |
-| SQS | `aureum-cap-v01-lead-processing` | Standard processing queue for CAP jobs | Low usage-based request cost | Created |
-| SQS | `aureum-cap-v01-lead-processing-dlq` | Dead-letter queue for failed processing jobs | Low usage-based request cost | Created |
+| S3 | `aureum-cap-v01-assets-795804715712` | Private CAP imports, campaign exports, audits, snapshots, and reports | Private, Block Public Access, SSE-S3 | Created |
+| SQS | `aureum-cap-v01-lead-processing` | Standard processing queue for CAP jobs | Owner-only access, SQS-managed encryption | Created |
+| SQS | `aureum-cap-v01-lead-processing-dlq` | Dead-letter queue for failed processing jobs | Owner-only access, SQS-managed encryption | Created |
+| RDS PostgreSQL | `aureum-cap-v01-db` | CAP source-of-truth database | PostgreSQL 18.3, `db.t4g.micro`, 20 GB, Single-AZ, encrypted, private, port 5432, no Multi-AZ | Creating |
 
-The S3 bucket was created with private ownership/access defaults, public access blocked, and SSE-S3 default encryption. The queues use standard SQS delivery, owner-only access policy, and SQS-managed encryption.
+RDS credentials are managed by AWS Secrets Manager; the generated password was not displayed or stored in source control. The RDS instance is being provisioned in the default VPC with a default security group and is **not publicly accessible**.
 
-## Not created / approval required
+## SES status
 
-- **RDS PostgreSQL:** no instance exists. Creating one can create ongoing charges and requires selecting instance class, storage, network/security groups, backups, and credentials. It is intentionally gated pending owner approval.
-- **SES:** no sending identity, DNS change, sandbox/production change, or campaign sending was performed. Sending configuration can affect email reputation and external domains, so it remains gated.
-- **IAM roles/policies:** no broad or application execution roles were created. Least-privilege policies require the final runtime/API architecture and target principals.
-- **Secrets Manager / SSM:** no secret values were entered or stored. Hunter/OpenAI/database credentials are not available in the repository or browser workflow.
-- **EventBridge:** no active rule was created because there is not yet a target worker/API and an active schedule without a validated consumer would be unsafe.
-- **CloudWatch:** no alarms were created because there are no CAP workers or delivery metrics to monitor yet.
+SES is healthy in `eu-north-1` but remains in the **sandbox**. Sending quota is 200 emails per 24 hours with a maximum send rate of 1 email/second; current usage is 0. No identities are verified, no domain or DNS records were changed, and no emails were sent.
 
-## Next AWS steps after approval
+A sending domain or email identity must be supplied and verified before SES can be used. Production access should remain disabled until the operator reviews the dry-run messages and suppression controls.
 
-1. Approve a low-cost RDS PostgreSQL configuration and networking plan.
-2. Configure secret storage without exposing credential values.
-3. Create least-privilege runtime role(s) for the eventual API/worker.
-4. Attach the DLQ redrive policy to the processing queue.
-5. Create disabled EventBridge schedules with validated worker targets.
-6. Configure SES identity and DNS only after confirming the sending domain and sandbox policy.
-7. Add CloudWatch alarms for queue age/failures and provider events.
+## Not created / pending integration
+
+- **IAM runtime role/policies:** pending final API/worker target; no broad policies were created.
+- **EventBridge rules:** pending a validated worker/API target; no schedule was activated without a consumer.
+- **CloudWatch alarms:** pending worker and delivery metrics; baseline AWS-managed RDS/SQS metrics are available.
+- **Hunter/OpenAI secrets:** not supplied; no credentials were entered or exposed.
+- **Database schema/migrations:** pending RDS availability and application API implementation.
+- **DLQ redrive wiring:** queues exist; source-queue redrive policy should be attached after the worker retry policy is finalized.
+
+## Next steps
+
+1. Wait for `aureum-cap-v01-db` to become available and capture its endpoint without exposing the password.
+2. Apply CAP PostgreSQL schema and migrations.
+3. Implement the server-side API and least-privilege worker role.
+4. Attach the DLQ redrive policy and add disabled EventBridge schedules.
+5. Add CloudWatch alarms for queue age/failures and RDS availability.
+6. Supply and verify an approved SES sender identity; remain in sandbox.
+7. Run a 10–20 lead dry run and require human approval before any real send.
