@@ -1,8 +1,10 @@
-# Project status — 2026-09-14
+# Project status — 2026-09-15
 
 ## Current status
 
 **Pilot console and first authenticated production foundation are implemented and build-verified.** The repository contains a protected operator dashboard, normalized 100-lead seed dataset, deterministic scoring and product-fit services, website verification, fallback message preparation, approval/suppression/audit APIs, PostgreSQL schema migration tooling, server-only readiness boundary, AWS foundation documentation, and deployment metadata.
+
+**Audited completion: 25% of the supplied production definition of done.** The six fully satisfied checklist items are internal website verification, deterministic scoring, deterministic product matching, labelled fallback messages, backup/recovery documentation, and the no-uncontrolled-outbound safety gate. Partial foundations are deliberately not counted as complete until deployed, persistent, observable, and end-to-end verified. See [`COMPLETION_AUDIT.md`](COMPLETION_AUDIT.md) for the item-by-item calculation and blockers.
 
 | Area | Status | Notes |
 |---|---|---|
@@ -44,4 +46,4 @@
 
 A real campaign can discover a prospect, store it, enrich it, score it, identify a relevant product, generate a personalized offer, send it under controlled policy, receive/classify a response, hand the opportunity to the founder, record a sale, and attribute revenue to campaign and product.
 
-**Current production-readiness assessment: not yet 100%.** Code-side validation, dynamic readiness reporting, and operational guidance have improved, but the remaining blockers require RDS availability, credentials, server-side integrations, a verified sending identity, and end-to-end testing; the implementation does not claim those external prerequisites are complete.
+**Current production-readiness assessment: 25%, not yet 100%.** Code-side validation, dynamic readiness reporting, and operational guidance have improved, but the remaining blockers require a deployed API, real production authentication, applied and verified RDS schema, PostgreSQL persistence, SQS workers, controlled scheduling, SES event handling, monitoring, and end-to-end testing; the implementation does not claim those external prerequisites are complete.
