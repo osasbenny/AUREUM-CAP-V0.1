@@ -32,9 +32,17 @@ RDS credentials are managed by AWS Secrets Manager; the generated password was n
 
 ## SES status
 
-SES is healthy in `eu-north-1` but remains in the **sandbox**. Sending quota is 200 emails per 24 hours with a maximum send rate of 1 email/second; current usage is 0. No identities are verified, no domain or DNS records were changed, and no emails were sent.
+SES is healthy in `eu-north-1` but remains in the **sandbox**. Sending quota is 200 emails per 24 hours with a maximum send rate of 1 email/second; current usage is 0. No emails were sent.
 
-A sending domain or email identity must be supplied and verified before SES can be used. Production access should remain disabled until the operator reviews the dry-run messages and suppression controls.
+The approved sender identity `mail.cactusdigitalmedia.ng` was created in SES with Easy DKIM. The three required CNAME records were successfully saved in cPanel Zone Editor for `cactusdigitalmedia.ng`:
+
+| Name | Target | Status |
+|---|---|---|
+| `i3sz72eiwqfr7ew2vjzgdxcot77cqf6r._domainkey.mail.cactusdigitalmedia.ng` | `i3sz72eiwqfr7ew2vjzgdxcot77cqf6r.dkim.amazonses.com` | Saved; SES verification pending |
+| `3yicgkffgdb53lrt5l27gud3w4jazydo._domainkey.mail.cactusdigitalmedia.ng` | `3yicgkffgdb53lrt5l27gud3w4jazydo.dkim.amazonses.com` | Saved; SES verification pending |
+| `hn472d2bidcbblpl37nfmbfs7t7hj4we._domainkey.mail.cactusdigitalmedia.ng` | `hn472d2bidcbblpl37nfmbfs7t7hj4we.dkim.amazonses.com` | Saved; SES verification pending |
+
+SES still showed **Verification pending** immediately after the DNS changes. DNS detection can take up to 72 hours. `aureum.cap@cactusdigitalmedia.ng` is the intended From address once the domain identity is verified. SMTP credentials were not created or stored; any future SMTP/API secret must be placed in AWS Secrets Manager or SSM, never in Git.
 
 ## Not created / pending integration
 
@@ -45,6 +53,7 @@ A sending domain or email identity must be supplied and verified before SES can 
 - **Database schema/migrations:** `db/schema.sql` is committed and syntax-checked; application requires the RDS endpoint and managed secret before applying it.
 - **Server/API boundary:** `/health` and `/readiness` are implemented; business API, authentication, and worker endpoints remain pending.
 - **DLQ redrive wiring:** queues exist; source-queue redrive policy should be attached after the worker retry policy is finalized.
+- **SES domain verification:** DKIM records are saved in cPanel; wait for DNS propagation and refresh SES until the identity becomes verified.
 
 ## Next steps
 
@@ -53,5 +62,5 @@ A sending domain or email identity must be supplied and verified before SES can 
 3. Implement the server-side API and least-privilege worker role.
 4. Attach the DLQ redrive policy and add disabled EventBridge schedules.
 5. Add CloudWatch alarms for queue age/failures and RDS availability.
-6. Supply and verify an approved SES sender identity; remain in sandbox.
+6. Wait for SES DKIM verification, then request production access only after suppression and dry-run controls are reviewed.
 7. Run a 10–20 lead dry run and require human approval before any real send.
