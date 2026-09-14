@@ -2,24 +2,24 @@
 
 ## Current status
 
-**Pilot console and first production integration slice are implemented and build-verified.** The repository contains the responsive operator dashboard, normalized 100-lead seed dataset, export support, review-before-send interaction, PostgreSQL schema migration, server-only readiness boundary, AWS foundation documentation, and deployment metadata.
+**Pilot console and first authenticated production foundation are implemented and build-verified.** The repository contains a protected operator dashboard, normalized 100-lead seed dataset, deterministic scoring and product-fit services, website verification, fallback message preparation, approval/suppression/audit APIs, PostgreSQL schema migration tooling, server-only readiness boundary, AWS foundation documentation, and deployment metadata.
 
 | Area | Status | Notes |
 |---|---|---|
 | Lead import | READY | 100 records normalized from supplied PDF |
 | PostgreSQL schema | READY TO APPLY | `db/schema.sql`, `db/apply-schema.sh`, and `db/verify-schema.sql` are prepared; run from a VPC-connected runner |
-| Server/API boundary | IMPROVED | Dynamic `/health`, `/readiness`, and dry-run `/api/v1/pilot/summary` endpoints implemented; business API/auth still required |
+| Server/API boundary | IMPLEMENTED FOUNDATION | Session login/logout, live dashboard, leads, approvals, campaigns, queue/events/revenue/product-fit endpoints; PostgreSQL persistence still to wire |
 | AWS S3/SQS foundation | READY | Private bucket, processing queue, and DLQ created |
 | RDS PostgreSQL | AVAILABLE | `aureum-cap-v01-db`, private `db.t4g.micro`, PostgreSQL 18.3, Single-AZ; endpoint is available in AWS |
 | Deduplication | IMPROVED | Deterministic seed validation now checks normalized business keys; database-backed dedupe remains server work |
-| Website verification | BLOCKED | Needs approved verifier/provider and evidence storage |
+| Website verification | READY IN FOUNDATION | CAP internal bounded HTTP/DNS verifier and evidence response implemented; persistence/worker execution remains |
 | Hunter enrichment | BLOCKED | Credential and provider adapter not configured |
 | Email verification | BLOCKED | Provider adapter and suppression checks required |
-| Lead scoring | PARTIALLY READY | Scoring model documented; persistence and evidence UI pending |
-| Product matching | PARTIALLY READY | Starter product graph seeded in migration; fit engine pending |
-| Message generation | BLOCKED | OpenAI secret and human-review API required |
+| Lead scoring | READY IN FOUNDATION | Deterministic weighted scoring with version and evidence implemented |
+| Product matching | READY IN FOUNDATION | Multi-fit deterministic matcher with evidence implemented |
+| Message generation | SAFE FALLBACK READY | Clearly labelled template/fallback message preparation; OpenAI remains disabled |
 | Queueing/scheduling | DOCUMENTED | SQS/DLQ contract, retry guidance, and incident runbook added; worker, redrive policy, and EventBridge target pending |
-| SES delivery | BLOCKED SAFELY | SES sandbox; approved sender/DKIM records are configured, with SES verification still pending |
+| SES delivery | BLOCKED SAFELY | SES sandbox and send gate remain disabled until identity status and dry-run controls are verified |
 | Replies/handoff | BLOCKED | Inbound event capture and classifier pending |
 | Revenue attribution | BLOCKED | Opportunities, deals, purchases, and revenue events pending |
 | Monitoring | DOCUMENTED | Operational incident runbook added; CloudWatch alarms and runtime notifications remain pending |
@@ -37,7 +37,7 @@
 - [ ] Implement bounce, complaint, unsubscribe, suppression, and duplicate-send prevention.
 - [ ] Implement inbound reply capture and response classification with human handoff notifications.
 - [ ] Implement opportunity/deal/purchase/revenue attribution and campaign reporting.
-- [ ] Add authentication, authorization, audit logging, backups, and CloudWatch alarms; the incident runbook is documented in `WORKER_RUNBOOK.md`.
+- [x] Add initial server-side authentication, role-ready session boundary, audit event capture, and protected operator UI; production identity provider, backups, and CloudWatch alarms remain.
 - [ ] Run an end-to-end dry run on 10–20 records, review evidence and generated messages, and obtain explicit operator approval before any real send.
 
 ## Definition of done

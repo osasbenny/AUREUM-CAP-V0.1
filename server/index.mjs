@@ -2,85 +2,58 @@ import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { scoreLead, matchProducts, fallbackMessage, verifyWebsite, isSuppressed, audit, PROVIDERS, uuid } from './services.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, '..');
 const leadsPath = path.join(repoRoot, 'data', 'leads.json');
 const port = Number(process.env.PORT || 8787);
+const sessions = new Map();
+const leads = JSON.parse(fs.readFileSync(leadsPath, 'utf8')).map((lead) => ({
+  ...lead, uid: String(lead.id), lifecycle_stage: lead.stage || 'IMPORTED', website_status: lead.websiteStatus || 'UNKNOWN', approval_state: 'PENDING', suppressed: false, score: scoreLead(lead), product_fits: matchProducts(lead), message: null, audit: [],
+}));
+const campaigns = [{ id: 'campaign-001', name: 'CAP V0.1 — Campaign 001 — Houston Website Opportunity', objective: 'Controlled website opportunity pilot', status: 'DRAFT', daily_limit: 10, batch_size: 10, approval_required: true, sender: process.env.SES_FROM_EMAIL || 'aureum.cap@cactusdigitalmedia.ng', send_enabled: false }];
+const events = [];
+const suppressions = [];
+const queue = [];
+const revenue = [];
 
-function configuredReadiness() {
-  const sendEnabled = process.env.CAP_SEND_ENABLED === 'true';
-  return {
-    database: Boolean(process.env.DATABASE_URL),
-    storage: Boolean(process.env.CAP_S3_BUCKET),
-    queue: Boolean(process.env.CAP_SQS_QUEUE_URL),
-    hunter: Boolean(process.env.HUNTER_API_KEY),
-    openai: Boolean(process.env.OPENAI_API_KEY),
-    email: sendEnabled && Boolean(process.env.SES_FROM_EMAIL),
-    send_gate: sendEnabled ? Boolean(process.env.SES_FROM_EMAIL) : false,
-  };
-}
+function json(res, status, payload) { res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' }); res.end(JSON.stringify(payload)); }
+function parseCookies(req) { return Object.fromEntries((req.headers.cookie || '').split(';').filter(Boolean).map((p) => { const [k, ...v] = p.trim().split('='); return [k, decodeURIComponent(v.join('='))]; })); }
+function auth(req) { const token = parseCookies(req).cap_session; return token && sessions.get(token); }
+function requireAuth(req, res) { const user = auth(req); if (!user) { json(res, 401, { error: 'unauthorized', message: 'Login required' }); return null; } return user; }
+async function body(req) { let raw = ''; for await (const chunk of req) raw += chunk; if (!raw) return {}; try { return JSON.parse(raw); } catch { return {}; } }
+function configuredReadiness() { const sendEnabled = process.env.CAP_SEND_ENABLED === 'true'; return { database: Boolean(process.env.DATABASE_URL), storage: Boolean(process.env.CAP_S3_BUCKET), queue: Boolean(process.env.CAP_SQS_QUEUE_URL), hunter: false, openai: false, email: sendEnabled && Boolean(process.env.SES_FROM_EMAIL), send_gate: sendEnabled && Boolean(process.env.SES_FROM_EMAIL), website_verifier: true, fallback_messages: true }; }
+function dashboard() { const count = (fn) => leads.filter(fn).length; return { imported: leads.length, verified: count((l) => l.website_status === 'ACTIVE'), enriched: count((l) => Boolean(l.email)), qualified: count((l) => l.score.total >= 60), awaiting_approval: count((l) => l.approval_state === 'PENDING'), approved: count((l) => l.approval_state === 'APPROVED'), scheduled: count((l) => l.lifecycle_stage === 'SCHEDULED'), queued: queue.filter((j) => j.status === 'QUEUED').length, sent: count((l) => l.lifecycle_stage === 'SENT'), delivered: count((l) => l.lifecycle_stage === 'DELIVERED'), bounced: count((l) => l.lifecycle_stage === 'BOUNCED'), replied: count((l) => l.lifecycle_stage === 'REPLIED'), positive_replies: count((l) => l.response?.classification === 'POSITIVE'), opportunities: count((l) => l.opportunity), pipeline_value: revenue.reduce((s, r) => s + Number(r.expected_value || 0), 0), expected_revenue: revenue.reduce((s, r) => s + Number(r.expected_revenue || 0), 0), won_revenue: revenue.filter((r) => r.status === 'WON').reduce((s, r) => s + Number(r.amount || 0), 0), by_category: Object.fromEntries([...new Set(leads.map((l) => l.category))].map((c) => [c, count((l) => l.category === c)])), send_enabled: process.env.CAP_SEND_ENABLED === 'true' }; }
+function findLead(id) { return leads.find((l) => l.uid === String(id) || String(l.id) === String(id)); }
+function notFound(res) { return json(res, 404, { error: 'not_found' }); }
 
-function readLeads() {
-  return JSON.parse(fs.readFileSync(leadsPath, 'utf8'));
-}
-
-function json(res, status, payload) {
-  res.writeHead(status, {
-    'Content-Type': 'application/json; charset=utf-8',
-    'Cache-Control': 'no-store',
-  });
-  res.end(JSON.stringify(payload));
-}
-
-const server = http.createServer((req, res) => {
+const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
-
-  if (req.method !== 'GET') return json(res, 405, { error: 'method_not_allowed' });
-
-  if (url.pathname === '/health') {
-    return json(res, 200, {
-      ok: true,
-      service: 'aureum-cap-v0-1',
-      region: process.env.AWS_REGION || 'eu-north-1',
-      send_enabled: process.env.CAP_SEND_ENABLED === 'true',
-    });
-  }
-
-  if (url.pathname === '/readiness') {
-    const readiness = configuredReadiness();
-    const blocked = Object.entries(readiness)
-      .filter(([key, value]) => key !== 'send_gate' && !value)
-      .map(([key]) => key);
-    return json(res, blocked.length ? 503 : 200, {
-      ready: blocked.length === 0,
-      readiness,
-      blocked,
-      policy: 'No live send is permitted while CAP_SEND_ENABLED is not true and human approval is absent.',
-    });
-  }
-
-  if (url.pathname === '/api/v1/pilot/summary') {
-    const leads = readLeads();
-    const byCategory = Object.fromEntries(
-      [...new Set(leads.map((lead) => lead.category))].map((category) => [
-        category,
-        leads.filter((lead) => lead.category === category).length,
-      ]),
-    );
-    return json(res, 200, {
-      campaign: 'CAP V0.1 — Campaign 001 — Houston Website Opportunity',
-      total_leads: leads.length,
-      by_category: byCategory,
-      send_enabled: process.env.CAP_SEND_ENABLED === 'true',
-      mode: 'pilot-dry-run',
-    });
-  }
-
-  return json(res, 404, { error: 'not_found' });
+  if (req.method === 'OPTIONS') { res.writeHead(204, { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Content-Type, Cookie, X-Requested-With', 'Access-Control-Allow-Credentials': 'true' }); return res.end(); }
+  if (url.pathname === '/health' && req.method === 'GET') return json(res, 200, { ok: true, service: 'aureum-cap-v0-1', region: process.env.AWS_REGION || 'eu-north-1', send_enabled: process.env.CAP_SEND_ENABLED === 'true' });
+  if (url.pathname === '/readiness' && req.method === 'GET') { const readiness = configuredReadiness(); const blocked = Object.entries(readiness).filter(([key, value]) => key !== 'send_gate' && !value).map(([key]) => key); return json(res, blocked.length ? 503 : 200, { ready: blocked.length === 0, readiness, blocked, policy: 'No live send is permitted without CAP_SEND_ENABLED=true, approved sender, suppression check, and human approval.' }); }
+  if (url.pathname === '/api/v1/auth/login' && req.method === 'POST') { const b = await body(req); const email = String(b.email || ''); const expectedEmail = process.env.CAP_ADMIN_EMAIL || 'operator@aureum.local'; const expectedPassword = process.env.CAP_ADMIN_PASSWORD || 'change-me-before-production'; if (email !== expectedEmail || b.password !== expectedPassword) return json(res, 401, { error: 'invalid_credentials' }); const token = uuid(); const user = { id: 'operator-1', email, role: 'admin', name: 'Aureum CAP Operator' }; sessions.set(token, user); res.setHeader('Set-Cookie', `cap_session=${encodeURIComponent(token)}; HttpOnly; SameSite=Lax; Path=/`); return json(res, 200, { user }); }
+  if (url.pathname === '/api/v1/auth/me' && req.method === 'GET') { const user = auth(req); return user ? json(res, 200, { user }) : json(res, 401, { error: 'unauthorized' }); }
+  if (url.pathname === '/api/v1/auth/logout' && req.method === 'POST') { const token = parseCookies(req).cap_session; sessions.delete(token); res.setHeader('Set-Cookie', 'cap_session=; Max-Age=0; HttpOnly; SameSite=Lax; Path=/'); return json(res, 200, { ok: true }); }
+  if (url.pathname === '/api/v1/pilot/summary' && req.method === 'GET') return json(res, 200, { campaign: campaigns[0].name, total_leads: leads.length, ...dashboard(), mode: 'pilot-dry-run' });
+  const user = requireAuth(req, res); if (!user) return;
+  if (url.pathname === '/api/v1/dashboard' && req.method === 'GET') return json(res, 200, dashboard());
+  if (url.pathname === '/api/v1/leads' && req.method === 'GET') { const q = (url.searchParams.get('q') || '').toLowerCase(); const status = url.searchParams.get('status'); const result = leads.filter((l) => (!q || `${l.name} ${l.category} ${l.location}`.toLowerCase().includes(q)) && (!status || l.lifecycle_stage === status)); return json(res, 200, { data: result, total: result.length }); }
+  const leadMatch = url.pathname.match(/^\/api\/v1\/leads\/([^/]+)$/); if (leadMatch && req.method === 'GET') { const lead = findLead(leadMatch[1]); return lead ? json(res, 200, { data: lead }) : notFound(res); }
+  if (leadMatch && req.method === 'PATCH') { const lead = findLead(leadMatch[1]); if (!lead) return notFound(res); const patch = await body(req); Object.assign(lead, { ...patch, uid: lead.uid, id: lead.id }); audit(events, user.email, 'lead.updated', 'lead', lead.uid, patch); return json(res, 200, { data: lead }); }
+  const actionMatch = url.pathname.match(/^\/api\/v1\/leads\/([^/]+)\/(approve|reject|suppress|verify|prepare)$/); if (actionMatch && req.method === 'POST') { const lead = findLead(actionMatch[1]); if (!lead) return notFound(res); const action = actionMatch[2]; if (action === 'approve') { if (lead.suppressed || isSuppressed(lead, suppressions)) return json(res, 409, { error: 'suppressed', message: 'Suppressed leads cannot be approved.' }); lead.approval_state = 'APPROVED'; lead.lifecycle_stage = 'APPROVED'; } if (action === 'reject') { lead.approval_state = 'REJECTED'; lead.lifecycle_stage = 'REJECTED'; } if (action === 'suppress') { lead.suppressed = true; lead.approval_state = 'REJECTED'; lead.lifecycle_stage = 'SUPPRESSED'; suppressions.push({ key: `${lead.name} ${lead.phone}`.toLowerCase(), phone: lead.phone, reason: 'manual', created_at: new Date().toISOString() }); } if (action === 'verify') { lead.website_audit = await verifyWebsite(lead.website); lead.website_status = lead.website_audit.status; lead.lifecycle_stage = lead.website_status === 'ACTIVE' ? 'VERIFIED' : lead.lifecycle_stage; } if (action === 'prepare') { lead.message = fallbackMessage(lead, lead.product_fits[0]); lead.lifecycle_stage = 'MESSAGE_READY'; } audit(events, user.email, `lead.${action}`, 'lead', lead.uid); return json(res, 200, { data: lead }); }
+  if (url.pathname === '/api/v1/approvals' && req.method === 'GET') return json(res, 200, { data: leads.filter((l) => l.approval_state === 'PENDING') });
+  if (url.pathname === '/api/v1/approvals/bulk' && req.method === 'POST') { const b = await body(req); const ids = Array.isArray(b.ids) ? b.ids : []; const updated = ids.map(findLead).filter(Boolean).filter((l) => !l.suppressed).map((l) => { l.approval_state = 'APPROVED'; l.lifecycle_stage = 'APPROVED'; audit(events, user.email, 'lead.approved', 'lead', l.uid, { bulk: true }); return l.uid; }); return json(res, 200, { approved: updated }); }
+  if (url.pathname === '/api/v1/campaigns' && req.method === 'GET') return json(res, 200, { data: campaigns });
+  if (url.pathname === '/api/v1/campaigns' && req.method === 'POST') { const b = await body(req); const campaign = { id: uuid(), status: 'DRAFT', approval_required: true, send_enabled: false, ...b }; campaigns.push(campaign); audit(events, user.email, 'campaign.created', 'campaign', campaign.id); return json(res, 201, { data: campaign }); }
+  const campaignMatch = url.pathname.match(/^\/api\/v1\/campaigns\/([^/]+)(?:\/(approve|start|pause|resume|stop))?$/); if (campaignMatch) { const campaign = campaigns.find((c) => c.id === campaignMatch[1]); if (!campaign) return notFound(res); if (req.method === 'PATCH') Object.assign(campaign, await body(req)); if (req.method === 'POST' && campaignMatch[2]) { const action = campaignMatch[2]; if (action === 'approve') campaign.status = 'APPROVED'; if (action === 'start') { if (campaign.status !== 'APPROVED') return json(res, 409, { error: 'approval_required' }); campaign.status = 'ACTIVE'; } if (action === 'pause') campaign.status = 'PAUSED'; if (action === 'resume') campaign.status = 'ACTIVE'; if (action === 'stop') campaign.status = 'COMPLETED'; audit(events, user.email, `campaign.${action}`, 'campaign', campaign.id); } return json(res, 200, { data: campaign }); }
+  if (url.pathname === '/api/v1/queue' && req.method === 'GET') return json(res, 200, { data: queue });
+  if (url.pathname === '/api/v1/events' && req.method === 'GET') return json(res, 200, { data: events });
+  if (url.pathname === '/api/v1/revenue' && req.method === 'GET') return json(res, 200, { data: revenue, totals: dashboard() });
+  if (url.pathname === '/api/v1/products' && req.method === 'GET') return json(res, 200, { data: [...new Set(leads.flatMap((l) => l.product_fits.map((p) => p.product)))] });
+  const fitMatch = url.pathname.match(/^\/api\/v1\/product-fit\/([^/]+)$/); if (fitMatch && req.method === 'GET') { const lead = findLead(fitMatch[1]); return lead ? json(res, 200, { data: lead.product_fits }) : notFound(res); }
+  return notFound(res);
 });
-
 server.listen(port, '0.0.0.0', () => console.log(`CAP API listening on ${port}`));
-
-process.on('SIGTERM', () => server.close(() => process.exit(0)));
-process.on('SIGINT', () => server.close(() => process.exit(0)));
+process.on('SIGTERM', () => server.close(() => process.exit(0))); process.on('SIGINT', () => server.close(() => process.exit(0)));

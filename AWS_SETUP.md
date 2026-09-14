@@ -42,7 +42,7 @@ The approved sender identity `mail.cactusdigitalmedia.ng` was created in SES wit
 | `3yicgkffgdb53lrt5l27gud3w4jazydo._domainkey.mail.cactusdigitalmedia.ng` | `3yicgkffgdb53lrt5l27gud3w4jazydo.dkim.amazonses.com` | Saved; SES verification pending |
 | `hn472d2bidcbblpl37nfmbfs7t7hj4we._domainkey.mail.cactusdigitalmedia.ng` | `hn472d2bidcbblpl37nfmbfs7t7hj4we.dkim.amazonses.com` | Saved; SES verification pending |
 
-SES still showed **Verification pending** immediately after the DNS changes. DNS detection can take up to 72 hours. `aureum.cap@cactusdigitalmedia.ng` is the intended From address once the domain identity is verified. SMTP credentials were not created or stored; any future SMTP/API secret must be placed in AWS Secrets Manager or SSM, never in Git.
+SES verification status must be refreshed in the authenticated AWS console after DNS propagation. `aureum.cap@cactusdigitalmedia.ng` is the intended From address once the domain identity is verified. SMTP credentials were not created or stored; any future SMTP/API secret must be placed in AWS Secrets Manager or SSM, never in Git.
 
 ## Not created / pending integration
 
@@ -51,7 +51,7 @@ SES still showed **Verification pending** immediately after the DNS changes. DNS
 - **CloudWatch alarms:** pending worker and delivery metrics; baseline AWS-managed RDS/SQS metrics are available.
 - **Hunter/OpenAI secrets:** no Hunter credential was supplied; the repository only contains server-side placeholders and no provider call is enabled.
 - **Database schema/migrations:** RDS is now Available. `db/apply-schema.sh` and `db/verify-schema.sql` are committed; apply them only from a VPC-connected runner using the managed Secrets Manager value. AWS CloudShell was opened and confirmed unsuitable because it is not connected to the private RDS VPC; the RDS Query Editor is unavailable under the current free-plan limitation.
-- **Server/API boundary:** dynamic `/health`, `/readiness`, and dry-run `/api/v1/pilot/summary` are implemented; business API, authentication, and worker endpoints remain pending.
+- **Server/API boundary:** dynamic health/readiness plus protected session login, dashboard, lead review, approvals, campaigns, events, revenue, and product-fit endpoints are implemented in the safe in-process foundation; PostgreSQL/SQS persistence and worker execution remain.
 - **DLQ redrive wiring:** queues exist; source-queue redrive policy should be attached after the worker retry policy is finalized.
 - **SES domain verification:** DKIM records are saved in cPanel; wait for DNS propagation and refresh SES until the identity becomes verified.
 - **Worker/incident operations:** queue contract, retry guidance, DLQ handling, and incident procedure are documented in `WORKER_RUNBOOK.md`; no consumer or schedule is enabled.
