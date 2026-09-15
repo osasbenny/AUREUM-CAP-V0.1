@@ -51,3 +51,11 @@
 A real campaign can discover a prospect, store it, enrich it, score it, identify a relevant product, generate a personalized offer, send it under controlled policy, receive/classify a response, hand the opportunity to the founder, record a sale, and attribute revenue to campaign and product.
 
 **Current production-readiness assessment: 25%, not yet 100%.** SMS preparation is complete, but the remaining blockers require a deployed API, real production authentication, applied and verified RDS schema, PostgreSQL persistence, SQS workers, controlled scheduling, Twilio A2P/provider setup, permission/compliance evidence, SMS status/reply handling, monitoring, and end-to-end testing; the implementation does not claim those external prerequisites are complete.
+
+## 2026-09-16 production activation update
+
+The API now has a PostgreSQL repository path activated by `DATABASE_URL`, durable lead snapshots, queue job persistence, SQS worker code with retry/DLQ handling, Twilio signature-verified status and inbound webhooks, recipient STOP suppression, and a review-only first-50 batch manifest. Local dry-run fallback remains available when `DATABASE_URL` is absent.
+
+The private RDS instance is confirmed **Available** in `eu-north-1`, but schema application is still blocked because AWS CloudShell is not VPC-connected and the account's RDS Query Editor path is unavailable. A VPC-connected runner or an approved temporary Lambda/EC2 runner with access to the managed Secrets Manager credential is required. No database migration is claimed complete until the verification query succeeds.
+
+Twilio credentials, a valid U.S. sender or Messaging Service, A2P 10DLC registration, and permission/compliance evidence for the supplied phone records are still external prerequisites. The first 50 batch is generated in `data/first-50-sms-batch.json`, but every record is explicitly `BLOCKED_REVIEW_ONLY`; no live SMS send is enabled.

@@ -12,7 +12,15 @@
     "validate:pilot": "node scripts/validate-pilot.mjs",
     "activation:manifest": "node scripts/build-activation-manifest.mjs",
     "validate:activation": "node scripts/validate-activation.mjs",
-    "smoke": "npm run check && npm run validate:pilot && npm run activation:manifest && npm run validate:activation && npm run build"
+    "smoke": "npm run check && npm run validate:pilot && npm run activation:manifest && npm run validate:activation && npm run build",
+    "db:bootstrap": "node scripts/bootstrap-db.mjs",
+    "worker": "node workers/sqs-worker.mjs"
   },
-  "devDependencies": {"vite":"^7.1.7"}
+  "devDependencies": {
+    "vite": "^7.1.7"
+  },
+  "dependencies": {
+    "@aws-sdk/client-sqs": "^3.1133.0",
+    "pg": "^8.16.3"
+  }
 }
