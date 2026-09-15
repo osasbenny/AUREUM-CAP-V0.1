@@ -10,7 +10,9 @@
     "api": "node server/index.mjs",
     "check": "node --check server/index.mjs",
     "validate:pilot": "node scripts/validate-pilot.mjs",
-    "smoke": "npm run check && npm run validate:pilot && npm run build"
+    "activation:manifest": "node scripts/build-activation-manifest.mjs",
+    "validate:activation": "node scripts/validate-activation.mjs",
+    "smoke": "npm run check && npm run validate:pilot && npm run activation:manifest && npm run validate:activation && npm run build"
   },
   "devDependencies": {"vite":"^7.1.7"}
 }
