@@ -1,0 +1,22 @@
+{
+  "prospect_id": "CAP-001",
+  "accessed_at": "2026-09-17",
+  "assets": [
+    {
+      "id": "hero-abstract-lavender",
+      "type": "css_composition",
+      "source_url": null,
+      "usage_decision": "approved_for_current_private_demo",
+      "alt_text": "Abstract lavender composition representing a clearer point of view",
+      "identity_note": "Not a portrait and not intended to depict Zoey",
+      "notes": "Used because no authentic public profile image was downloaded and verified during this savepoint. Replace only with a legitimately sourced authentic image after recording its use decision."
+    },
+    {
+      "id": "zoey-profile-image",
+      "type": "public_profile_image",
+      "source_url": "https://ng.linkedin.com/in/zoey-vincent-socialmediamanager",
+      "usage_decision": "not_retrieved",
+      "notes": "No local copy or public deployment use claimed."
+    }
+  ]
+}

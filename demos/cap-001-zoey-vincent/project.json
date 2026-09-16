@@ -1,0 +1,18 @@
+{
+  "prospect_id": "CAP-001",
+  "prospect_name": "Zoey Vincent Vevakpor",
+  "campaign_id": "CAP-001",
+  "demo_id": "zoey-vincent-personal-brand-hq",
+  "slug": "zoey-vincent",
+  "archetype": "PERSONAL_BRAND_HQ",
+  "status": "BUILDING",
+  "repository": "osasbenny/AUREUM-CAP-V0.1",
+  "project_root": "demos/cap-001-zoey-vincent",
+  "deployment_id": null,
+  "canonical_url": null,
+  "deployment_status": "NOT_DEPLOYED",
+  "analytics_status": "CLIENT_EVENT_CONTRACT_IMPLEMENTED",
+  "qa_status": "PENDING",
+  "created_at": "2026-09-17",
+  "updated_at": "2026-09-17"
+}
