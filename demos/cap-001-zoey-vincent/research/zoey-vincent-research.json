@@ -1,0 +1,71 @@
+{
+  "prospect_id": "CAP-001",
+  "prospect_name": "Zoey Vincent Vevakpor",
+  "accessed_at": "2026-09-17",
+  "records": [
+    {
+      "fact": "The public LinkedIn profile identifies Zoey V. Vevakpor as a Brand Strategist at Lumina and lists Rivers State, Nigeria in the public profile context.",
+      "source_url": "https://ng.linkedin.com/in/zoey-vincent-socialmediamanager",
+      "source_type": "linkedin_profile",
+      "confidence": "high",
+      "safe_to_publish": true,
+      "notes": "Use current positioning cautiously because profile data can change."
+    },
+    {
+      "fact": "The LinkedIn profile describes social-media growth, online presence, high-ticket client acquisition, ghostwriting/content writing, profile optimization/audit, brand strategy/content strategy, trainings, consultations, and mentorships.",
+      "source_url": "https://ng.linkedin.com/in/zoey-vincent-socialmediamanager",
+      "source_type": "linkedin_profile",
+      "confidence": "high",
+      "safe_to_publish": true,
+      "notes": "Present as services stated on the public profile, not as independently audited outcomes."
+    },
+    {
+      "fact": "The LinkedIn profile states that Zoey has helped over 1,300 brands, generated over $100,000 in revenue, and received Favikon rankings.",
+      "source_url": "https://ng.linkedin.com/in/zoey-vincent-socialmediamanager",
+      "source_type": "linkedin_profile",
+      "confidence": "medium",
+      "safe_to_publish": false,
+      "notes": "These are self-reported profile claims. Do not place them in public proof sections without a separate verification decision and current context."
+    },
+    {
+      "fact": "The public LinkedIn post uses humorous, conversational, motivational language and includes hashtags related to LinkedIn growth and social media management.",
+      "source_url": "https://www.linkedin.com/posts/zoey-vincent-socialmediamanager_linkedin-linkedingrowth-socialmediamanager-activity-7396064629556285440-9vvF",
+      "source_type": "linkedin_post",
+      "confidence": "high",
+      "safe_to_publish": true,
+      "notes": "Summarize tone; do not reproduce the post."
+    },
+    {
+      "fact": "The public Instagram profile uses the positioning 'The Best Social Media Manager', a purple heart motif, creator/lifestyle language, and a link to LinkedIn.",
+      "source_url": "https://www.instagram.com/_zoey.vincent/",
+      "source_type": "instagram_profile",
+      "confidence": "high",
+      "safe_to_publish": true,
+      "notes": "Use the visual cue as inspiration, not as a claim of ownership of a color system."
+    },
+    {
+      "fact": "The Instagram profile displays a current follower count and references LinkedIn followers, but public search outputs show inconsistent LinkedIn audience counts.",
+      "source_url": "https://www.instagram.com/_zoey.vincent/",
+      "source_type": "instagram_profile",
+      "confidence": "high",
+      "safe_to_publish": false,
+      "notes": "Do not hard-code audience numbers in the HQ. Use a qualitative audience statement or a dated, attributed metric only after owner review."
+    },
+    {
+      "fact": "A public event post describes Zoey as a social media manager and founder of Ziitech Hub and references her LinkedIn personal brand.",
+      "source_url": "https://www.instagram.com/p/DAoaB9RoPgR/",
+      "source_type": "instagram_event_post",
+      "confidence": "medium",
+      "safe_to_publish": true,
+      "notes": "Use as third-party contextual evidence with attribution; do not present its historical follower count as current."
+    },
+    {
+      "fact": "The current research did not verify a dedicated owned website, portfolio, booking system, newsletter, or resource hub that can safely be used as the primary destination.",
+      "source_url": "https://ng.linkedin.com/in/zoey-vincent-socialmediamanager",
+      "source_type": "public-source-review",
+      "confidence": "low",
+      "safe_to_publish": false,
+      "notes": "Absence cannot be claimed conclusively from this pass. Treat the owned-destination opportunity as a hypothesis, not as a public criticism."
+    }
+  ]
+}
