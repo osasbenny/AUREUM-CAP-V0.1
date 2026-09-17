@@ -12,6 +12,7 @@
     "validate:pilot": "node scripts/validate-pilot.mjs",
     "activation:manifest": "node scripts/build-activation-manifest.mjs",
     "validate:activation": "node scripts/validate-activation.mjs",
+    "pipeline:dry-run": "node scripts/run-pipeline-dry-run.mjs",
     "smoke": "npm run check && npm run validate:pilot && npm run activation:manifest && npm run validate:activation && npm run build",
     "db:bootstrap": "node scripts/bootstrap-db.mjs",
     "worker": "node workers/sqs-worker.mjs"

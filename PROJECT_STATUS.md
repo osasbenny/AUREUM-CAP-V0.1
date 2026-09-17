@@ -59,3 +59,7 @@ The API now has a PostgreSQL repository path activated by `DATABASE_URL`, durabl
 The private RDS instance is confirmed **Available** in `eu-north-1`, but schema application is still blocked because AWS CloudShell is not VPC-connected and the account's RDS Query Editor path is unavailable. A VPC-connected runner or an approved temporary Lambda/EC2 runner with access to the managed Secrets Manager credential is required. No database migration is claimed complete until the verification query succeeds.
 
 Twilio credentials, a valid U.S. sender or Messaging Service, A2P 10DLC registration, and permission/compliance evidence for the supplied phone records are still external prerequisites. The first 50 batch is generated in `data/first-50-sms-batch.json`, but every record is explicitly `BLOCKED_REVIEW_ONLY`; no live SMS send is enabled.
+
+## 2026-09-17 implementation kickoff
+
+The end-to-end production implementation plan is recorded in [`IMPLEMENTATION_PLAN_V0.1.md`](IMPLEMENTATION_PLAN_V0.1.md). The first safe work package is complete: `npm run pipeline:dry-run` processed all 100 seeded records locally through normalization, deterministic scoring, product matching, fallback/SMS preparation, and eligibility evaluation without calling Hunter, Twilio, SES, OpenAI, n8n, PostgreSQL, or SQS. The report is saved at `data/pipeline-dry-run-report.json` and confirms 100 unique records, 100 prepared messages, zero outbound calls, and 100 records blocked pending approval and an established permission/compliance basis.
