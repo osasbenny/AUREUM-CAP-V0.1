@@ -62,6 +62,15 @@ const scrollSlider = (id, direction) => {
 };
 document.querySelectorAll('[data-slider]').forEach((button) => button.addEventListener('click', () => scrollSlider(button.dataset.slider, button.dataset.direction)));
 
+const ideasSlider = document.querySelector('#ideas-slider');
+const ideaDots = [...document.querySelectorAll('.slider-dots i')];
+ideasSlider?.addEventListener('scroll', () => {
+  if (!ideaDots.length) return;
+  const step = Math.max(ideasSlider.scrollWidth / ideaDots.length, 1);
+  const active = Math.min(ideaDots.length - 1, Math.round(ideasSlider.scrollLeft / step));
+  ideaDots.forEach((dot, index) => dot.classList.toggle('is-active', index === active));
+}, { passive: true });
+
 let startX = 0;
 document.querySelectorAll('.snap-slider').forEach((slider) => {
   slider.addEventListener('pointerdown', (event) => { startX = event.clientX; slider.setPointerCapture?.(event.pointerId); });
