@@ -19,7 +19,7 @@
   "deployment_id": "zoey-vincent-personal-brand-hq-production",
   "canonical_url": "https://zoey-vincent-personal-brand-hq.vercel.app",
   "deployment_status": "DEPLOYED",
-  "deployed_commit": "7182c0a",
+  "deployed_commit": "41b1e5f",
   "analytics_status": "CLIENT_EVENT_CONTRACT_IMPLEMENTED",
   "qa_status": "AUTOMATED_PRODUCTION_CHECKS_PASSED",
   "created_at": "2026-09-17",

@@ -7,7 +7,7 @@ Deployment status: **DEPLOYED**.
 | Vercel project | `zoey-vincent-personal-brand-hq` |
 | Production URL | https://zoey-vincent-personal-brand-hq.vercel.app |
 | Deployment source | GitHub `main` |
-| Verified commit | `7182c0a` |
+| Verified commit | `41b1e5f` |
 | HTML response | HTTP 200 |
 | Portrait asset | HTTP 200, image/jpeg |
 | Verified markers | Theme switcher, work slider, footer credit, production metadata |
