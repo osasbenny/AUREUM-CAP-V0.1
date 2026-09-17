@@ -47,6 +47,23 @@ CAP remains the **source of truth and control plane**. n8n is optional orchestra
 
 **Recommended sequence:** use a temporary VPC-connected runner for migration verification, then deploy the existing Node API and worker in AWS-compatible managed runtime. Do not enable outbound sends during infrastructure work.
 
+## Approved AWS cost envelope before resource creation
+
+The existing RDS instance is already provisioned and observed in the AWS console as `aureum-cap-v01-db`, PostgreSQL, `db.t4g.micro`, private in VPC `vpc-02f0b750c4f333666`, Availability Zone `eu-north-1b`, status **Available**, Single-AZ. It is not being resized, replaced, or deleted.
+
+| Proposed resource | Size/configuration | Purpose | Estimated cost envelope |
+|---|---|---|---:|
+| Temporary EC2 migration runner | 1 × ARM `t4g.micro`, short-lived, one small encrypted EBS volume, same VPC; stopped/terminated after verification | Apply/verify PostgreSQL schema and import the manifest | Approximately **$0.01/hour plus minimal EBS**, region pricing to be confirmed in AWS; expected one-session cost is a few cents to low dollars |
+| RDS already present | Existing `db.t4g.micro`, 20 GiB, Single-AZ, private | Authoritative CAP database | Existing cost continues; no new RDS instance or scale-up |
+| SQS already present | Existing processing queue and DLQ | Durable job transport | Existing usage-based queue cost; no new queue |
+| S3 already present | Existing private CAP bucket | Reports/imports/audits | Existing usage-based storage/request cost; no new bucket |
+| Future API runtime | 1 × ARM Fargate task, target 0.25 vCPU / 0.5–1 GiB, no autoscaling during pilot | HTTPS API | Usage-based compute; official pricing is per-second with a one-minute minimum. Load balancer, public IPv4, logs, and data transfer are separate and must be costed before deployment |
+| Future worker runtime | 1 × ARM Fargate task, same minimum sizing, only while processing | SQS worker | Usage-based compute; keep stopped until the API, schema, and queue tests pass |
+
+**Cost controls:** no NAT Gateway, no Multi-AZ changes, no RDS resize, no production SES-limit request, no paid Hunter/n8n activation, no autoscaling, and no outbound provider calls. The temporary runner will be removed or disabled after the migration report is captured. AWS’s official pricing pages state that Lambda is usage-priced with a free tier, Fargate is billed per second with a one-minute minimum, and RDS charges depend on instance hours, storage, backups, I/O, and transfer; exact Stockholm totals depend on the final networking/runtime configuration.
+
+**Migration recommendation:** use a temporary EC2 `t4g.micro` runner rather than Lambda for the first migration because the current repository already has shell-based schema/bootstrap tooling and the private RDS path can be tested directly without introducing a new VPC endpoint or Lambda packaging layer. No resource should be created until the operator confirms this specific cost envelope.
+
 ## Phase 0 — Governance and external prerequisites
 
 1. Keep `CAP_SMS_SEND_ENABLED=false` and `CAP_SEND_ENABLED=false`.
