@@ -38,8 +38,8 @@ No authentic profile image was downloaded during this savepoint. The build will 
 
 - `research/zoey-vincent-research.json`
 - `research/zoey-vincent-research.md`
-- `research/zoey-vincent-claims.md`
-- `research/zoey-vincent-opportunity.md`
+- `intelligence/zoey-vincent-claims.md`
+- `opportunity/zoey-vincent-opportunity.md`
 - `research/SAVEPOINT-002-SEARCH-LEADS.md`
 
 ## Build authorization

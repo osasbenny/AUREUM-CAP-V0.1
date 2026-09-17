@@ -98,8 +98,8 @@ Research outputs:
 
 - `research/zoey-vincent-research.json`
 - `research/zoey-vincent-research.md`
-- `research/zoey-vincent-claims.md`
-- `research/zoey-vincent-opportunity.md`
+- `intelligence/zoey-vincent-claims.md`
+- `opportunity/zoey-vincent-opportunity.md`
 
 The claims document must have three sections: verified claims safe to publish, claims requiring cautious wording, and claims rejected because they could not be verified. A changing metric must be dated or expressed cautiously. A missing proof item must become an intentional design decision, not a fabricated statistic.
 
@@ -320,9 +320,9 @@ The CAP-001 implementation is complete only when these artifacts exist:
 
 - `research/zoey-vincent-research.json`
 - `research/zoey-vincent-research.md`
-- `research/zoey-vincent-claims.md`
-- `research/zoey-vincent-opportunity.md`
-- `research/zoey-vincent-assets.json`
+- `intelligence/zoey-vincent-claims.md`
+- `opportunity/zoey-vincent-opportunity.md`
+- `assets/zoey-vincent-assets.json`
 - Prospect-specific website source
 - Production build output
 - QA report with pass/fail evidence

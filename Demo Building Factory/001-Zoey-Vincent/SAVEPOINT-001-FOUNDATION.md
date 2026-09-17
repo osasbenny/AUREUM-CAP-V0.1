@@ -12,7 +12,7 @@
 Zoey’s Brand HQ will be implemented as a dedicated project folder at:
 
 ```text
-demos/cap-001-zoey-vincent/
+Demo Building Factory/001-Zoey-Vincent/
 ```
 
 It will remain inside the existing Aureum CAP V0.1 GitHub repository rather than creating a new repository. This preserves a single auditable source of truth for prospect records, research, deployment metadata, outreach drafts, and future demo projects while allowing the folder to have its own deployable application boundary.
@@ -22,7 +22,7 @@ Vercel can deploy this folder as an independent project using the folder as the 
 ## Created structure
 
 ```text
-demos/cap-001-zoey-vincent/
+Demo Building Factory/001-Zoey-Vincent/
 ├── public/
 ├── research/
 ├── src/
