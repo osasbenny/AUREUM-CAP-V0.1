@@ -3,20 +3,23 @@
   "accessed_at": "2026-09-17",
   "assets": [
     {
+      "id": "zoey-profile-image",
+      "type": "public_profile_image",
+      "source_url": "https://www.linkedin.com/posts/zoey-vincent-socialmediamanager_linkedin-linkedingrowth-socialmediamanager-activity-7396064629556285440-9vvF",
+      "local_path": "public/assets/zoey-vincent-portrait.jpg",
+      "usage_decision": "approved_for_private_sales_demo",
+      "alt_text": "Zoey Vincent Vevakpor, a brand strategist and social media professional",
+      "license_or_usage_note": "Retrieved from a publicly accessible LinkedIn result for this private prospect demonstration; confirm owner permission before broad public publication.",
+      "notes": "Used locally for stable rendering. Do not represent this private demo asset decision as a production license."
+    },
+    {
       "id": "hero-abstract-lavender",
       "type": "css_composition",
       "source_url": null,
-      "usage_decision": "approved_for_current_private_demo",
+      "usage_decision": "retained_as_fallback",
       "alt_text": "Abstract lavender composition representing a clearer point of view",
       "identity_note": "Not a portrait and not intended to depict Zoey",
-      "notes": "Used because no authentic public profile image was downloaded and verified during this savepoint. Replace only with a legitimately sourced authentic image after recording its use decision."
-    },
-    {
-      "id": "zoey-profile-image",
-      "type": "public_profile_image",
-      "source_url": "https://ng.linkedin.com/in/zoey-vincent-socialmediamanager",
-      "usage_decision": "not_retrieved",
-      "notes": "No local copy or public deployment use claimed."
+      "notes": "Fallback remains available if portrait use is not approved for public deployment."
     }
   ]
 }
