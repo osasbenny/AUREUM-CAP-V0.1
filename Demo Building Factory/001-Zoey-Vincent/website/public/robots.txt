@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://cap.aureum.example/zoey-vincent/sitemap.xml
+Sitemap: https://zoey-vincent-personal-brand-hq.vercel.app/sitemap.xml

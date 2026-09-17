@@ -1,7 +1,18 @@
 # CAP-001 Deployment
 
-Deployment status: **NOT_DEPLOYED** for the Zoey Personal Brand HQ.
+Deployment status: **DEPLOYED**.
 
-The parent repository currently has a Vercel deployment for the CAP Command Center. This project is intentionally tracked separately inside the Demo Building Factory so it can receive a unique prospect-specific Vercel URL without replacing the operator console.
+| Field | Value |
+|---|---|
+| Vercel project | `zoey-vincent-personal-brand-hq` |
+| Production URL | https://zoey-vincent-personal-brand-hq.vercel.app |
+| Deployment source | GitHub `main` |
+| Verified commit | `7182c0a` |
+| HTML response | HTTP 200 |
+| Portrait asset | HTTP 200, image/jpeg |
+| Verified markers | Theme switcher, work slider, footer credit, production metadata |
+| Deployment verified | 17 September 2026 |
 
-Required next deployment record fields: `deployment_id`, `canonical_url`, `deployment_status`, `deployed_commit`, `verified_at`, and `qa_status`.
+The Vercel project is rooted at `Demo Building Factory/001-Zoey-Vincent` and uses `vercel.json` to route the public request to the nested `website/` folder while preserving the Demo Building Factory structure.
+
+The production deployment is live. A custom domain, production analytics backend, and formal human visual/accessibility review remain separate follow-up items; no unsupported public claims or automatic outreach were enabled.
