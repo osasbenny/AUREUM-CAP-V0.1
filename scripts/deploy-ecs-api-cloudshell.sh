@@ -50,7 +50,10 @@ POLICY
 aws iam put-role-policy --role-name aureum-cap-v01-ecs-execution-role --policy-name aureum-cap-v01-runtime-secret-read --policy-document file:///tmp/cap-runtime-policy.json
 
 aws ecr get-login-password --region "$REGION" | docker login --username AWS --password-stdin "$ACCOUNT.dkr.ecr.$REGION.amazonaws.com"
-docker build --platform linux/arm64 -t "$IMAGE" "$WORKDIR"
+# CloudShell builds on x86_64; use the default x86_64 Fargate runtime to avoid
+# requiring QEMU emulation. The task definition intentionally omits a runtime
+# platform override, so ECS selects the matching x86_64 platform.
+docker build -t "$IMAGE" "$WORKDIR"
 docker push "$IMAGE"
 
 cat > /tmp/cap-task-definition.json <<TASK
