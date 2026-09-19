@@ -24,12 +24,16 @@ fi
 RDS_SECRET_NAME=$(aws secretsmanager list-secrets --region "$REGION" --query 'SecretList[?starts_with(Name, `rds!`)].Name | [0]' --output text)
 [[ "$RDS_SECRET_NAME" != "None" && -n "$RDS_SECRET_NAME" ]] || { echo 'RDS managed secret not found.' >&2; exit 1; }
 RDS_JSON=$(aws secretsmanager get-secret-value --region "$REGION" --secret-id "$RDS_SECRET_NAME" --query SecretString --output text)
-DB_USER=$(jq -r '.username // .Username // "postgres"' <<<"$RDS_JSON")
-DB_PASS=$(jq -r '.password // .Password' <<<"$RDS_JSON")
-DB_HOST=$(jq -r '.host // .Host' <<<"$RDS_JSON")
-DB_PORT=$(jq -r '.port // .Port // 5432' <<<"$RDS_JSON")
-DB_NAME=$(jq -r '.dbname // .database // .DBName // "postgres"' <<<"$RDS_JSON")
-[[ "$DB_PASS" != "null" && "$DB_HOST" != "null" ]] || { echo 'RDS managed secret lacks host/password fields.' >&2; exit 1; }
+DB_USER=$(aws rds describe-db-instances --region "$REGION" --db-instance-identifier aureum-cap-v01-db --query 'DBInstances[0].MasterUsername' --output text)
+DB_HOST=$(aws rds describe-db-instances --region "$REGION" --db-instance-identifier aureum-cap-v01-db --query 'DBInstances[0].Endpoint.Address' --output text)
+DB_PORT=$(aws rds describe-db-instances --region "$REGION" --db-instance-identifier aureum-cap-v01-db --query 'DBInstances[0].Endpoint.Port' --output text)
+DB_NAME=postgres
+if jq -e . >/dev/null 2>&1 <<<"$RDS_JSON"; then
+  DB_PASS=$(jq -r 'to_entries[] | select(.key | ascii_downcase | test("pass")) | .value' <<<"$RDS_JSON" | head -n 1)
+else
+  DB_PASS="$RDS_JSON"
+fi
+[[ -n "$DB_PASS" && "$DB_PASS" != "null" && -n "$DB_HOST" && "$DB_HOST" != "None" ]] || { echo 'RDS managed secret or instance metadata did not provide a usable password/endpoint.' >&2; exit 1; }
 DATABASE_URL="postgresql://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT}/${DB_NAME}"
 
 RUNTIME_JSON=$(jq -n --arg db "$DATABASE_URL" --arg email "$CAP_ADMIN_EMAIL" --arg pass "$CAP_ADMIN_PASSWORD" '{DATABASE_URL:$db,CAP_ADMIN_EMAIL:$email,CAP_ADMIN_PASSWORD:$pass,CAP_SEND_ENABLED:"false",CAP_SMS_SEND_ENABLED:"false",CAP_ALLOWED_ORIGIN:"https://aureum-cap-v0-1.vercel.app",FRONTEND_ORIGIN:"https://aureum-cap-v0-1.vercel.app",AWS_REGION:"eu-north-1",CAP_S3_BUCKET:"aureum-cap-v01-assets-795804715712",CAP_SQS_QUEUE_URL:"https://sqs.eu-north-1.amazonaws.com/795804715712/aureum-cap-v01-lead-processing",SES_FROM_EMAIL:"aureum.cap@cactusdigitalmedia.ng",NODE_ENV:"production"}')
