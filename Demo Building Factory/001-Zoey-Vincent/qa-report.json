@@ -1,0 +1,106 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "name": "HTML document language",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Semantic main and footer",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Unique page title",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Meta description",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Canonical metadata",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Open Graph metadata",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Twitter metadata",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Required sections",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Verified social links",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "No visible fabrication markers",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "No unreviewed numeric proof",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "No image tag without alt",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Keyboard-focus styling",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Reduced motion",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Responsive breakpoint",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Dynamic copyright year",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "CAP event identifiers",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "No provider credentials",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "External links use HTTPS",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Local HTTP response",
+      "passed": true,
+      "detail": "status 200"
+    }
+  ],
+  "external_links": 13
+}
