@@ -1,60 +1,77 @@
-# CAP-001 Savepoint 004 — QA and Repository Audit
+# CAP-001 Savepoint 004 — QA, Deployment, and Repository Audit
 
 **Audit date:** 22 September 2026  
 **Prospect:** Zoey Vincent Vevakpor  
 **Campaign:** CAP-001  
-**Current status:** `DEPLOYMENT_PENDING`
+**Current status:** `DEMO_READY`
 
 ## Repository state
 
-The repository is connected to `osasbenny/AUREUM-CAP-V0.1` on the `main` branch. Before this savepoint, the latest pushed implementation commit was `c6a9295` (`feat: build CAP-001 Zoey personal brand HQ`). The local working tree contained the uncommitted keyboard-focus correction, QA script, and QA report. Those artifacts are included in this savepoint.
+The repository is connected to `osasbenny/AUREUM-CAP-V0.1` on `main`. During this audit, the remote branch was found to contain additional CAP-001 work beyond the earlier local snapshot. The project was reorganized into the canonical Demo Building Factory path:
+
+```text
+Demo Building Factory/001-Zoey-Vincent/
+```
+
+The project now has separate directories for `website`, `research`, `intelligence`, `opportunity`, `assets`, `deployment`, `analytics`, `outreach`, and `brief` records. The QA audit itself is stored in this canonical path.
+
+The latest audit commit is `da78e94`, pushed successfully to `origin/main`. The working tree is clean and `main` is synchronized with `origin/main`.
 
 ## Completed work
 
-The evidence-led research pass is complete. The research ledger, research summary, claims register, opportunity brief, and asset-use record exist under `research/`. The project has a dedicated folder under `demos/cap-001-zoey-vincent` rather than a separate repository.
+The CAP-001 evidence-led research record exists, including research, claims, opportunity, intelligence, and asset records. The project has a dedicated factory folder and a private project manifest linking the prospect, campaign, archetype, repository, research record, opportunity record, asset record, deployment record, analytics record, and outreach record.
 
-The first Personal Brand HQ build is complete as a self-contained static site. It includes the editorial lavender direction, verified positioning and service categories, social links, ideas section, provisional source-linked CTA, dynamic copyright year, SEO metadata, favicon, robots.txt, sitemap, responsive navigation, reduced-motion handling, visible focus states, and a privacy-scoped client event buffer.
+The prospect-specific Personal Brand HQ is implemented under `website/`. The remote implementation includes the editorial visual direction, responsive navigation, source-linked social pathways, service and ideas sections, a verified portrait asset, footer attribution, metadata, robots.txt, sitemap, interaction enhancements, and CAP-001 client event identifiers. The public page does not expose Aureum branding or unsupported proof claims.
 
-The content guardrails are active. The public site excludes unsupported audience counts, self-reported metrics as hero proof, revenue claims, unverified rankings, fabricated testimonials, fabricated case studies, generated or stock portraits, visible Aureum references, and visible implementation labels.
+## Current deployment
+
+The production deployment is live at:
+
+> https://zoey-vincent-personal-brand-hq.vercel.app
+
+The project manifest records:
+
+| Field | Current value |
+|---|---|
+| Deployment ID | `zoey-vincent-personal-brand-hq-production` |
+| Deployment status | `DEPLOYED` |
+| Verified source commit | `41b1e5f` |
+| Canonical URL | `https://zoey-vincent-personal-brand-hq.vercel.app` |
+| CAP status | `DEMO_READY` |
+| Repository | `osasbenny/AUREUM-CAP-V0.1` |
+
+A live `curl` check returned HTTP 200 from Vercel and confirmed the public markers `Zoey Vincent`, `theme-toggle`, and `Designed By Osagie Bernard E.`.
 
 ## Validation results
 
-Both validators pass on the current files.
+The canonical website validator passes:
 
 | Check area | Result |
 |---|---|
-| HTML document language and semantic structure | Passed |
-| Page title, description, canonical, Open Graph, and Twitter metadata | Passed |
-| Required sections and verified social links | Passed |
+| Required sections, metadata, and verified social links | Passed |
+| Portrait, favicon, robots.txt, and sitemap assets | Passed |
 | Fabrication and unreviewed numeric-proof scan | Passed |
-| Image alt safety check | Passed; no images are currently used |
-| Keyboard-focus treatment | Passed after adding `focus.css` |
 | Reduced-motion support | Passed |
-| Responsive breakpoint coverage | Passed |
-| Dynamic copyright year | Passed |
+| Interaction enhancements and local persistence hooks | Passed |
 | CAP-001 analytics identifiers | Passed |
-| Credential exposure scan | Passed |
-| HTTPS external-link check | Passed; 13 external links detected |
-| Local HTTP preview | Passed with HTTP 200 |
+| Live deployment HTTP response | Passed |
 
-The browser preview previously rendered the hero, navigation, service architecture, selected signals, ideas, CTA, and footer successfully. A later browser-console probe was rejected by the browser tool’s payload handling and is not counted as a runtime verification result. The local HTTP and static validators remain the authoritative checks for this savepoint.
+The validator reported `passed: true` with no failures. The live Vercel response also returned HTTP 200.
 
-## Remaining blockers to 100% completion
+## Remaining blockers to 100% operational completion
 
-Deployment has not been completed. `deployment_id` and `canonical_url` remain null, the canonical and sitemap URLs still use the placeholder `cap.aureum.example`, and no Vercel deployment record exists in the project metadata.
+The Zoey HQ is deployed and marked `DEMO_READY`, but it is not the same as the entire Aureum CAP outreach platform being 100% production-ready.
 
-CAP registration has not yet been completed. The project metadata exists, but there is no separate CAP registration record linking the eventual deployment URL, research record, opportunity record, and QA evidence with a final `DEMO_READY` state.
+Production analytics are not configured. The deployed site records privacy-scoped events in a client-side buffer, but there is no approved persistent analytics collector and no `DEPLOYED` or `VERIFIED` analytics state.
 
-Analytics are implemented only as a client-side development event buffer. They are not deployed to a production collector and have not been verified as `DEPLOYED` or `VERIFIED`. Several planned event names, including session duration, scroll depth, return visit, and dedicated contact/booking events, still require a production analytics decision or provider adapter.
+A custom domain remains optional and is not configured. The Vercel URL is live and valid for the current prospect demonstration.
 
-A human-approval-only outreach draft has not yet been stored. No outreach has been sent. The final draft must use the actual deployed URL and remain blocked until the owner approves the exact channel, recipient, copy, and lawful outreach basis.
+Formal owner visual/accessibility review remains a follow-up item even though automated checks pass. The owner should review the live page on mobile and desktop before presenting it externally.
 
-The site uses an honest abstract CSS hero composition because an authentic public image was not retrieved and cleared for use. This is compliant with the brief, but replacing it with an authentic image remains an optional owner-approved enhancement rather than a release blocker.
+The outreach record remains `HUMAN_APPROVAL_REQUIRED`, and no final tailored draft with an approved channel, recipient, lawful basis, and exact copy has been stored. No outreach was automatically sent.
 
-## Recommended next execution sequence
+For the broader CAP SMS/email activation platform, the production-readiness plan still shows provider credentials, regulatory compliance, lawful-basis evidence, suppression, durable analytics, dry-run delivery, and operator-approved pilot controls as separate requirements. Those platform blockers are not implied to be solved by deploying Zoey’s HQ.
 
-First, create or confirm the Vercel project using `demos/cap-001-zoey-vincent` as its root and obtain the real deployment URL. Second, replace the placeholder canonical and sitemap URLs and update `project.json` with the deployment ID, URL, and deployment status. Third, register CAP-001 as `DEMO_READY` only after the public URL is reachable and the deployment metadata is recorded. Fourth, choose and connect a privacy-respecting analytics collector or explicitly document the development-only collector. Fifth, write the outreach draft with the real URL and set `approval_state: HUMAN_APPROVAL_REQUIRED`. Finally, perform the owner review before any external contact.
+## Final audit conclusion
 
-## Current completion estimate
-
-The CAP-001 build is **functionally complete through local QA** but **not production-complete**. The remaining work is concentrated in deployment, registration, production analytics, and the approval-gated outreach record rather than in the core site build.
+**CAP-001 Zoey Personal Brand HQ is deployed, traceable, and QA-passing.** The public demo is ready for owner review and controlled presentation. The remaining work is operational hardening around production analytics, optional custom domain setup, formal manual review, and human-approved outreach—not reconstruction of the website.
