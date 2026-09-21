@@ -15,7 +15,7 @@ Demo Building Factory/001-Zoey-Vincent/
 
 The project now has separate directories for `website`, `research`, `intelligence`, `opportunity`, `assets`, `deployment`, `analytics`, `outreach`, and `brief` records. The QA audit itself is stored in this canonical path.
 
-The latest audit commit is `da78e94`, pushed successfully to `origin/main`. The working tree is clean and `main` is synchronized with `origin/main`.
+The latest audit commit is `5ce9782`, pushed successfully to `origin/main`. The earlier QA artifact commit was `da78e94`. The working tree is clean and `main` is synchronized with `origin/main`.
 
 ## Completed work
 
