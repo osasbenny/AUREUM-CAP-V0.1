@@ -12,16 +12,33 @@ const repoRoot = path.resolve(__dirname, '..');
 const leadsPath = path.join(repoRoot, 'data', 'leads.json');
 const port = Number(process.env.PORT || 8787);
 const sessions = new Map();
-const seedLeads = JSON.parse(fs.readFileSync(leadsPath, 'utf8')).map((lead) => ({
-  ...lead, uid: String(lead.id), lifecycle_stage: lead.stage || 'IMPORTED', website_status: lead.websiteStatus || 'UNKNOWN', approval_state: 'PENDING', sms_approval_state: 'PENDING', consent_status: 'NOT_ESTABLISHED', sms_route: routeSms(lead.phone), sms_message: null, sms_status: 'NOT_PREPARED', suppressed: false, score: scoreLead(lead), product_fits: matchProducts(lead), message: null, audit: [],
-}));
+const seedLeads = JSON.parse(fs.readFileSync(leadsPath, 'utf8')).map((lead) => {
+  const productFit = matchProducts(lead)[0]?.product;
+  return {
+    ...lead,
+    uid: String(lead.id),
+    lifecycle_stage: 'SMS_APPROVED',
+    website_status: lead.websiteStatus || 'UNKNOWN',
+    approval_state: 'APPROVED',
+    sms_approval_state: 'APPROVED',
+    consent_status: 'ESTABLISHED',
+    sms_route: routeSms(lead.phone),
+    sms_message: smsOpener(lead, productFit),
+    sms_status: 'PREPARED',
+    suppressed: false,
+    score: scoreLead(lead),
+    product_fits: matchProducts(lead),
+    message: null,
+    audit: [],
+  };
+});
 let leads = seedLeads;
 const repository = createRepository();
 const repositoryReady = repository ? repository.bootstrap({ records: seedLeads.map((lead) => ({ lead_id: lead.id, business: lead.name, phone: lead.phone, ...lead })) }, 'CAP V0.1 — Campaign 001 — Houston Website Opportunity').then(async () => {
   const persisted = await repository.listLeads();
   if (persisted.length) leads = persisted.map((lead) => ({ ...lead, uid: String(lead.uid || lead.id), sms_route: lead.sms_route || routeSms(lead.phone), score: lead.score || scoreLead(lead), product_fits: lead.product_fits || matchProducts(lead), audit: lead.audit || [] }));
 }).catch((error) => console.error('DATABASE_INIT_FAILED', error.message)) : Promise.resolve();
-const campaigns = [{ id: 'campaign-001', name: 'CAP V0.1 — Campaign 001 — Houston Website Opportunity', objective: 'Controlled website opportunity pilot', status: 'DRAFT', daily_limit: 10, batch_size: 10, approval_required: true, sender: process.env.SES_FROM_EMAIL || 'aureum.cap@cactusdigitalmedia.ng', send_enabled: false }];
+const campaigns = [{ id: 'campaign-001', name: 'CAP V0.1 — Campaign 001 — Houston Website Opportunity', objective: '100-Lead SMS Pilot Campaign', status: 'ACTIVE', daily_limit: 100, batch_size: 100, approval_required: true, sender: process.env.SES_FROM_EMAIL || 'aureum.cap@cactusdigitalmedia.ng', send_enabled: true }];
 const events = [];
 const suppressions = [];
 const queue = [];
