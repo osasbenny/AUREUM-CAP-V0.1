@@ -31,7 +31,9 @@ export async function sendTwilioSms({ to, body, statusCallback }) {
   if (!sid || !token || (!from && !serviceSid)) throw new Error('Twilio server configuration is incomplete');
   const params = new URLSearchParams({ To: to, Body: body });
   if (serviceSid) params.set('MessagingServiceSid', serviceSid); else params.set('From', from);
-  if (statusCallback) params.set('StatusCallback', statusCallback);
+  if (statusCallback && /^https:\/\//i.test(statusCallback) && !/localhost|127\.0\.0\.1/i.test(statusCallback)) {
+    params.set('StatusCallback', statusCallback);
+  }
   const response = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${sid}/Messages.json`, { method: 'POST', headers: { Authorization: `Basic ${Buffer.from(`${sid}:${token}`).toString('base64')}`, 'Content-Type': 'application/x-www-form-urlencoded' }, body: params });
   const result = await response.json();
   if (!response.ok) throw new Error(result.message || `Twilio request failed: ${response.status}`);

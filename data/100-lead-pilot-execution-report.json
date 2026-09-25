@@ -1,0 +1,18 @@
+{
+  "executed_at": "2026-09-22T00:00:00.000Z",
+  "total_leads": 100,
+  "batch_processed": 50,
+  "sent": 0,
+  "errors": 50,
+  "skipped": 0,
+  "results": [
+    {
+      "lead_id": 1,
+      "name": "Honey Sheep's Car Wash",
+      "phone": "+17137480955",
+      "status": "ERROR",
+      "error": "Account exceeded the 50 daily messages limit"
+    }
+  ],
+  "note": "Twilio account daily trial limit of 50 messages reached. Subsequent batches will be rate-paced across consecutive days."
+}
