@@ -1,0 +1,19 @@
+{
+  "executed_at": "2026-09-22T00:00:00.000Z",
+  "batch_number": 2,
+  "lead_range": "51-100",
+  "total_processed": 50,
+  "sent": 0,
+  "errors": 50,
+  "skipped": 0,
+  "results": [
+    {
+      "lead_id": 51,
+      "name": "Joes Auto",
+      "phone": "+18328763057",
+      "status": "ERROR",
+      "error": "Account exceeded the 50 daily messages limit"
+    }
+  ],
+  "note": "Twilio trial account daily message limit reached. Subsequent batches will be rate-paced across consecutive days."
+}
