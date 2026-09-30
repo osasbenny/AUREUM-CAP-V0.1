@@ -1,9 +1,10 @@
 {
-  "campaign_name": "59to10k Guide Campaign — Houston Pilot",
-  "scheduled_for": "2026-10-01T11:18:34.735Z",
+  "campaign_name": "59to10k Guide Campaign — Houston Pilot ($10 Offer)",
+  "scheduled_for": "2026-10-01T11:20:55.268Z",
   "total_queued": 100,
   "sender": "Kathleen Furlong",
   "product_link": "https://bit.ly/10k-online-business",
+  "guide_price": "$10",
   "jobs": [
     {
       "id": "job-59to10k-1",
@@ -12,10 +13,10 @@
       "business": "Honey Sheep's Car Wash",
       "provider": "twilio",
       "to": "+17137480955",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.748Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-2",
@@ -24,10 +25,10 @@
       "business": "Golden Shine Hand Carwash",
       "provider": "twilio",
       "to": "+17138698485",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.748Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-3",
@@ -36,10 +37,10 @@
       "business": "Carwash a domicilio Fuentes",
       "provider": "twilio",
       "to": "+17134050361",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.748Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-4",
@@ -48,10 +49,10 @@
       "business": "Carlos Carwash",
       "provider": "twilio",
       "to": "+18323527302",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.748Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-5",
@@ -60,10 +61,10 @@
       "business": "Blue Hand Car Wash",
       "provider": "twilio",
       "to": "+17132038272",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.748Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-6",
@@ -72,10 +73,10 @@
       "business": "Diamond Car Wash",
       "provider": "twilio",
       "to": "+12815869274",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.748Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-7",
@@ -84,10 +85,10 @@
       "business": "Best Hand Car Wash 2",
       "provider": "twilio",
       "to": "+17137843209",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.748Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-8",
@@ -96,10 +97,10 @@
       "business": "USA Hand Car Wash",
       "provider": "twilio",
       "to": "+18322771385",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.748Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-9",
@@ -108,10 +109,10 @@
       "business": "Blue Planet Mobile Car Wash and Detailing",
       "provider": "twilio",
       "to": "+19797301092",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.748Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-10",
@@ -120,10 +121,10 @@
       "business": "Sparkles Hand Car Wash",
       "provider": "twilio",
       "to": "+18322434598",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.748Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-11",
@@ -132,10 +133,10 @@
       "business": "H-TOWN CAR WASH",
       "provider": "twilio",
       "to": "+17134569971",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.748Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-12",
@@ -144,10 +145,10 @@
       "business": "Regency Car Wash",
       "provider": "twilio",
       "to": "+12818708967",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.748Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-13",
@@ -156,10 +157,10 @@
       "business": "The District Car Wash",
       "provider": "twilio",
       "to": "+18329555376",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.748Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-14",
@@ -168,10 +169,10 @@
       "business": "Bellaire Hand Detail and Car Wash",
       "provider": "twilio",
       "to": "+18329889105",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.748Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-15",
@@ -180,10 +181,10 @@
       "business": "AB Boss Car Wash & Detailing",
       "provider": "twilio",
       "to": "+12109561338",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.748Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-16",
@@ -192,10 +193,10 @@
       "business": "Masters hand Car Wash",
       "provider": "twilio",
       "to": "+18328898355",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.748Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-17",
@@ -204,10 +205,10 @@
       "business": "Houston Car Salon",
       "provider": "twilio",
       "to": "+17135057477",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.748Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-18",
@@ -216,10 +217,10 @@
       "business": "Superior Texas Car Wash & Lube",
       "provider": "twilio",
       "to": "+12814983228",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.748Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-19",
@@ -228,10 +229,10 @@
       "business": "Carwash a domicilio",
       "provider": "twilio",
       "to": "+17134050361",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.748Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-20",
@@ -240,10 +241,10 @@
       "business": "Monarca Lawn service",
       "provider": "twilio",
       "to": "+18322072789",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.748Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-21",
@@ -252,10 +253,10 @@
       "business": "Rogelio & Jean Moreno Lawn Services",
       "provider": "twilio",
       "to": "+17132981807",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.748Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-22",
@@ -264,10 +265,10 @@
       "business": "Texas Clean Cut, Precision Masters, LLC",
       "provider": "twilio",
       "to": "+17139028721",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.748Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-23",
@@ -276,10 +277,10 @@
       "business": "Ecoscape Luxury Innovations LLC",
       "provider": "twilio",
       "to": "+19362422339",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.748Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-24",
@@ -288,10 +289,10 @@
       "business": "LawnCare Houston",
       "provider": "twilio",
       "to": "+18327625179",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.748Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-25",
@@ -300,10 +301,10 @@
       "business": "Cervantes Landscaping services",
       "provider": "twilio",
       "to": "+18322978420",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.748Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-26",
@@ -312,10 +313,10 @@
       "business": "100% Tree & Lawn Care LLC",
       "provider": "twilio",
       "to": "+18327852750",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.748Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-27",
@@ -324,10 +325,10 @@
       "business": "Greater Houston Lawn Services",
       "provider": "twilio",
       "to": "+17138943936",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.748Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-28",
@@ -336,10 +337,10 @@
       "business": "Will’s Lawn Maintenance",
       "provider": "twilio",
       "to": "+12817436887",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-29",
@@ -348,10 +349,10 @@
       "business": "Rogelio Ortega Lawn Services",
       "provider": "twilio",
       "to": "+18328033506",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-30",
@@ -360,10 +361,10 @@
       "business": "Mow Stars Lawn Service",
       "provider": "twilio",
       "to": "+12815470078",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-31",
@@ -372,10 +373,10 @@
       "business": "Kingdom Lawn Care",
       "provider": "twilio",
       "to": "+18323418700",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-32",
@@ -384,10 +385,10 @@
       "business": "B&A LAWN CARE",
       "provider": "twilio",
       "to": "+18325260896",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-33",
@@ -396,10 +397,10 @@
       "business": "Perry Brothers Roof Repair",
       "provider": "twilio",
       "to": "+19365367100",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-34",
@@ -408,10 +409,10 @@
       "business": "Wright Brothers Roofing",
       "provider": "twilio",
       "to": "+19362097110",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-35",
@@ -420,10 +421,10 @@
       "business": "Universal Roofing & Restoration",
       "provider": "twilio",
       "to": "+12816165842",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-36",
@@ -432,10 +433,10 @@
       "business": "Ruben's Window TinT LLC",
       "provider": "twilio",
       "to": "+18322025899",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-37",
@@ -444,10 +445,10 @@
       "business": "Exclusive Window Tint",
       "provider": "twilio",
       "to": "+12814080474",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-38",
@@ -456,10 +457,10 @@
       "business": "Shark Tint",
       "provider": "twilio",
       "to": "+18328700527",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-39",
@@ -468,10 +469,10 @@
       "business": "Sun Cap Auto Tint of Houston",
       "provider": "twilio",
       "to": "+12815288468",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-40",
@@ -480,10 +481,10 @@
       "business": "Fx Window tint stereo alarms car audio",
       "provider": "twilio",
       "to": "+18327686256",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-41",
@@ -492,10 +493,10 @@
       "business": "Window tint and graphics",
       "provider": "twilio",
       "to": "+13462758126",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-42",
@@ -504,10 +505,10 @@
       "business": "Auto tint",
       "provider": "twilio",
       "to": "+12819792093",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-43",
@@ -516,10 +517,10 @@
       "business": "Night window tint",
       "provider": "twilio",
       "to": "+18328445555",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-44",
@@ -528,10 +529,10 @@
       "business": "Tint King",
       "provider": "twilio",
       "to": "+17137410303",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-45",
@@ -540,10 +541,10 @@
       "business": "HTOWN TINT (we come to you )",
       "provider": "twilio",
       "to": "+17134162825",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-46",
@@ -552,10 +553,10 @@
       "business": "LUXURY CUSTOMZ WINDOW TINT",
       "provider": "twilio",
       "to": "+18325461890",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-47",
@@ -564,10 +565,10 @@
       "business": "Exclusive King's Window Tint.Behind the building.",
       "provider": "twilio",
       "to": "+18327242493",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-48",
@@ -576,10 +577,10 @@
       "business": "D E Mobile Window Tint & Alarms",
       "provider": "twilio",
       "to": "+12815615141",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-49",
@@ -588,10 +589,10 @@
       "business": "GT CAR STEREO ALARMS AND WINDOW TINT",
       "provider": "twilio",
       "to": "+12818883942",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-50",
@@ -600,10 +601,10 @@
       "business": "Exclusive King's Window Tint #2",
       "provider": "twilio",
       "to": "+13466104511",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-51",
@@ -612,10 +613,10 @@
       "business": "Joes Auto",
       "provider": "twilio",
       "to": "+18328763057",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-52",
@@ -624,10 +625,10 @@
       "business": "ATLAS WINDOW TINT",
       "provider": "twilio",
       "to": "+18324332830",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-53",
@@ -636,10 +637,10 @@
       "business": "Back Ally Tint LLC",
       "provider": "twilio",
       "to": "+17132066327",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-54",
@@ -648,10 +649,10 @@
       "business": "Sun Control Window Tinting",
       "provider": "twilio",
       "to": "+12818570398",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-55",
@@ -660,10 +661,10 @@
       "business": "East West auto tint",
       "provider": "twilio",
       "to": "+18323432633",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-56",
@@ -672,10 +673,10 @@
       "business": "JC Window Tinting",
       "provider": "twilio",
       "to": "+18322758166",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-57",
@@ -684,10 +685,10 @@
       "business": "King Tint",
       "provider": "twilio",
       "to": "+18328294557",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-58",
@@ -696,10 +697,10 @@
       "business": "Reed's Window Tint",
       "provider": "twilio",
       "to": "+18328750506",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-59",
@@ -708,10 +709,10 @@
       "business": "High Performance Tint",
       "provider": "twilio",
       "to": "+18325187266",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-60",
@@ -720,10 +721,10 @@
       "business": "Exclusive Mobile Tinting (Curtis Hart) CEO/ owner",
       "provider": "twilio",
       "to": "+13462645631",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-61",
@@ -732,10 +733,10 @@
       "business": "cruz window tint",
       "provider": "twilio",
       "to": "+18325719208",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-62",
@@ -744,10 +745,10 @@
       "business": "pancho's window tint",
       "provider": "twilio",
       "to": "+18324809290",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.270Z"
     },
     {
       "id": "job-59to10k-63",
@@ -756,10 +757,10 @@
       "business": "High RollerZ Car Audio",
       "provider": "twilio",
       "to": "+17133737867",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.271Z"
     },
     {
       "id": "job-59to10k-64",
@@ -768,10 +769,10 @@
       "business": "Mr. Tires & Window Tint",
       "provider": "twilio",
       "to": "+12818772528",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.271Z"
     },
     {
       "id": "job-59to10k-65",
@@ -780,10 +781,10 @@
       "business": "Window tint griggs",
       "provider": "twilio",
       "to": "+18322986757",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.271Z"
     },
     {
       "id": "job-59to10k-66",
@@ -792,10 +793,10 @@
       "business": "Ernest Tint Shop",
       "provider": "twilio",
       "to": "+17136920992",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.271Z"
     },
     {
       "id": "job-59to10k-67",
@@ -804,10 +805,10 @@
       "business": "Ernie’s glass tinting",
       "provider": "twilio",
       "to": "+17132526984",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.271Z"
     },
     {
       "id": "job-59to10k-68",
@@ -816,10 +817,10 @@
       "business": "katy car tint",
       "provider": "twilio",
       "to": "+12819953305",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.271Z"
     },
     {
       "id": "job-59to10k-69",
@@ -828,10 +829,10 @@
       "business": "David Tint",
       "provider": "twilio",
       "to": "+18328985467",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.271Z"
     },
     {
       "id": "job-59to10k-70",
@@ -840,10 +841,10 @@
       "business": "Window Tint Ceramic",
       "provider": "twilio",
       "to": "+12818460896",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.271Z"
     },
     {
       "id": "job-59to10k-71",
@@ -852,10 +853,10 @@
       "business": "Sierra Vista Realty, LLC",
       "provider": "twilio",
       "to": "+18328951618",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.271Z"
     },
     {
       "id": "job-59to10k-72",
@@ -864,10 +865,10 @@
       "business": "Carlos Garcia Realty Comm",
       "provider": "twilio",
       "to": "+17139285211",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.271Z"
     },
     {
       "id": "job-59to10k-73",
@@ -876,10 +877,10 @@
       "business": "Stephany Pacheco casas nuevas | Houston Texas",
       "provider": "twilio",
       "to": "+12812362612",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.271Z"
     },
     {
       "id": "job-59to10k-74",
@@ -888,10 +889,10 @@
       "business": "United Real Estate: Hena Malkani",
       "provider": "twilio",
       "to": "+12818710456",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.271Z"
     },
     {
       "id": "job-59to10k-75",
@@ -900,10 +901,10 @@
       "business": "Jay Bustos | Houston Realtor | Bustos Properties Group",
       "provider": "twilio",
       "to": "+18325424037",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.271Z"
     },
     {
       "id": "job-59to10k-76",
@@ -912,10 +913,10 @@
       "business": "First Aid Plumbing Specialist",
       "provider": "twilio",
       "to": "+18322793065",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.271Z"
     },
     {
       "id": "job-59to10k-77",
@@ -924,10 +925,10 @@
       "business": "Josiah & Sons Plumbers",
       "provider": "twilio",
       "to": "+13462391950",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.271Z"
     },
     {
       "id": "job-59to10k-78",
@@ -936,10 +937,10 @@
       "business": "Perez Plumbing",
       "provider": "twilio",
       "to": "+17132254341",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.271Z"
     },
     {
       "id": "job-59to10k-79",
@@ -948,10 +949,10 @@
       "business": "Arm Plumbing Co.",
       "provider": "twilio",
       "to": "+17136947836",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.271Z"
     },
     {
       "id": "job-59to10k-80",
@@ -960,10 +961,10 @@
       "business": "U-Plumb-It",
       "provider": "twilio",
       "to": "+17139422277",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.271Z"
     },
     {
       "id": "job-59to10k-81",
@@ -972,10 +973,10 @@
       "business": "Pacheco Carpenter Services",
       "provider": "twilio",
       "to": "+18327154877",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.271Z"
     },
     {
       "id": "job-59to10k-82",
@@ -984,10 +985,10 @@
       "business": "Pro Carpentry",
       "provider": "twilio",
       "to": "+17138758313",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.271Z"
     },
     {
       "id": "job-59to10k-83",
@@ -996,10 +997,10 @@
       "business": "Gomez carpenter and construction",
       "provider": "twilio",
       "to": "+17133781348",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.271Z"
     },
     {
       "id": "job-59to10k-84",
@@ -1008,10 +1009,10 @@
       "business": "J&j carpentry",
       "provider": "twilio",
       "to": "+18328897075",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.271Z"
     },
     {
       "id": "job-59to10k-85",
@@ -1020,10 +1021,10 @@
       "business": "INMA Custom Carpentry",
       "provider": "twilio",
       "to": "+18323560307",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.271Z"
     },
     {
       "id": "job-59to10k-86",
@@ -1032,10 +1033,10 @@
       "business": "Perdomos Woodwork Carpentry",
       "provider": "twilio",
       "to": "+18325163065",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.271Z"
     },
     {
       "id": "job-59to10k-87",
@@ -1044,10 +1045,10 @@
       "business": "MadesaCustom Cabinets",
       "provider": "twilio",
       "to": "+18329101349",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.271Z"
     },
     {
       "id": "job-59to10k-88",
@@ -1056,10 +1057,10 @@
       "business": "Innova Custom Cabinets DBA",
       "provider": "twilio",
       "to": "+12817484019",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.271Z"
     },
     {
       "id": "job-59to10k-89",
@@ -1068,10 +1069,10 @@
       "business": "Zelayaconstruction",
       "provider": "twilio",
       "to": "+12818022559",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.271Z"
     },
     {
       "id": "job-59to10k-90",
@@ -1080,10 +1081,10 @@
       "business": "Kirk Furniture and Cabinetry Restoration",
       "provider": "twilio",
       "to": "+16018315496",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.271Z"
     },
     {
       "id": "job-59to10k-91",
@@ -1092,10 +1093,10 @@
       "business": "LG Carpenter's LLC",
       "provider": "twilio",
       "to": "+18325888896",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.271Z"
     },
     {
       "id": "job-59to10k-92",
@@ -1104,10 +1105,10 @@
       "business": "Quiroz's carpenter",
       "provider": "twilio",
       "to": "+12816906866",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.271Z"
     },
     {
       "id": "job-59to10k-93",
@@ -1116,10 +1117,10 @@
       "business": "Coronado Cabinets LLC",
       "provider": "twilio",
       "to": "+18328146232",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.271Z"
     },
     {
       "id": "job-59to10k-94",
@@ -1128,10 +1129,10 @@
       "business": "Got Carpenter LLC",
       "provider": "twilio",
       "to": "+12817458633",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.271Z"
     },
     {
       "id": "job-59to10k-95",
@@ -1140,10 +1141,10 @@
       "business": "AB MILLWORK",
       "provider": "twilio",
       "to": "+17139418174",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.271Z"
     },
     {
       "id": "job-59to10k-96",
@@ -1152,10 +1153,10 @@
       "business": "BC Woodwork",
       "provider": "twilio",
       "to": "+17135458506",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.271Z"
     },
     {
       "id": "job-59to10k-97",
@@ -1164,10 +1165,10 @@
       "business": "Taller de carpintería",
       "provider": "twilio",
       "to": "+14099958805",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.271Z"
     },
     {
       "id": "job-59to10k-98",
@@ -1176,10 +1177,10 @@
       "business": "KBG Barbershop",
       "provider": "twilio",
       "to": "+18329897577",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.271Z"
     },
     {
       "id": "job-59to10k-99",
@@ -1188,10 +1189,10 @@
       "business": "Elegant Fade Barbershop",
       "provider": "twilio",
       "to": "+18326186438",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.271Z"
     },
     {
       "id": "job-59to10k-100",
@@ -1200,10 +1201,10 @@
       "business": "Mike's Barber Shop",
       "provider": "twilio",
       "to": "+17139720431",
-      "body": "Turned $59 into $10K selling a simple $5 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $5: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
+      "body": "Turned $59 into $10K selling a simple $10 digital product online. Learn the exact system: low-ticket offers, simple storefronts, and direct outreach. Get the 59to10k Guide for $10: https://bit.ly/10k-online-business — Kathleen Furlong. Reply STOP to opt out.",
       "status": "QUEUED",
-      "scheduled_for": "2026-10-01T11:18:34.735Z",
-      "created_at": "2026-09-30T11:18:34.749Z"
+      "scheduled_for": "2026-10-01T11:20:55.268Z",
+      "created_at": "2026-09-30T11:20:55.271Z"
     }
   ]
 }
