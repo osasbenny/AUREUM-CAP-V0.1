@@ -1,0 +1,76 @@
+{
+  "generated_at": "2026-10-03T05:34:08.268Z",
+  "input_records": 682,
+  "unique_businesses": 669,
+  "duplicates_merged": 13,
+  "conflicting_records_manual_review": 0,
+  "conflicts": [],
+  "rfi_high_intent_count": 8,
+  "rfi_high_intent_businesses": [
+    {
+      "id": 101,
+      "business": "Nik Shipping and Logistics",
+      "category": "Website Design / Redesign",
+      "location": "London, Eng E2 0Aa",
+      "request_type": "website design/redesign"
+    },
+    {
+      "id": 102,
+      "business": "Best House Buyer",
+      "category": "Website Design / Redesign",
+      "location": "London, Eng W1w 7Lt",
+      "request_type": "website design/redesign"
+    },
+    {
+      "id": 103,
+      "business": "Blogging and Best-Selling Introduction",
+      "category": "Website Design / Redesign",
+      "location": "London Se8 4Hh",
+      "request_type": "website design/redesign"
+    },
+    {
+      "id": 104,
+      "business": "Lynx London",
+      "category": "Website Design / Redesign",
+      "location": "London, Eng W1s 1Hs",
+      "request_type": "website design/redesign"
+    },
+    {
+      "id": 105,
+      "business": "Hspg",
+      "category": "Website Design / Redesign",
+      "location": "Manchester, Eng M12 6PN",
+      "request_type": "website design/redesign"
+    },
+    {
+      "id": 106,
+      "business": "Mda Consulting",
+      "category": "Website Design / Redesign",
+      "location": "Birmingham, West Midlands B2 5NY",
+      "request_type": "website design/redesign"
+    },
+    {
+      "id": 107,
+      "business": "Prime Estates",
+      "category": "Website Design / Redesign",
+      "location": "Birmingham, Eng B25 8Ur",
+      "request_type": "website design/redesign"
+    },
+    {
+      "id": 108,
+      "business": "UK Mail Courier",
+      "category": "Website Design / Redesign",
+      "location": "Leeds, Eng LS27 7JQ",
+      "request_type": "website design/redesign"
+    }
+  ],
+  "internet_presence_counts": {
+    "NO_WEB_PRESENCE": 100,
+    "SOCIAL_ONLY": 0,
+    "DIRECTORY_ONLY": 0,
+    "WEAK_WEBSITE": 0,
+    "OUTDATED_WEBSITE": 0,
+    "FUNCTIONAL_WEBSITE": 582,
+    "STRONG_WEBSITE": 0
+  }
+}
