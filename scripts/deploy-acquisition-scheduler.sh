@@ -60,13 +60,14 @@ echo "Registered Task Definition ARN: $TASK_DEF_ARN"
 echo "=== 2. Creating EventBridge Scheduler Schedule ==="
 ROLE_ARN="arn:aws:iam::$ACCOUNT:role/aureum-cap-v01-scheduler-role"
 
-# Ensure scheduler role exists or create one if needed
 if ! aws iam get-role --role-name aureum-cap-v01-scheduler-role >/dev/null 2>&1; then
   aws iam create-role --role-name aureum-cap-v01-scheduler-role --assume-role-policy-document '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"Service":"scheduler.amazonaws.com"},"Action":"sts:AssumeRole"}]}' >/dev/null
   aws iam attach-role-policy --role-name aureum-cap-v01-scheduler-role --policy-arn arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceEventsRole >/dev/null
 fi
 
 CLUSTER_ARN=$(aws ecs describe-clusters --region "$REGION" --clusters "$CLUSTER" --query 'clusters[0].clusterArn' --output text)
+
+SUBNET_JSON_ARRAY=$(echo "$SUBNETS" | sed 's/,/","/g' | sed 's/^/"/' | sed 's/$/"/')
 
 cat > /tmp/scheduler-target.json <<TARGET
 {
@@ -77,8 +78,8 @@ cat > /tmp/scheduler-target.json <<TARGET
     "TaskCount": 1,
     "LaunchType": "FARGATE",
     "NetworkConfiguration": {
-      "AwsvpcConfiguration": {
-        "Subnets": [$(echo "$SUBNETS" | sed 's/,/","/g' | sed 's/^/"/' | sed 's/$/"/.')],
+      "awsvpcConfiguration": {
+        "Subnets": [$SUBNET_JSON_ARRAY],
         "SecurityGroups": ["$TASK_SG"],
         "AssignPublicIp": "ENABLED"
       }
@@ -87,7 +88,6 @@ cat > /tmp/scheduler-target.json <<TARGET
 }
 TARGET
 
-# Create or update schedule
 aws scheduler create-schedule \
   --region "$REGION" \
   --name "aureum-cap-v01-daily-acquisition" \
