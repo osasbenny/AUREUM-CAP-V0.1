@@ -12,7 +12,15 @@ TASK_SG="sg-0653bfae5521b3400"
 SUBNETS=$(aws ec2 describe-subnets --region "$REGION" --filters Name=vpc-id,Values=vpc-02f0b750c4f333666 --query 'Subnets[?MapPublicIpOnLaunch==`true`].SubnetId' --output text | tr '\t' ',')
 LOG_GROUP="/ecs/aureum-cap-v01-api"
 
-echo "=== 1. Registering Acquisition ECS Task Definition ==="
+echo "=== 1. Setting up SNS Alert Topic & EventBridge Scheduler DLQ ==="
+SNS_TOPIC_ARN=$(aws sns create-topic --region "$REGION" --name "aureum-cap-v01-alerts" --query 'TopicArn' --output text 2>/dev/null || aws sns list-topics --region "$REGION" --query "Topics[?ends_with(TopicArn, ':aureum-cap-v01-alerts')].TopicArn | [0]" --output text)
+echo "SNS Alert Topic ARN: $SNS_TOPIC_ARN"
+
+DLQ_URL=$(aws sqs create-queue --region "$REGION" --queue-name "aureum-cap-v01-scheduler-dlq" --query 'QueueUrl' --output text 2>/dev/null || aws sqs get-queue-url --region "$REGION" --queue-name "aureum-cap-v01-scheduler-dlq" --query 'QueueUrl' --output text)
+DLQ_ARN=$(aws sqs get-queue-attributes --region "$REGION" --queue-url "$DLQ_URL" --attribute-names QueueArn --query 'Attributes.QueueArn' --output text)
+echo "Scheduler DLQ ARN: $DLQ_ARN"
+
+echo "=== 2. Registering Acquisition ECS Task Definition ==="
 RUNTIME_ARN=$(aws secretsmanager describe-secret --region "$REGION" --secret-id "$RUNTIME_SECRET_NAME" --query ARN --output text)
 
 cat > /tmp/acquisition-task-definition.json <<TASK
@@ -57,7 +65,7 @@ TASK
 TASK_DEF_ARN=$(aws ecs register-task-definition --region "$REGION" --cli-input-json file:///tmp/acquisition-task-definition.json --query 'taskDefinition.taskDefinitionArn' --output text)
 echo "Registered Task Definition ARN: $TASK_DEF_ARN"
 
-echo "=== 2. Creating EventBridge Scheduler Schedule ==="
+echo "=== 3. Creating EventBridge Scheduler Schedule with DLQ & Retry ==="
 ROLE_ARN="arn:aws:iam::$ACCOUNT:role/aureum-cap-v01-scheduler-role"
 
 if ! aws iam get-role --role-name aureum-cap-v01-scheduler-role >/dev/null 2>&1; then
@@ -66,7 +74,6 @@ if ! aws iam get-role --role-name aureum-cap-v01-scheduler-role >/dev/null 2>&1;
 fi
 
 CLUSTER_ARN=$(aws ecs describe-clusters --region "$REGION" --clusters "$CLUSTER" --query 'clusters[0].clusterArn' --output text)
-
 SUBNET_JSON_ARRAY=$(echo "$SUBNETS" | sed 's/,/","/g' | sed 's/^/"/' | sed 's/$/"/')
 
 cat > /tmp/scheduler-target.json <<TARGET
@@ -84,6 +91,12 @@ cat > /tmp/scheduler-target.json <<TARGET
         "AssignPublicIp": "ENABLED"
       }
     }
+  },
+  "RetryPolicy": {
+    "MaximumRetryAttempts": 3
+  },
+  "DeadLetterConfig": {
+    "Arn": "$DLQ_ARN"
   }
 }
 TARGET
@@ -109,7 +122,7 @@ SCHEDULE_ARN=$(aws scheduler get-schedule --region "$REGION" --name "aureum-cap-
 NEXT_TIME=$(aws scheduler get-schedule --region "$REGION" --name "aureum-cap-v01-daily-acquisition" --query 'StartDate' --output text)
 echo "Schedule ARN: $SCHEDULE_ARN"
 
-echo "=== 3. Running Acquisition Task Immediately ==="
+echo "=== 4. Running Acquisition Task Immediately ==="
 TASK_RUN_JSON=$(aws ecs run-task \
   --region "$REGION" \
   --cluster "$CLUSTER" \
@@ -127,7 +140,7 @@ aws ecs wait tasks-stopped --region "$REGION" --cluster "$CLUSTER" --tasks "$TAS
 FINAL_STATUS=$(aws ecs describe-tasks --region "$REGION" --cluster "$CLUSTER" --tasks "$TASK_ARN" --query 'tasks[0].lastStatus' --output text)
 echo "Task Final Status: $FINAL_STATUS"
 
-echo "=== 4. Verification & Metrics ==="
+echo "=== 5. Verification & Metrics ==="
 echo "Acquisition task definition ARN/revision: $TASK_DEF_ARN"
 echo "EventBridge schedule ARN: $SCHEDULE_ARN"
 echo "state = ENABLED"
@@ -135,3 +148,5 @@ echo "schedule expression = rate(1 day)"
 echo "next execution time = $NEXT_TIME"
 echo "immediate ECS task ARN = $TASK_ARN"
 echo "immediate task final status = $FINAL_STATUS"
+echo "SNS Alert Topic ARN: $SNS_TOPIC_ARN"
+echo "Scheduler DLQ ARN: $DLQ_ARN"
