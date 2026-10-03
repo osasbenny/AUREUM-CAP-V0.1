@@ -41,7 +41,7 @@ function getLeads() {
 }
 let leads = getLeads();
 const repository = createRepository();
-const repositoryReady = repository ? repository.bootstrap({ records: seedLeads.map((lead) => ({ lead_id: lead.id, business: lead.name, phone: lead.phone, ...lead })) }, 'CAP V0.1 — Campaign 001 — Houston Website Opportunity').then(async () => {
+const repositoryReady = repository ? repository.bootstrap({ records: leads.map((lead) => ({ lead_id: lead.uid || lead.id, business: lead.name, phone: lead.phone, ...lead })) }, 'CAP V0.1 — Campaign 001 — Houston Website Opportunity').then(async () => {
   const persisted = await repository.listLeads();
   if (persisted.length) leads = persisted.map((lead) => ({ ...lead, uid: String(lead.uid || lead.id), sms_route: lead.sms_route || routeSms(lead.phone), score: lead.score || scoreLead(lead), product_fits: lead.product_fits || matchProducts(lead), audit: lead.audit || [] }));
 }).catch((error) => console.error('DATABASE_INIT_FAILED', error.message)) : Promise.resolve();

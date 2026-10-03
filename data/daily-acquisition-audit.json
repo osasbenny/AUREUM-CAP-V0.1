@@ -1,0 +1,711 @@
+{
+  "run_at": "2026-10-03T03:29:10.935Z",
+  "daily_target": 100,
+  "processed": 100,
+  "sent": 100,
+  "errors": 0,
+  "skipped": 0,
+  "remaining_uncontacted": 682,
+  "results": [
+    {
+      "lead_id": 1,
+      "name": "Honey Sheep's Car Wash",
+      "phone": "+17137480955",
+      "status": "SENT",
+      "provider_id": "SM9fbb085a46d4124de71f2efba443fa99"
+    },
+    {
+      "lead_id": 2,
+      "name": "Golden Shine Hand Carwash",
+      "phone": "+17138698485",
+      "status": "SENT",
+      "provider_id": "SM59661ae6f9781ad2ea1b4f35697ed07c"
+    },
+    {
+      "lead_id": 3,
+      "name": "Carwash a domicilio Fuentes",
+      "phone": "+17134050361",
+      "status": "SENT",
+      "provider_id": "SMa01873257d0ffe325f10fe34d0db107e"
+    },
+    {
+      "lead_id": 4,
+      "name": "Carlos Carwash",
+      "phone": "+18323527302",
+      "status": "SENT",
+      "provider_id": "SM8225665548f2fe0d03d68e66201f57bf"
+    },
+    {
+      "lead_id": 5,
+      "name": "Blue Hand Car Wash",
+      "phone": "+17132038272",
+      "status": "SENT",
+      "provider_id": "SM5d077aa378eed72b3952ead381206343"
+    },
+    {
+      "lead_id": 6,
+      "name": "Diamond Car Wash",
+      "phone": "+12815869274",
+      "status": "SENT",
+      "provider_id": "SM29baf1b76052342e5c9f2f9eb7025e05"
+    },
+    {
+      "lead_id": 7,
+      "name": "Best Hand Car Wash 2",
+      "phone": "+17137843209",
+      "status": "SENT",
+      "provider_id": "SM2f0990acaa14c0a42f92a1d2970828d1"
+    },
+    {
+      "lead_id": 8,
+      "name": "USA Hand Car Wash",
+      "phone": "+18322771385",
+      "status": "SENT",
+      "provider_id": "SM19549367b919567f89173e676e910831"
+    },
+    {
+      "lead_id": 9,
+      "name": "Blue Planet Mobile Car Wash and Detailing",
+      "phone": "+19797301092",
+      "status": "SENT",
+      "provider_id": "SM4eb4dc2d09ab51e29ee4685c61c8031d"
+    },
+    {
+      "lead_id": 10,
+      "name": "Sparkles Hand Car Wash",
+      "phone": "+18322434598",
+      "status": "SENT",
+      "provider_id": "SMcb9e90b92a708d51fe51856a17a62514"
+    },
+    {
+      "lead_id": 11,
+      "name": "H-TOWN CAR WASH",
+      "phone": "+17134569971",
+      "status": "SENT",
+      "provider_id": "SM2b42eba5f8651ec1b7c09f0a55566a90"
+    },
+    {
+      "lead_id": 12,
+      "name": "Regency Car Wash",
+      "phone": "+12818708967",
+      "status": "SENT",
+      "provider_id": "SM93b36038ffcb3c4cef9dc54fecd073e7"
+    },
+    {
+      "lead_id": 13,
+      "name": "The District Car Wash",
+      "phone": "+18329555376",
+      "status": "SENT",
+      "provider_id": "SM59561b43cee320b02197d10ac6168d29"
+    },
+    {
+      "lead_id": 14,
+      "name": "Bellaire Hand Detail and Car Wash",
+      "phone": "+18329889105",
+      "status": "SENT",
+      "provider_id": "SM3eb5d7dbeac9a2d21c9a3015906171ac"
+    },
+    {
+      "lead_id": 15,
+      "name": "AB Boss Car Wash & Detailing",
+      "phone": "+12109561338",
+      "status": "SENT",
+      "provider_id": "SMfe870df105ba32532fe7df43d1d42279"
+    },
+    {
+      "lead_id": 16,
+      "name": "Masters hand Car Wash",
+      "phone": "+18328898355",
+      "status": "SENT",
+      "provider_id": "SMc734223d59178086a38ac7a94442481c"
+    },
+    {
+      "lead_id": 17,
+      "name": "Houston Car Salon",
+      "phone": "+17135057477",
+      "status": "SENT",
+      "provider_id": "SMd2d901e9f419e924247270986f0575de"
+    },
+    {
+      "lead_id": 18,
+      "name": "Superior Texas Car Wash & Lube",
+      "phone": "+12814983228",
+      "status": "SENT",
+      "provider_id": "SMaa842d567a0d7938ab69354843bee09d"
+    },
+    {
+      "lead_id": 19,
+      "name": "Carwash a domicilio",
+      "phone": "+17134050361",
+      "status": "SENT",
+      "provider_id": "SM0e3ac445b3f7c557e6b7c8013a80bd58"
+    },
+    {
+      "lead_id": 20,
+      "name": "Monarca Lawn service",
+      "phone": "+18322072789",
+      "status": "SENT",
+      "provider_id": "SMab468d6cd3ddc3b1c6972bd51afdc807"
+    },
+    {
+      "lead_id": 21,
+      "name": "Rogelio & Jean Moreno Lawn Services",
+      "phone": "+17132981807",
+      "status": "SENT",
+      "provider_id": "SMaf6e5905f1e5b7fdb8077de4c21e164c"
+    },
+    {
+      "lead_id": 22,
+      "name": "Texas Clean Cut, Precision Masters, LLC",
+      "phone": "+17139028721",
+      "status": "SENT",
+      "provider_id": "SMe9a7f795f51b13cd2353e2e0f1f559e1"
+    },
+    {
+      "lead_id": 23,
+      "name": "Ecoscape Luxury Innovations LLC",
+      "phone": "+19362422339",
+      "status": "SENT",
+      "provider_id": "SMa7bf9d84284d0f54a7ca7b5d5a012567"
+    },
+    {
+      "lead_id": 24,
+      "name": "LawnCare Houston",
+      "phone": "+18327625179",
+      "status": "SENT",
+      "provider_id": "SMb1932057636a4890a6e2e0b6224bb0fb"
+    },
+    {
+      "lead_id": 25,
+      "name": "Cervantes Landscaping services",
+      "phone": "+18322978420",
+      "status": "SENT",
+      "provider_id": "SMf5deeff46fa03c839e91d97ff7fe5511"
+    },
+    {
+      "lead_id": 26,
+      "name": "100% Tree & Lawn Care LLC",
+      "phone": "+18327852750",
+      "status": "SENT",
+      "provider_id": "SM1dd3153e63c46d6ba2712066ebce9215"
+    },
+    {
+      "lead_id": 27,
+      "name": "Greater Houston Lawn Services",
+      "phone": "+17138943936",
+      "status": "SENT",
+      "provider_id": "SM55a09006e46dda054c2fdd37a69d7b42"
+    },
+    {
+      "lead_id": 28,
+      "name": "Will’s Lawn Maintenance",
+      "phone": "+12817436887",
+      "status": "SENT",
+      "provider_id": "SM0a1289988a75078fc0cc8797e5ae2ce9"
+    },
+    {
+      "lead_id": 29,
+      "name": "Rogelio Ortega Lawn Services",
+      "phone": "+18328033506",
+      "status": "SENT",
+      "provider_id": "SM5c01e5874724cb08db72f0fb58e0ce4d"
+    },
+    {
+      "lead_id": 30,
+      "name": "Mow Stars Lawn Service",
+      "phone": "+12815470078",
+      "status": "SENT",
+      "provider_id": "SMe879602b97f7405eb7aa4fc1dacd3819"
+    },
+    {
+      "lead_id": 31,
+      "name": "Kingdom Lawn Care",
+      "phone": "+18323418700",
+      "status": "SENT",
+      "provider_id": "SM8f0d95441b27340d81cdf7f7d5d3fc0a"
+    },
+    {
+      "lead_id": 32,
+      "name": "B&A LAWN CARE",
+      "phone": "+18325260896",
+      "status": "SENT",
+      "provider_id": "SMcf1cda6ca544ef7aed628f7d75fce1c5"
+    },
+    {
+      "lead_id": 33,
+      "name": "Perry Brothers Roof Repair",
+      "phone": "+19365367100",
+      "status": "SENT",
+      "provider_id": "SM3e644ae0a2ae4d9a687572b0a02ed513"
+    },
+    {
+      "lead_id": 34,
+      "name": "Wright Brothers Roofing",
+      "phone": "+19362097110",
+      "status": "SENT",
+      "provider_id": "SM5629e388cf9fb1b0538625142ce310a3"
+    },
+    {
+      "lead_id": 35,
+      "name": "Universal Roofing & Restoration",
+      "phone": "+12816165842",
+      "status": "SENT",
+      "provider_id": "SM25c520f82ce6d8ddc4352a28e1e36af6"
+    },
+    {
+      "lead_id": 36,
+      "name": "Ruben's Window TinT LLC",
+      "phone": "+18322025899",
+      "status": "SENT",
+      "provider_id": "SM5b84298a539b1fb6242186a3a116d4de"
+    },
+    {
+      "lead_id": 37,
+      "name": "Exclusive Window Tint",
+      "phone": "+12814080474",
+      "status": "SENT",
+      "provider_id": "SM40292586835abf911919197e3fad209f"
+    },
+    {
+      "lead_id": 38,
+      "name": "Shark Tint",
+      "phone": "+18328700527",
+      "status": "SENT",
+      "provider_id": "SM3ad3fc0c625bb47d6e9c06e747466600"
+    },
+    {
+      "lead_id": 39,
+      "name": "Sun Cap Auto Tint of Houston",
+      "phone": "+12815288468",
+      "status": "SENT",
+      "provider_id": "SMfacd0077f828688972c8c3fad4dae3dd"
+    },
+    {
+      "lead_id": 40,
+      "name": "Fx Window tint stereo alarms car audio",
+      "phone": "+18327686256",
+      "status": "SENT",
+      "provider_id": "SM9d769f103e65859bb980d8dc6862d7e2"
+    },
+    {
+      "lead_id": 41,
+      "name": "Window tint and graphics",
+      "phone": "+13462758126",
+      "status": "SENT",
+      "provider_id": "SM49d431dc8d37de89ba65e9fd8a3de356"
+    },
+    {
+      "lead_id": 42,
+      "name": "Auto tint",
+      "phone": "+12819792093",
+      "status": "SENT",
+      "provider_id": "SMe647109fc606461d8c4897389dac463d"
+    },
+    {
+      "lead_id": 43,
+      "name": "Night window tint",
+      "phone": "+18328445555",
+      "status": "SENT",
+      "provider_id": "SM074cac5e5cd9a4550284b2b2ee7c8406"
+    },
+    {
+      "lead_id": 44,
+      "name": "Tint King",
+      "phone": "+17137410303",
+      "status": "SENT",
+      "provider_id": "SMaeac6b2c709e942612bdf0e1a54eeab5"
+    },
+    {
+      "lead_id": 45,
+      "name": "HTOWN TINT (we come to you )",
+      "phone": "+17134162825",
+      "status": "SENT",
+      "provider_id": "SM91a1f7c6a700ccff694735c105b9f515"
+    },
+    {
+      "lead_id": 46,
+      "name": "LUXURY CUSTOMZ WINDOW TINT",
+      "phone": "+18325461890",
+      "status": "SENT",
+      "provider_id": "SMe9ad087f083da6e5b32242763cced79a"
+    },
+    {
+      "lead_id": 47,
+      "name": "Exclusive King's Window Tint.Behind the building.",
+      "phone": "+18327242493",
+      "status": "SENT",
+      "provider_id": "SMeb3e2c3d0a0250e26f7f373c27f36f60"
+    },
+    {
+      "lead_id": 48,
+      "name": "D E Mobile Window Tint & Alarms",
+      "phone": "+12815615141",
+      "status": "SENT",
+      "provider_id": "SM7d067b6190c93f5bc72964487d0b97dd"
+    },
+    {
+      "lead_id": 49,
+      "name": "GT CAR STEREO ALARMS AND WINDOW TINT",
+      "phone": "+12818883942",
+      "status": "SENT",
+      "provider_id": "SM44100046cf42021aa2fce006fef20769"
+    },
+    {
+      "lead_id": 50,
+      "name": "Exclusive King's Window Tint #2",
+      "phone": "+13466104511",
+      "status": "SENT",
+      "provider_id": "SMa7245c88e2c67aac57d0c07dcef8ba92"
+    },
+    {
+      "lead_id": 51,
+      "name": "Joes Auto",
+      "phone": "+18328763057",
+      "status": "SENT",
+      "provider_id": "SMb4f722d949646f6e85f043ef9a65d48e"
+    },
+    {
+      "lead_id": 52,
+      "name": "ATLAS WINDOW TINT",
+      "phone": "+18324332830",
+      "status": "SENT",
+      "provider_id": "SM8f71e309232f7b9f67bc1d703e311fa9"
+    },
+    {
+      "lead_id": 53,
+      "name": "Back Ally Tint LLC",
+      "phone": "+17132066327",
+      "status": "SENT",
+      "provider_id": "SM112a04f3d59aba5f464ecbd5644c43d1"
+    },
+    {
+      "lead_id": 54,
+      "name": "Sun Control Window Tinting",
+      "phone": "+12818570398",
+      "status": "SENT",
+      "provider_id": "SM08fc3585a64c07813d218afa4591fae8"
+    },
+    {
+      "lead_id": 55,
+      "name": "East West auto tint",
+      "phone": "+18323432633",
+      "status": "SENT",
+      "provider_id": "SM41b0c689c7ce0034d70a9e6d99f06d26"
+    },
+    {
+      "lead_id": 56,
+      "name": "JC Window Tinting",
+      "phone": "+18322758166",
+      "status": "SENT",
+      "provider_id": "SM0a7b140402a17d9774505dfc9417b3a0"
+    },
+    {
+      "lead_id": 57,
+      "name": "King Tint",
+      "phone": "+18328294557",
+      "status": "SENT",
+      "provider_id": "SMd399b82a47d1bcc8f1f3ad8f33336e7d"
+    },
+    {
+      "lead_id": 58,
+      "name": "Reed's Window Tint",
+      "phone": "+18328750506",
+      "status": "SENT",
+      "provider_id": "SMac9b37d9ee03a1a0fc2a0c8bd212af5a"
+    },
+    {
+      "lead_id": 59,
+      "name": "High Performance Tint",
+      "phone": "+18325187266",
+      "status": "SENT",
+      "provider_id": "SM09900e59cac8ab363501ee28c3cb8f03"
+    },
+    {
+      "lead_id": 60,
+      "name": "Exclusive Mobile Tinting (Curtis Hart) CEO/ owner",
+      "phone": "+13462645631",
+      "status": "SENT",
+      "provider_id": "SMafd7ea14bb7fc8b969ee1c8b984db7ef"
+    },
+    {
+      "lead_id": 61,
+      "name": "cruz window tint",
+      "phone": "+18325719208",
+      "status": "SENT",
+      "provider_id": "SM48ce1e3d53048963883fd632dd4165a7"
+    },
+    {
+      "lead_id": 62,
+      "name": "pancho's window tint",
+      "phone": "+18324809290",
+      "status": "SENT",
+      "provider_id": "SM4fa0432e2ba969341cf18d95af58ba34"
+    },
+    {
+      "lead_id": 63,
+      "name": "High RollerZ Car Audio",
+      "phone": "+17133737867",
+      "status": "SENT",
+      "provider_id": "SMecd2881ace91a201b4c792eceef2983e"
+    },
+    {
+      "lead_id": 64,
+      "name": "Mr. Tires & Window Tint",
+      "phone": "+12818772528",
+      "status": "SENT",
+      "provider_id": "SMe2e4561a4ff55d43d81a98f20f9b212c"
+    },
+    {
+      "lead_id": 65,
+      "name": "Window tint griggs",
+      "phone": "+18322986757",
+      "status": "SENT",
+      "provider_id": "SM28e333cb6efc327272c5dc1d1ab028c8"
+    },
+    {
+      "lead_id": 66,
+      "name": "Ernest Tint Shop",
+      "phone": "+17136920992",
+      "status": "SENT",
+      "provider_id": "SM7d07b4a2140a17d217082c52f52240a7"
+    },
+    {
+      "lead_id": 67,
+      "name": "Ernie’s glass tinting",
+      "phone": "+17132526984",
+      "status": "SENT",
+      "provider_id": "SM9c9e968ece8a26d774c19115c2cf577c"
+    },
+    {
+      "lead_id": 68,
+      "name": "katy car tint",
+      "phone": "+12819953305",
+      "status": "SENT",
+      "provider_id": "SMdb3baae90ae25b1d3f891a2645bf45c5"
+    },
+    {
+      "lead_id": 69,
+      "name": "David Tint",
+      "phone": "+18328985467",
+      "status": "SENT",
+      "provider_id": "SM730f0279c75e66fa1d1424be031c0274"
+    },
+    {
+      "lead_id": 70,
+      "name": "Window Tint Ceramic",
+      "phone": "+12818460896",
+      "status": "SENT",
+      "provider_id": "SMd37355d158cfc14b53a1ae0122f37f83"
+    },
+    {
+      "lead_id": 71,
+      "name": "Sierra Vista Realty, LLC",
+      "phone": "+18328951618",
+      "status": "SENT",
+      "provider_id": "SM34e91e397ee90cf28e2de72ac0330af1"
+    },
+    {
+      "lead_id": 72,
+      "name": "Carlos Garcia Realty Comm",
+      "phone": "+17139285211",
+      "status": "SENT",
+      "provider_id": "SM4df7149cb904e6fb62f8f3c054c0d3fd"
+    },
+    {
+      "lead_id": 73,
+      "name": "Stephany Pacheco casas nuevas | Houston Texas",
+      "phone": "+12812362612",
+      "status": "SENT",
+      "provider_id": "SM962e926e71fceca619ee8a3eabb4b8e5"
+    },
+    {
+      "lead_id": 74,
+      "name": "United Real Estate: Hena Malkani",
+      "phone": "+12818710456",
+      "status": "SENT",
+      "provider_id": "SM48d6ff303b7e72968d000284ebd58824"
+    },
+    {
+      "lead_id": 75,
+      "name": "Jay Bustos | Houston Realtor | Bustos Properties Group",
+      "phone": "+18325424037",
+      "status": "SENT",
+      "provider_id": "SM178a7bcfa5a0b8afb9caa7c31188833c"
+    },
+    {
+      "lead_id": 76,
+      "name": "First Aid Plumbing Specialist",
+      "phone": "+18322793065",
+      "status": "SENT",
+      "provider_id": "SM154b3fcad8af6a4458686f6993cb293f"
+    },
+    {
+      "lead_id": 77,
+      "name": "Josiah & Sons Plumbers",
+      "phone": "+13462391950",
+      "status": "SENT",
+      "provider_id": "SM7b997ef257a9aeb3c5aa525500565945"
+    },
+    {
+      "lead_id": 78,
+      "name": "Perez Plumbing",
+      "phone": "+17132254341",
+      "status": "SENT",
+      "provider_id": "SMa2a8a8252855ed7730fdfe23d947c5fa"
+    },
+    {
+      "lead_id": 79,
+      "name": "Arm Plumbing Co.",
+      "phone": "+17136947836",
+      "status": "SENT",
+      "provider_id": "SMf1a7b38e74d98b40c6311cb02f1e40c8"
+    },
+    {
+      "lead_id": 80,
+      "name": "U-Plumb-It",
+      "phone": "+17139422277",
+      "status": "SENT",
+      "provider_id": "SMbfb60d9f5cf4b419c39a9c6da89b2e2c"
+    },
+    {
+      "lead_id": 81,
+      "name": "Pacheco Carpenter Services",
+      "phone": "+18327154877",
+      "status": "SENT",
+      "provider_id": "SMa481aa2ca41eb8aacbee0dc91e3cc1f8"
+    },
+    {
+      "lead_id": 82,
+      "name": "Pro Carpentry",
+      "phone": "+17138758313",
+      "status": "SENT",
+      "provider_id": "SM916917de174b814b0e2bca87852d5716"
+    },
+    {
+      "lead_id": 83,
+      "name": "Gomez carpenter and construction",
+      "phone": "+17133781348",
+      "status": "SENT",
+      "provider_id": "SM609b7ab8b07e07da5a94227f1157d723"
+    },
+    {
+      "lead_id": 84,
+      "name": "J&j carpentry",
+      "phone": "+18328897075",
+      "status": "SENT",
+      "provider_id": "SM40fd277b21c03f46e12b82f9820695b3"
+    },
+    {
+      "lead_id": 85,
+      "name": "INMA Custom Carpentry",
+      "phone": "+18323560307",
+      "status": "SENT",
+      "provider_id": "SM06ff38f210f0a7e600233efe391c04c9"
+    },
+    {
+      "lead_id": 86,
+      "name": "Perdomos Woodwork Carpentry",
+      "phone": "+18325163065",
+      "status": "SENT",
+      "provider_id": "SM7a84f1b57ffff2bf966be08b3690cf97"
+    },
+    {
+      "lead_id": 87,
+      "name": "MadesaCustom Cabinets",
+      "phone": "+18329101349",
+      "status": "SENT",
+      "provider_id": "SM363d48da9a05e71b35de395f78ec6770"
+    },
+    {
+      "lead_id": 88,
+      "name": "Innova Custom Cabinets DBA",
+      "phone": "+12817484019",
+      "status": "SENT",
+      "provider_id": "SM7f35fe22ac3bd31d6dda6ee620811ac8"
+    },
+    {
+      "lead_id": 89,
+      "name": "Zelayaconstruction",
+      "phone": "+12818022559",
+      "status": "SENT",
+      "provider_id": "SMa92138ed909e4e435378e2b6b2b118f0"
+    },
+    {
+      "lead_id": 90,
+      "name": "Kirk Furniture and Cabinetry Restoration",
+      "phone": "+16018315496",
+      "status": "SENT",
+      "provider_id": "SM95c68c793570eff1f5220c1a10450514"
+    },
+    {
+      "lead_id": 91,
+      "name": "LG Carpenter's LLC",
+      "phone": "+18325888896",
+      "status": "SENT",
+      "provider_id": "SMcbdf2f96567b1f26e067a20013871561"
+    },
+    {
+      "lead_id": 92,
+      "name": "Quiroz's carpenter",
+      "phone": "+12816906866",
+      "status": "SENT",
+      "provider_id": "SM92d645eabe283d3b5559a20df86f5b92"
+    },
+    {
+      "lead_id": 93,
+      "name": "Coronado Cabinets LLC",
+      "phone": "+18328146232",
+      "status": "SENT",
+      "provider_id": "SM3ee49ebeea426c61f5ed32dacae00516"
+    },
+    {
+      "lead_id": 94,
+      "name": "Got Carpenter LLC",
+      "phone": "+12817458633",
+      "status": "SENT",
+      "provider_id": "SM1f2d1c67cec06ee65a6a2e59dd6da98c"
+    },
+    {
+      "lead_id": 95,
+      "name": "AB MILLWORK",
+      "phone": "+17139418174",
+      "status": "SENT",
+      "provider_id": "SM5c8d093104dcdaad74624004cf2fd705"
+    },
+    {
+      "lead_id": 96,
+      "name": "BC Woodwork",
+      "phone": "+17135458506",
+      "status": "SENT",
+      "provider_id": "SM26f76d9323c89b98323049af25a76b70"
+    },
+    {
+      "lead_id": 97,
+      "name": "Taller de carpintería",
+      "phone": "+14099958805",
+      "status": "SENT",
+      "provider_id": "SMe36ca4da4c5ccf69b06496b401eac46c"
+    },
+    {
+      "lead_id": 98,
+      "name": "KBG Barbershop",
+      "phone": "+18329897577",
+      "status": "SENT",
+      "provider_id": "SM1df623cfe34460015ef83d3cf198da8b"
+    },
+    {
+      "lead_id": 99,
+      "name": "Elegant Fade Barbershop",
+      "phone": "+18326186438",
+      "status": "SENT",
+      "provider_id": "SM1b5d93d75ab40995313d7766a3dfb2bc"
+    },
+    {
+      "lead_id": 100,
+      "name": "Mike's Barber Shop",
+      "phone": "+17139720431",
+      "status": "SENT",
+      "provider_id": "SMaf0f42453ba25787a954fcfc729b13de"
+    }
+  ]
+}
