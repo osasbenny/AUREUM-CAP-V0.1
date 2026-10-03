@@ -137,6 +137,6 @@ fs.writeFileSync('CAP_100_LEAD_READINESS_SUMMARY.json', JSON.stringify({
   send_eligible: dryRun.send_eligible_count,
   outbound_calls: dryRun.outbound_calls,
   shortlist: shortlist.map((l, i) => ({rank: i + 1, id: l.id, business: l.name, category: l.category, phone: l.phone})),
-  sending_gates: {CAP_SEND_ENABLED: false, CAP_SMS_SEND_ENABLED: false},
+  sending_gates: {CAP_EMAIL_SEND_ENABLED: false, CAP_SMS_SEND_ENABLED: false},
 }, null, 2) + '\n');
 console.log(JSON.stringify({ok:true, total:rows.length, categories:counts, shortlist:shortlist.map((x) => x.name)}, null, 2));

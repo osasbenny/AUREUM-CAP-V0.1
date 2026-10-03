@@ -1,0 +1,12 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { reconcileRecords } from '../db/repository.mjs';
+import { classifyInternetPresence } from '../server/services.mjs';
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const source = JSON.parse(fs.readFileSync(path.join(root, 'data', 'leads.json'), 'utf8'));
+const result = reconcileRecords(source.map((lead) => ({ ...lead, lead_id: lead.id, business: lead.name })));
+const rfi = source.filter((lead) => lead.request_type || /rfi|request|redesign/i.test(String(lead.stage || ''))).map((lead) => ({ id: lead.id, business: lead.name, category: lead.category, location: lead.location, request_type: lead.request_type || lead.stage }));
+const presence = Object.fromEntries(['NO_WEB_PRESENCE','SOCIAL_ONLY','DIRECTORY_ONLY','WEAK_WEBSITE','OUTDATED_WEBSITE','FUNCTIONAL_WEBSITE','STRONG_WEBSITE'].map((key) => [key, result.records.filter((lead) => classifyInternetPresence(lead) === key).length]));
+const report = { generated_at: new Date().toISOString(), input_records: source.length, unique_businesses: result.records.length, duplicates_merged: result.duplicates, conflicting_records_manual_review: result.conflicts.length, conflicts: result.conflicts.map((c) => ({ id: c.record.id, business: c.record.name, matching_groups: c.matching_groups, identifiers: c.identifiers })), rfi_high_intent_count: rfi.length, rfi_high_intent_businesses: rfi, internet_presence_counts: presence };
+fs.writeFileSync(path.join(root, 'data', 'reconciliation-report.json'), JSON.stringify(report, null, 2) + '\n'); console.log(JSON.stringify(report, null, 2));

@@ -1,2 +1,5 @@
 allowBuilds:
   esbuild: set this to true or false
+minimumReleaseAgeExclude:
+  - '@aws-sdk/client-s3@3.1146.0'
+  - '@aws-sdk/client-sesv2@3.1146.0'

@@ -15,13 +15,18 @@
     "pipeline:dry-run": "node scripts/run-pipeline-dry-run.mjs",
     "smoke": "npm run check && npm run validate:pilot && npm run activation:manifest && npm run validate:activation && npm run build",
     "db:bootstrap": "node scripts/bootstrap-db.mjs",
-    "worker": "node workers/sqs-worker.mjs"
+    "worker": "node workers/sqs-worker.mjs",
+    "acquire": "node scripts/acquisition-engine.mjs",
+    "reconcile": "node scripts/reconcile-report.mjs"
   },
   "devDependencies": {
     "vite": "^7.1.7"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1146.0",
+    "@aws-sdk/client-sesv2": "^3.1146.0",
     "@aws-sdk/client-sqs": "^3.1133.0",
+    "openai": "^7.27.0",
     "pg": "^8.16.3"
   }
 }
