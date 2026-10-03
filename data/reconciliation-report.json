@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-03T05:34:08.268Z",
+  "generated_at": "2026-10-03T05:51:23.928Z",
   "input_records": 682,
   "unique_businesses": 669,
   "duplicates_merged": 13,
@@ -65,12 +65,12 @@
     }
   ],
   "internet_presence_counts": {
-    "NO_WEB_PRESENCE": 100,
+    "NO_WEB_PRESENCE": 99,
     "SOCIAL_ONLY": 0,
     "DIRECTORY_ONLY": 0,
     "WEAK_WEBSITE": 0,
     "OUTDATED_WEBSITE": 0,
-    "FUNCTIONAL_WEBSITE": 582,
+    "FUNCTIONAL_WEBSITE": 570,
     "STRONG_WEBSITE": 0
   }
 }
