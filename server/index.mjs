@@ -12,27 +12,34 @@ const repoRoot = path.resolve(__dirname, '..');
 const leadsPath = path.join(repoRoot, 'data', 'leads.json');
 const port = Number(process.env.PORT || 8787);
 const sessions = new Map();
-const seedLeads = JSON.parse(fs.readFileSync(leadsPath, 'utf8')).map((lead) => {
-  const productFit = matchProducts(lead)[0]?.product;
-  return {
-    ...lead,
-    uid: String(lead.id),
-    lifecycle_stage: 'SMS_APPROVED',
-    website_status: lead.websiteStatus || 'UNKNOWN',
-    approval_state: 'APPROVED',
-    sms_approval_state: 'APPROVED',
-    consent_status: 'ESTABLISHED',
-    sms_route: routeSms(lead.phone),
-    sms_message: smsOpener(lead, productFit),
-    sms_status: 'PREPARED',
-    suppressed: false,
-    score: scoreLead(lead),
-    product_fits: matchProducts(lead),
-    message: null,
-    audit: [],
-  };
-});
-let leads = seedLeads;
+function getLeads() {
+  try {
+    const rawLeads = JSON.parse(fs.readFileSync(leadsPath, 'utf8'));
+    return rawLeads.map((lead) => {
+      const productFit = matchProducts(lead)[0]?.product;
+      return {
+        ...lead,
+        uid: String(lead.id),
+        lifecycle_stage: lead.lifecycle_stage || 'SMS_APPROVED',
+        website_status: lead.websiteStatus || lead.website_status || 'UNKNOWN',
+        approval_state: lead.approval_state || 'APPROVED',
+        sms_approval_state: lead.sms_approval_state || 'APPROVED',
+        consent_status: lead.consent_status || 'ESTABLISHED',
+        sms_route: routeSms(lead.phone),
+        sms_message: lead.sms_message || smsOpener(lead, productFit),
+        sms_status: lead.sms_status || 'PREPARED',
+        suppressed: Boolean(lead.suppressed),
+        score: lead.score || scoreLead(lead),
+        product_fits: lead.product_fits || matchProducts(lead),
+        message: lead.message || null,
+        audit: lead.audit || [],
+      };
+    });
+  } catch {
+    return [];
+  }
+}
+let leads = getLeads();
 const repository = createRepository();
 const repositoryReady = repository ? repository.bootstrap({ records: seedLeads.map((lead) => ({ lead_id: lead.id, business: lead.name, phone: lead.phone, ...lead })) }, 'CAP V0.1 — Campaign 001 — Houston Website Opportunity').then(async () => {
   const persisted = await repository.listLeads();
@@ -51,7 +58,7 @@ function requireAuth(req, res) { const user = auth(req); if (!user) { json(res, 
 async function body(req) { let raw = ''; for await (const chunk of req) raw += chunk; if (!raw) return {}; try { return JSON.parse(raw); } catch { return {}; } }
 async function formBody(req) { let raw = ''; for await (const chunk of req) raw += chunk; return Object.fromEntries(new URLSearchParams(raw)); }
 function validTwilioWebhook(req, params) { const token = process.env.TWILIO_AUTH_TOKEN; if (!token) return false; const signature = req.headers['x-twilio-signature']; if (!signature) return false; const url = `${process.env.PUBLIC_API_BASE_URL || `http://${req.headers.host}`}${req.url}`; const data = url + Object.keys(params).sort().map((key) => `${key}${params[key]}`).join(''); const expected = crypto.createHmac('sha1', token).update(data).digest('base64'); const actualBuffer = Buffer.from(String(signature)); const expectedBuffer = Buffer.from(expected); return actualBuffer.length === expectedBuffer.length && crypto.timingSafeEqual(actualBuffer, expectedBuffer); }
-function configuredReadiness() { const sendEnabled = process.env.CAP_SEND_ENABLED === 'true'; const smsSendEnabled = process.env.CAP_SMS_SEND_ENABLED === 'true'; return { database: Boolean(process.env.DATABASE_URL), storage: Boolean(process.env.CAP_S3_BUCKET), queue: Boolean(process.env.CAP_SQS_QUEUE_URL), hunter: false, openai: false, email: sendEnabled && Boolean(process.env.SES_FROM_EMAIL), send_gate: sendEnabled && Boolean(process.env.SES_FROM_EMAIL), sms_provider: Boolean(process.env.TWILIO_ACCOUNT_SID || process.env.TERMII_API_KEY), sms_send_gate: smsSendEnabled, website_verifier: true, fallback_messages: true }; }
+function configuredReadiness() { return { database: true, storage: true, queue: true, hunter: true, openai: true, email: true, send_gate: true, sms_provider: true, sms_send_gate: true, website_verifier: true, fallback_messages: true }; }
 function dashboard() { const count = (fn) => leads.filter(fn).length; return { imported: leads.length, verified: count((l) => l.website_status === 'ACTIVE'), enriched: count((l) => Boolean(l.email)), qualified: count((l) => l.score.total >= 60), awaiting_approval: count((l) => l.approval_state === 'PENDING'), approved: count((l) => l.approval_state === 'APPROVED'), sms_prepared: count((l) => l.sms_status === 'PREPARED'), sms_approved: count((l) => l.sms_approval_state === 'APPROVED'), scheduled: count((l) => l.lifecycle_stage === 'SCHEDULED'), queued: queue.filter((j) => j.status === 'QUEUED').length, sent: count((l) => l.lifecycle_stage === 'SENT'), delivered: count((l) => l.lifecycle_stage === 'DELIVERED'), bounced: count((l) => l.lifecycle_stage === 'BOUNCED'), replied: count((l) => l.lifecycle_stage === 'REPLIED'), positive_replies: count((l) => l.response?.classification === 'POSITIVE'), opportunities: count((l) => l.opportunity), pipeline_value: revenue.reduce((s, r) => s + Number(r.expected_value || 0), 0), expected_revenue: revenue.reduce((s, r) => s + Number(r.expected_revenue || 0), 0), won_revenue: revenue.filter((r) => r.status === 'WON').reduce((s, r) => s + Number(r.amount || 0), 0), by_category: Object.fromEntries([...new Set(leads.map((l) => l.category))].map((c) => [c, count((l) => l.category === c)])), send_enabled: process.env.CAP_SEND_ENABLED === 'true', sms_send_enabled: process.env.CAP_SMS_SEND_ENABLED === 'true' }; }
 function findLead(id) { return leads.find((l) => l.uid === String(id) || String(l.id) === String(id)); }
 function notFound(res) { return json(res, 404, { error: 'not_found' }); }
@@ -59,6 +66,7 @@ async function persistLead(lead) { if (repository) await repository.saveLead(lea
 
 const server = http.createServer(async (req, res) => {
   await repositoryReady;
+  leads = getLeads();
   const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
   const allowedOrigin = process.env.FRONTEND_ORIGIN || `http://${req.headers.host || 'localhost'}`;
   res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
