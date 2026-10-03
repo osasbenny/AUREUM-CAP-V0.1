@@ -1,92 +1,20 @@
 #!/usr/bin/env bash
 set -euo pipefail
-
-REGION=eu-north-1
-ACCOUNT=795804715712
-REPO=aureum-cap-v01-api
-CLUSTER=aureum-cap-v01-api
-SERVICE=aureum-cap-v01-api
-IMAGE="$ACCOUNT.dkr.ecr.$REGION.amazonaws.com/$REPO:production"
-TG_ARN=arn:aws:elasticloadbalancing:eu-north-1:795804715712:targetgroup/aureum-cap-v01-api-tg/226dbd8390037824
-TASK_SG=sg-0653bfae5521b3400
-EXEC_ROLE=arn:aws:iam::$ACCOUNT:role/aureum-cap-v01-ecs-execution-role
-TASK_ROLE=arn:aws:iam::$ACCOUNT:role/aureum-cap-v01-api-task-role
-RUNTIME_SECRET_NAME=aureum-cap-v01-api-runtime
-WORKDIR="${PWD}"
-
-: "${CAP_ADMIN_EMAIL:?Set CAP_ADMIN_EMAIL before running}"
-if [[ -z "${CAP_ADMIN_PASSWORD:-}" ]]; then
-  read -r -s -p 'CAP_ADMIN_PASSWORD (do not paste into chat): ' CAP_ADMIN_PASSWORD
-  echo
-fi
-[[ ${#CAP_ADMIN_PASSWORD} -ge 16 ]] || { echo 'Admin password must be at least 16 characters.' >&2; exit 1; }
-
-RDS_SECRET_NAME=$(aws secretsmanager list-secrets --region "$REGION" --query 'SecretList[?starts_with(Name, `rds!`)].Name | [0]' --output text)
-[[ "$RDS_SECRET_NAME" != "None" && -n "$RDS_SECRET_NAME" ]] || { echo 'RDS managed secret not found.' >&2; exit 1; }
-RDS_JSON=$(aws secretsmanager get-secret-value --region "$REGION" --secret-id "$RDS_SECRET_NAME" --query SecretString --output text)
-DB_USER=$(aws rds describe-db-instances --region "$REGION" --db-instance-identifier aureum-cap-v01-db --query 'DBInstances[0].MasterUsername' --output text)
-DB_HOST=$(aws rds describe-db-instances --region "$REGION" --db-instance-identifier aureum-cap-v01-db --query 'DBInstances[0].Endpoint.Address' --output text)
-DB_PORT=$(aws rds describe-db-instances --region "$REGION" --db-instance-identifier aureum-cap-v01-db --query 'DBInstances[0].Endpoint.Port' --output text)
-DB_NAME=postgres
-if jq -e . >/dev/null 2>&1 <<<"$RDS_JSON"; then
-  DB_PASS=$(jq -r 'to_entries[] | select(.key | ascii_downcase | test("pass")) | .value' <<<"$RDS_JSON" | head -n 1)
-else
-  DB_PASS="$RDS_JSON"
-fi
-[[ -n "$DB_PASS" && "$DB_PASS" != "null" && -n "$DB_HOST" && "$DB_HOST" != "None" ]] || { echo 'RDS managed secret or instance metadata did not provide a usable password/endpoint.' >&2; exit 1; }
-DATABASE_URL="postgresql://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT}/${DB_NAME}"
-
-EXISTING_RUNTIME_JSON='{}'
-if aws secretsmanager describe-secret --region "$REGION" --secret-id "$RUNTIME_SECRET_NAME" >/dev/null 2>&1; then
-  EXISTING_RUNTIME_JSON=$(aws secretsmanager get-secret-value --region "$REGION" --secret-id "$RUNTIME_SECRET_NAME" --query SecretString --output text)
-  jq -e . >/dev/null 2>&1 <<<"$EXISTING_RUNTIME_JSON" || EXISTING_RUNTIME_JSON='{}'
-fi
-RUNTIME_JSON=$(jq -n --argjson existing "$EXISTING_RUNTIME_JSON" --arg db "$DATABASE_URL" --arg email "$CAP_ADMIN_EMAIL" --arg pass "$CAP_ADMIN_PASSWORD" '
-  ($existing // {})
-  | .DATABASE_URL=$db
-  | .CAP_ADMIN_EMAIL=$email
-  | .CAP_ADMIN_PASSWORD=$pass
-  | .CAP_SEND_ENABLED="true"
-  | .CAP_SMS_SEND_ENABLED="true"
-  | .CAP_ALLOWED_ORIGIN="https://aureum-cap-v0-1.vercel.app"
-  | .FRONTEND_ORIGIN="https://aureum-cap-v0-1.vercel.app"
-  | .AWS_REGION="eu-north-1"
-  | .CAP_S3_BUCKET="aureum-cap-v01-assets-795804715712"
-  | .CAP_SQS_QUEUE_URL="https://sqs.eu-north-1.amazonaws.com/795804715712/aureum-cap-v01-lead-processing"
-  | .SES_FROM_EMAIL="aureum.cap@cactusdigitalmedia.ng"
-  | .SMS_STATUS_CALLBACK_URL="https://api.cactusdigitalmedia.ng/api/v1/webhooks/sms/status"
-  | .NODE_ENV="production"
-')
-if aws secretsmanager describe-secret --region "$REGION" --secret-id "$RUNTIME_SECRET_NAME" >/dev/null 2>&1; then
-  aws secretsmanager put-secret-value --region "$REGION" --secret-id "$RUNTIME_SECRET_NAME" --secret-string "$RUNTIME_JSON" >/dev/null
-else
-  aws secretsmanager create-secret --region "$REGION" --name "$RUNTIME_SECRET_NAME" --description 'AUREUM CAP API runtime values; outbound sending remains disabled' --secret-string "$RUNTIME_JSON" >/dev/null
-fi
-RUNTIME_ARN=$(aws secretsmanager describe-secret --region "$REGION" --secret-id "$RUNTIME_SECRET_NAME" --query ARN --output text)
-
-cat > /tmp/cap-runtime-policy.json <<POLICY
-{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":["secretsmanager:GetSecretValue"],"Resource":"$RUNTIME_ARN"}]}
-POLICY
-aws iam put-role-policy --role-name aureum-cap-v01-ecs-execution-role --policy-name aureum-cap-v01-runtime-secret-read --policy-document file:///tmp/cap-runtime-policy.json
-
-aws ecr get-login-password --region "$REGION" | docker login --username AWS --password-stdin "$ACCOUNT.dkr.ecr.$REGION.amazonaws.com"
-# CloudShell builds on x86_64; use the default x86_64 Fargate runtime to avoid
-# requiring QEMU emulation. The task definition intentionally omits a runtime
-# platform override, so ECS selects the matching x86_64 platform.
-docker build -t "$IMAGE" "$WORKDIR"
-docker push "$IMAGE"
-
-cat > /tmp/cap-task-definition.json <<TASK
-{"family":"aureum-cap-v01-api","networkMode":"awsvpc","requiresCompatibilities":["FARGATE"],"cpu":"256","memory":"512","executionRoleArn":"$EXEC_ROLE","taskRoleArn":"$TASK_ROLE","containerDefinitions":[{"name":"api","image":"$IMAGE","essential":true,"portMappings":[{"containerPort":8787,"protocol":"tcp"}],"secrets":[{"name":"DATABASE_URL","valueFrom":"$RUNTIME_ARN:DATABASE_URL::"},{"name":"CAP_ADMIN_EMAIL","valueFrom":"$RUNTIME_ARN:CAP_ADMIN_EMAIL::"},{"name":"CAP_ADMIN_PASSWORD","valueFrom":"$RUNTIME_ARN:CAP_ADMIN_PASSWORD::"},{"name":"CAP_SEND_ENABLED","valueFrom":"$RUNTIME_ARN:CAP_SEND_ENABLED::"},{"name":"CAP_SMS_SEND_ENABLED","valueFrom":"$RUNTIME_ARN:CAP_SMS_SEND_ENABLED::"},{"name":"CAP_ALLOWED_ORIGIN","valueFrom":"$RUNTIME_ARN:CAP_ALLOWED_ORIGIN::"},{"name":"FRONTEND_ORIGIN","valueFrom":"$RUNTIME_ARN:FRONTEND_ORIGIN::"},{"name":"AWS_REGION","valueFrom":"$RUNTIME_ARN:AWS_REGION::"},{"name":"CAP_S3_BUCKET","valueFrom":"$RUNTIME_ARN:CAP_S3_BUCKET::"},{"name":"CAP_SQS_QUEUE_URL","valueFrom":"$RUNTIME_ARN:CAP_SQS_QUEUE_URL::"},{"name":"SES_FROM_EMAIL","valueFrom":"$RUNTIME_ARN:SES_FROM_EMAIL::"},{"name":"SMS_STATUS_CALLBACK_URL","valueFrom":"$RUNTIME_ARN:SMS_STATUS_CALLBACK_URL::"},{"name":"TWILIO_ACCOUNT_SID","valueFrom":"$RUNTIME_ARN:TWILIO_ACCOUNT_SID::"},{"name":"TWILIO_AUTH_TOKEN","valueFrom":"$RUNTIME_ARN:TWILIO_AUTH_TOKEN::"},{"name":"TWILIO_FROM_NUMBER","valueFrom":"$RUNTIME_ARN:TWILIO_FROM_NUMBER::"},{"name":"TWILIO_MESSAGING_SERVICE_SID","valueFrom":"$RUNTIME_ARN:TWILIO_MESSAGING_SERVICE_SID::"},{"name":"NODE_ENV","valueFrom":"$RUNTIME_ARN:NODE_ENV::"}],"healthCheck":{"command":["CMD-SHELL","node -e \"fetch('http://127.0.0.1:8787/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))\""],"interval":30,"timeout":5,"retries":3,"startPeriod":20},"logConfiguration":{"logDriver":"awslogs","options":{"awslogs-group":"/ecs/aureum-cap-v01-api","awslogs-region":"eu-north-1","awslogs-stream-prefix":"api"}}}]}
-TASK
-aws logs create-log-group --region "$REGION" --log-group-name /ecs/aureum-cap-v01-api 2>/dev/null || true
-TASK_ARN=$(aws ecs register-task-definition --region "$REGION" --cli-input-json file:///tmp/cap-task-definition.json --query 'taskDefinition.taskDefinitionArn' --output text)
-SUBNETS=$(aws ec2 describe-subnets --region "$REGION" --filters Name=vpc-id,Values=vpc-02f0b750c4f333666 --query 'Subnets[?MapPublicIpOnLaunch==`true`].SubnetId' --output text | tr '\t' ',')
-if aws ecs describe-services --region "$REGION" --cluster "$CLUSTER" --services "$SERVICE" --query 'services[0].serviceName' --output text 2>/dev/null | grep -qx "$SERVICE"; then
-  aws ecs update-service --region "$REGION" --cluster "$CLUSTER" --service "$SERVICE" --task-definition "$TASK_ARN" --desired-count 1 --force-new-deployment >/dev/null
-else
-  aws ecs create-service --region "$REGION" --cluster "$CLUSTER" --service-name "$SERVICE" --task-definition "$TASK_ARN" --desired-count 1 --launch-type FARGATE --platform-version LATEST --network-configuration "awsvpcConfiguration={subnets=[$SUBNETS],securityGroups=[$TASK_SG],assignPublicIp=ENABLED}" --load-balancers "targetGroupArn=$TG_ARN,containerName=api,containerPort=8787" --health-check-grace-period-seconds 60 >/dev/null
-fi
-aws ecs wait services-stable --region "$REGION" --cluster "$CLUSTER" --services "$SERVICE"
-aws ecs describe-services --region "$REGION" --cluster "$CLUSTER" --services "$SERVICE" --query 'services[0].{status:status,running:runningCount,desired:desiredCount,events:events[0:3].message}' --output json
-curl -fsS --max-time 20 https://api.cactusdigitalmedia.ng/health
+REGION=${AWS_REGION:-eu-north-1}; ACCOUNT=${AWS_ACCOUNT_ID:-795804715712}; REPO=aureum-cap-v01-api; CLUSTER=aureum-cap-v01-api; SERVICE=aureum-cap-v01-api; WORKER_SERVICE=aureum-cap-v01-worker; IMAGE="$ACCOUNT.dkr.ecr.$REGION.amazonaws.com/$REPO:production"; RUNTIME_SECRET_NAME=aureum-cap-v01-api-runtime; WORKDIR="${PWD}"
+: "${CAP_ADMIN_EMAIL:?Set CAP_ADMIN_EMAIL before running}"; : "${CAP_ADMIN_PASSWORD:?Set CAP_ADMIN_PASSWORD before running}"
+RDS_SECRET_NAME=$(aws secretsmanager list-secrets --region "$REGION" --query 'SecretList[?starts_with(Name, `rds!`)].Name | [0]' --output text); [[ "$RDS_SECRET_NAME" != "None" && -n "$RDS_SECRET_NAME" ]] || { echo 'RDS managed secret not found.' >&2; exit 1; }
+RDS_JSON=$(aws secretsmanager get-secret-value --region "$REGION" --secret-id "$RDS_SECRET_NAME" --query SecretString --output text); DB_USER=$(aws rds describe-db-instances --region "$REGION" --db-instance-identifier aureum-cap-v01-db --query 'DBInstances[0].MasterUsername' --output text); DB_HOST=$(aws rds describe-db-instances --region "$REGION" --db-instance-identifier aureum-cap-v01-db --query 'DBInstances[0].Endpoint.Address' --output text); DB_PORT=$(aws rds describe-db-instances --region "$REGION" --db-instance-identifier aureum-cap-v01-db --query 'DBInstances[0].Endpoint.Port' --output text); DB_PASS=$(jq -r 'if type=="object" then (to_entries[] | select(.key|ascii_downcase|test("pass")) | .value) else . end' <<<"$RDS_JSON" | head -n1); DATABASE_URL="postgresql://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT}/postgres"
+EXISTING='{}'; if aws secretsmanager describe-secret --region "$REGION" --secret-id "$RUNTIME_SECRET_NAME" >/dev/null 2>&1; then EXISTING=$(aws secretsmanager get-secret-value --region "$REGION" --secret-id "$RUNTIME_SECRET_NAME" --query SecretString --output text); fi; jq -e . >/dev/null 2>&1 <<<"$EXISTING" || EXISTING='{}'
+RUNTIME_JSON=$(jq -n --argjson e "$EXISTING" --arg db "$DATABASE_URL" --arg email "$CAP_ADMIN_EMAIL" --arg pass "$CAP_ADMIN_PASSWORD" '($e//{}) | .DATABASE_URL=$db | .CAP_ADMIN_EMAIL=$email | .CAP_ADMIN_PASSWORD=$pass | .OPENAI_MODEL=(.OPENAI_MODEL//"gpt-5.6-luna") | .CAP_DAILY_ACQUISITION_TARGET=(.CAP_DAILY_ACQUISITION_TARGET//"1000") | .CAP_DAILY_EMAIL_OUTREACH_LIMIT=(.CAP_DAILY_EMAIL_OUTREACH_LIMIT//"250") | .CAP_ALLOWED_ORIGIN="https://aureum-cap-v0-1.vercel.app" | .FRONTEND_ORIGIN="https://aureum-cap-v0-1.vercel.app" | .PUBLIC_API_BASE_URL="https://api.cactusdigitalmedia.ng" | .AWS_REGION="eu-north-1" | .CAP_S3_BUCKET=(.CAP_S3_BUCKET//"aureum-cap-v01-assets-795804715712") | .CAP_SQS_QUEUE_URL=(.CAP_SQS_QUEUE_URL//"https://sqs.eu-north-1.amazonaws.com/795804715712/aureum-cap-v01-lead-processing") | .CAP_SQS_DLQ_URL=(.CAP_SQS_DLQ_URL//"https://sqs.eu-north-1.amazonaws.com/795804715712/aureum-cap-v01-lead-processing-dlq") | .SES_FROM_EMAIL=(.SES_FROM_EMAIL//"aureum.cap@cactusdigitalmedia.ng") | .SMS_STATUS_CALLBACK_URL="https://api.cactusdigitalmedia.ng/api/v1/webhooks/sms/status" | .NODE_ENV="production"')
+if aws secretsmanager describe-secret --region "$REGION" --secret-id "$RUNTIME_SECRET_NAME" >/dev/null 2>&1; then aws secretsmanager put-secret-value --region "$REGION" --secret-id "$RUNTIME_SECRET_NAME" --secret-string "$RUNTIME_JSON" >/dev/null; else aws secretsmanager create-secret --region "$REGION" --name "$RUNTIME_SECRET_NAME" --secret-string "$RUNTIME_JSON" >/dev/null; fi
+RUNTIME_ARN=$(aws secretsmanager describe-secret --region "$REGION" --secret-id "$RUNTIME_SECRET_NAME" --query ARN --output text); aws ecr get-login-password --region "$REGION" | docker login --username AWS --password-stdin "$ACCOUNT.dkr.ecr.$REGION.amazonaws.com"; docker build -t "$IMAGE" "$WORKDIR"; docker push "$IMAGE"
+SECRET_NAMES='DATABASE_URL CAP_ADMIN_EMAIL CAP_ADMIN_PASSWORD OPENAI_API_KEY OPENAI_MODEL HUNTER_API_KEY CAP_DAILY_ACQUISITION_TARGET CAP_DAILY_EMAIL_OUTREACH_LIMIT CAP_EMAIL_SEND_ENABLED CAP_SMS_SEND_ENABLED CAP_WHATSAPP_SEND_ENABLED CAP_S3_BUCKET CAP_SQS_QUEUE_URL CAP_SQS_DLQ_URL SES_FROM_EMAIL TWILIO_ACCOUNT_SID TWILIO_AUTH_TOKEN TWILIO_FROM_NUMBER TWILIO_MESSAGING_SERVICE_SID SMS_STATUS_CALLBACK_URL AWS_REGION FRONTEND_ORIGIN PUBLIC_API_BASE_URL NODE_ENV'
+SECRETS_JSON='['; for name in $SECRET_NAMES; do SECRETS_JSON+="{\"name\":\"$name\",\"valueFrom\":\"$RUNTIME_ARN:$name::\"},"; done; SECRETS_JSON="${SECRETS_JSON%,}]"
+make_task() { local family=$1 container=$2 command=$3; jq -n --arg family "$family" --arg image "$IMAGE" --arg name "$container" --argjson secrets "$SECRETS_JSON" --arg command "$command" '{family:$family,networkMode:"awsvpc",requiresCompatibilities:["FARGATE"],cpu:"256",memory:"512",executionRoleArn:"arn:aws:iam::795804715712:role/aureum-cap-v01-ecs-execution-role",taskRoleArn:"arn:aws:iam::795804715712:role/aureum-cap-v01-api-task-role",containerDefinitions:[{name:$name,image:$image,essential:true,secrets:$secrets,entryPoint:["sh","-c"],command:[$command],logConfiguration:{logDriver:"awslogs",options:{"awslogs-group":("/ecs/"+$family),"awslogs-region":"eu-north-1","awslogs-stream-prefix":$name}}}}]}'; }
+# Deploy API task with the API entry point; worker gets the same secret references and a distinct command.
+make_task aureum-cap-v01-api api 'node server/index.mjs' >/tmp/cap-api-task.json; jq '.containerDefinitions[0].portMappings=[{containerPort:8787,protocol:"tcp"}]' /tmp/cap-api-task.json >/tmp/cap-api-task.fixed && mv /tmp/cap-api-task.fixed /tmp/cap-api-task.json; make_task aureum-cap-v01-worker worker 'node workers/sqs-worker.mjs' >/tmp/cap-worker-task.json
+aws logs create-log-group --region "$REGION" --log-group-name /ecs/aureum-cap-v01-api 2>/dev/null || true; aws logs create-log-group --region "$REGION" --log-group-name /ecs/aureum-cap-v01-worker 2>/dev/null || true
+API_TASK=$(aws ecs register-task-definition --region "$REGION" --cli-input-json file:///tmp/cap-api-task.json --query 'taskDefinition.taskDefinitionArn' --output text); WORKER_TASK=$(aws ecs register-task-definition --region "$REGION" --cli-input-json file:///tmp/cap-worker-task.json --query 'taskDefinition.taskDefinitionArn' --output text)
+aws ecs update-service --region "$REGION" --cluster "$CLUSTER" --service "$SERVICE" --task-definition "$API_TASK" --force-new-deployment >/dev/null
+if aws ecs describe-services --region "$REGION" --cluster "$CLUSTER" --services "$WORKER_SERVICE" --query 'services[0].serviceName' --output text 2>/dev/null | grep -qx "$WORKER_SERVICE"; then aws ecs update-service --region "$REGION" --cluster "$CLUSTER" --service "$WORKER_SERVICE" --task-definition "$WORKER_TASK" --desired-count 1 --force-new-deployment >/dev/null; else echo "Worker service $WORKER_SERVICE does not exist; create it with the existing queue networking/IAM configuration before enabling EMAIL_SEND jobs." >&2; fi
+aws ecs wait services-stable --region "$REGION" --cluster "$CLUSTER" --services "$SERVICE"; aws ecs describe-services --region "$REGION" --cluster "$CLUSTER" --services "$SERVICE" --query 'services[0].{status:status,running:runningCount,desired:desiredCount,taskDefinition:taskDefinition}' --output json; curl -fsS --max-time 20 https://api.cactusdigitalmedia.ng/health; echo
