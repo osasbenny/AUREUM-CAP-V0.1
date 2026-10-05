@@ -1,20 +1,159 @@
 #!/usr/bin/env node
 import fs from 'node:fs';
 import path from 'node:path';
+import { randomUUID } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
-import { classifyInternetPresence, scoreLead, matchProducts, fallbackMessage, verifyWebsite, hunterDomainSearch, hunterEmailVerifier, openaiResponses, normalizeDomain, normalizeEmail, normalizePhone } from '../server/services.mjs';
+import { SQSClient, SendMessageBatchCommand } from '@aws-sdk/client-sqs';
+import { classifyInternetPresence, scoreLead, matchProducts, fallbackMessage, normalizeDomain, normalizeEmail, normalizePhone } from '../server/services.mjs';
 import { createRepository, reconcileRecords } from '../db/repository.mjs';
 import { discoverOverpass } from './discovery-overpass.mjs';
+
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const inputPath = process.env.CAP_DISCOVERY_INPUT || path.join(root, 'data', 'discovery-inbox.json');
-const target = Math.min(Number(process.env.CAP_DAILY_ACQUISITION_TARGET || 1000), 1000);
+const target = Math.min(Math.max(Number(process.env.CAP_DAILY_ACQUISITION_TARGET || 1000), 1), 1000);
+const rawLimit = Math.min(Math.max(Number(process.env.CAP_DISCOVERY_RAW_LIMIT || target * 5), target), 10000);
 const provider = process.env.CAP_DISCOVERY_PROVIDER || 'overpass';
-const repository = createRepository(); if (!repository) throw new Error('DATABASE_URL_required_for_production_acquisition');
-const discovered = provider === 'overpass' ? await discoverOverpass({ limit: target }) : (fs.existsSync(inputPath) ? JSON.parse(fs.readFileSync(inputPath, 'utf8')) : []); if (!Array.isArray(discovered)) throw new Error('discovery_results_must_be_array');
+const queueUrl = process.env.CAP_SQS_QUEUE_URL;
+const region = process.env.AWS_REGION || 'eu-north-1';
+
+const repository = createRepository();
+if (!repository) throw new Error('DATABASE_URL_required_for_production_acquisition');
+if (!queueUrl) throw new Error('CAP_SQS_QUEUE_URL_required_for_production_acquisition');
+
+const discovered = provider === 'overpass'
+  ? await discoverOverpass({ limit: rawLimit })
+  : (fs.existsSync(inputPath) ? JSON.parse(fs.readFileSync(inputPath, 'utf8')) : []);
+
+if (!Array.isArray(discovered)) throw new Error('discovery_results_must_be_array');
+
 const existing = await repository.listLeads();
 const combined = reconcileRecords([...existing, ...discovered]);
-const existingKeys = new Set(existing.flatMap((r) => [normalizeDomain(r.website), normalizeEmail(r.email), normalizePhone(r.phone), `${String(r.name || '').toLowerCase()}|${String(r.location || '').toLowerCase()}`].filter(Boolean)));
-const newRecords = combined.records.filter((record) => !existingKeys.has(normalizeDomain(record.website)) && !existingKeys.has(normalizeEmail(record.email)) && !existingKeys.has(normalizePhone(record.phone)) && !existingKeys.has(`${String(record.name || '').toLowerCase()}|${String(record.location || '').toLowerCase()}`)).slice(0, target);
-const metrics = { source: provider === 'overpass' ? 'openstreetmap-overpass' : path.basename(inputPath), discovered: discovered.length, duplicates: discovered.length - newRecords.length, new_unique: newRecords.length, no_web_presence: 0, social_only: 0, weak_website: 0, domain_prospects: 0, enriched: 0, verified_email: 0, phone_only: 0, rejected: 0 };
-for (const raw of newRecords) { const lead = { ...raw, internet_presence: classifyInternetPresence(raw) }; if (lead.internet_presence === 'NO_WEB_PRESENCE') metrics.no_web_presence += 1; if (lead.internet_presence === 'SOCIAL_ONLY') metrics.social_only += 1; if (['WEAK_WEBSITE', 'OUTDATED_WEBSITE'].includes(lead.internet_presence)) metrics.weak_website += 1; if (lead.website || lead.domain) metrics.domain_prospects += 1; if (!lead.email && lead.phone) metrics.phone_only += 1; if (lead.website) lead.website_audit = await verifyWebsite(lead.website); if (lead.website || lead.domain) { const domain = normalizeDomain(lead.website || lead.domain); try { const result = await hunterDomainSearch(domain); lead.hunter_enrichment = { provider: 'hunter', source: 'domain-search', data: result.data, fetched_at: new Date().toISOString() }; const contact = result.data?.emails?.find((x) => x.value); if (contact && !lead.email) { lead.email = contact.value; lead.email_confidence = contact.confidence; lead.email_source = 'hunter'; } metrics.enriched += 1; } catch (error) { lead.hunter_enrichment = { provider: 'hunter', status: 'DEGRADED', reason: error.message }; } } else { lead.hunter_enrichment = { skipped: true, reason: 'no_domain' }; } if (lead.email) { try { const result = await hunterEmailVerifier(lead.email); const checkedAt = new Date().toISOString(); const verificationStatus = String(result.data?.status || result.data?.result || 'unknown').toLowerCase(); lead.email_verification = { status: verificationStatus, provider: 'hunter', checked_at: checkedAt, result: result.data }; if (verificationStatus === 'valid') metrics.verified_email += 1; } catch (error) { lead.email_verification = { provider: 'hunter', status: 'DEGRADED', reason: error.message }; } } lead.score = scoreLead(lead); lead.product_fits = matchProducts(lead); lead.message = fallbackMessage(lead, lead.product_fits[0]); try { const ai = await openaiResponses(`Analyze this acquisition prospect for website development and service fit. Return JSON with score, high_intent, rationale, opportunity. Business: ${lead.name}; category: ${lead.category}; presence: ${lead.internet_presence}.`, { name: 'acquisition_qualification', schema: { type: 'object', properties: { score: { type: 'number' }, high_intent: { type: 'boolean' }, rationale: { type: 'string' }, opportunity: { type: 'string' } }, required: ['score', 'high_intent', 'rationale', 'opportunity'], additionalProperties: false } }); lead.openai_qualification = { ...JSON.parse(ai.output_text), model: ai.model, request_id: ai.id, qualified_at: new Date().toISOString() }; } catch (error) { lead.openai_qualification = { status: 'DEGRADED', reason: error.message }; } lead.acquisition_date = new Date().toISOString(); lead.lifecycle_stage = 'ACQUIRED'; await repository.saveLead(lead); }
-await repository.recordAcquisitionRun(metrics); console.log(JSON.stringify({ ok: true, target, ...metrics }, null, 2)); await repository.close();
+const existingKeys = new Set(existing.flatMap((r) => [
+  normalizeDomain(r.website),
+  normalizeEmail(r.email),
+  normalizePhone(r.phone),
+  `${String(r.name || r.business || '').toLowerCase()}|${String(r.location || r.address || '').toLowerCase()}`
+].filter(Boolean)));
+
+const isNew = (record) => {
+  const keys = [
+    normalizeDomain(record.website),
+    normalizeEmail(record.email),
+    normalizePhone(record.phone),
+    `${String(record.name || record.business || '').toLowerCase()}|${String(record.location || record.address || '').toLowerCase()}`
+  ].filter(Boolean);
+  return keys.length > 0 && keys.every((key) => !existingKeys.has(key));
+};
+
+const newRecords = combined.records.filter(isNew).slice(0, target);
+const metrics = {
+  source: provider === 'overpass' ? 'openstreetmap-overpass' : path.basename(inputPath),
+  discovered: discovered.length,
+  duplicates: Math.max(0, discovered.length - newRecords.length),
+  new_unique: newRecords.length,
+  no_web_presence: 0,
+  social_only: 0,
+  weak_website: 0,
+  domain_prospects: 0,
+  enriched: 0,
+  verified_email: 0,
+  phone_only: 0,
+  rejected: 0
+};
+
+const jobs = [];
+for (const raw of newRecords) {
+  const id = raw.uid || raw.id || `acq-${randomUUID()}`;
+  const lead = {
+    ...raw,
+    uid: id,
+    id,
+    internet_presence: classifyInternetPresence(raw),
+    acquisition_date: new Date().toISOString(),
+    lifecycle_stage: 'ACQUIRED'
+  };
+
+  if (lead.internet_presence === 'NO_WEB_PRESENCE') metrics.no_web_presence += 1;
+  if (lead.internet_presence === 'SOCIAL_ONLY') metrics.social_only += 1;
+  if (['WEAK_WEBSITE', 'OUTDATED_WEBSITE'].includes(lead.internet_presence)) metrics.weak_website += 1;
+  if (lead.website || lead.domain) metrics.domain_prospects += 1;
+  if (!lead.email && lead.phone) metrics.phone_only += 1;
+
+  lead.score = scoreLead(lead);
+  lead.product_fits = matchProducts(lead);
+  lead.message = fallbackMessage(lead, lead.product_fits[0]);
+
+  if (lead.website || lead.domain) {
+    jobs.push({
+      id: randomUUID(),
+      type: 'LEAD_ENRICH',
+      lead_id: id,
+      provider: 'hunter',
+      domain: normalizeDomain(lead.website || lead.domain),
+      status: 'QUEUED',
+      attempts: 0,
+      created_at: new Date().toISOString()
+    });
+  }
+  if (lead.email) {
+    jobs.push({
+      id: randomUUID(),
+      type: 'EMAIL_VERIFY',
+      lead_id: id,
+      provider: 'hunter',
+      email: normalizeEmail(lead.email),
+      status: 'QUEUED',
+      attempts: 0,
+      created_at: new Date().toISOString()
+    });
+  }
+  jobs.push({
+    id: randomUUID(),
+    type: 'OPENAI_QUALIFY',
+    lead_id: id,
+    provider: 'openai',
+    status: 'QUEUED',
+    attempts: 0,
+    created_at: new Date().toISOString()
+  });
+
+  await repository.saveLead(lead);
+}
+
+const sqs = new SQSClient({ region });
+for (let i = 0; i < jobs.length; i += 10) {
+  const batch = jobs.slice(i, i + 10);
+  await Promise.all(batch.map((job) => repository.enqueue(job)));
+  const response = await sqs.send(new SendMessageBatchCommand({
+    QueueUrl: queueUrl,
+    Entries: batch.map((job) => ({
+      Id: job.id.replace(/-/g, '').slice(0, 80),
+      MessageBody: JSON.stringify(job)
+    }))
+  }));
+  if (response.Failed?.length) {
+    throw new Error(`sqs_batch_failed:${response.Failed.map((x) => x.Code || x.Id).join(',')}`);
+  }
+}
+
+await repository.recordAcquisitionRun(metrics);
+
+const result = {
+  ok: newRecords.length === target,
+  target,
+  raw_limit: rawLimit,
+  existing_before: existing.length,
+  ...metrics,
+  shortfall: Math.max(0, target - newRecords.length),
+  enrichment_jobs_queued: jobs.filter((j) => j.type === 'LEAD_ENRICH').length,
+  verification_jobs_queued: jobs.filter((j) => j.type === 'EMAIL_VERIFY').length,
+  qualification_jobs_queued: jobs.filter((j) => j.type === 'OPENAI_QUALIFY').length,
+  total_jobs_queued: jobs.length
+};
+
+console.log(JSON.stringify(result, null, 2));
+await repository.close();
+
+if (newRecords.length < target) {
+  throw new Error(`acquisition_target_shortfall:${newRecords.length}/${target}`);
+}
