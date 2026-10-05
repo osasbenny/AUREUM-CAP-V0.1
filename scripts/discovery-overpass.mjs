@@ -5,8 +5,14 @@ const OVERPASS_ENDPOINTS = [
   'https://maps.mail.ru/osm/tools/overpass/api/interpreter'
 ].filter(Boolean);
 
-const defaultBbox = process.env.CAP_DISCOVERY_BBOX || '29.50,-95.90,30.20,-95.00';
-const categories = (process.env.CAP_DISCOVERY_CATEGORIES || 'restaurant,bar,cafe,car_wash,beauty,barber,plumber,roofing_contractor,real_estate_agency,lawyer,car_repair,fitness_centre,shop').split(',').map((x) => x.trim()).filter(Boolean);
+const defaultBboxes = (process.env.CAP_DISCOVERY_BBOXES || [
+  '29.45,-96.05,30.25,-94.95',
+  '32.45,-97.75,33.35,-96.30',
+  '30.05,-98.10,30.65,-97.35',
+  '29.15,-98.85,29.80,-98.20',
+  '33.35,-84.75,34.15,-83.85',
+  '33.15,-112.45,33.85,-111.65'
+].join(';')).split(';').map((x) => x.trim()).filter(Boolean);
 
 const partitions = (bbox) => {
   const [south, west, north, east] = bbox.split(',').map(Number);
@@ -31,102 +37,105 @@ const text = (v) => v ? String(v).trim() : '';
 async function fetchWithResilience(query) {
   let lastError = null;
   for (const endpoint of OVERPASS_ENDPOINTS) {
-    let attempts = 0;
-    const maxAttempts = 3;
-    while (attempts < maxAttempts) {
-      attempts++;
+    for (let attempt = 1; attempt <= 3; attempt += 1) {
       try {
         const response = await fetch(endpoint, {
           method: 'POST',
           headers: {
             'User-Agent': 'AureumCAP/1.0 (contact@cactusdigitalmedia.ng)',
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Accept': 'application/json,application/osm3s+json'
+            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+            'Accept': 'application/json'
           },
-          body: new URLSearchParams({ data: query }),
-          signal: AbortSignal.timeout(45000)
+          body: `data=${encodeURIComponent(query)}`,
+          signal: AbortSignal.timeout(60000)
         });
 
-        if (response.ok) {
-          return await response.json();
-        }
+        if (response.ok) return await response.json();
 
         const status = response.status;
-        // Retry/fallback on 406, 429, and 5xx
-        if ([406, 429].includes(status) || (status >= 500 && status < 600)) {
-          console.warn(`[Overpass Warning] Endpoint ${endpoint} returned status ${status}. Attempt ${attempts}/${maxAttempts}. Retrying/rotating...`);
-          await new Promise((resolve) => setTimeout(resolve, attempts * 2000));
-          if (status === 406 || status === 429) {
-            // Break inner retry loop to try next endpoint immediately on client-rejection/rate-limit
-            break;
-          }
-          continue;
-        } else {
-          throw new Error(`overpass_http_${status}`);
-        }
+        lastError = new Error(`overpass_http_${status}`);
+        console.warn(`[Overpass] ${endpoint} returned ${status} on attempt ${attempt}/3`);
+        if (status === 406 || status === 429 || status >= 500) break;
+        throw lastError;
       } catch (error) {
         lastError = error;
-        console.warn(`[Overpass Error] Endpoint ${endpoint} failed: ${error.message}. Attempt ${attempts}/${maxAttempts}`);
-        await new Promise((resolve) => setTimeout(resolve, attempts * 1500));
+        console.warn(`[Overpass] ${endpoint} failed on attempt ${attempt}/3: ${error.message}`);
+        if (attempt < 3) await new Promise((resolve) => setTimeout(resolve, attempt * 1500));
       }
     }
   }
-  throw lastError || new Error('All Overpass endpoints failed');
+  throw lastError || new Error('all_overpass_endpoints_failed');
 }
 
-export async function discoverOverpass({ bbox = defaultBbox, limit = 1000 } = {}) {
+const buildQuery = (bbox) => `[out:json][timeout:45];(
+  nwr["amenity"~"^(restaurant|bar|cafe|fast_food|car_wash)$"](${bbox});
+  nwr["shop"~"^(car_repair|beauty|hairdresser)$"](${bbox});
+  nwr["craft"~"^(plumber|roofer|carpenter)$"](${bbox});
+  nwr["office"~"^(estate_agent|lawyer|consulting)$"](${bbox});
+  nwr["leisure"="fitness_centre"](${bbox});
+);out center tags qt;`;
+
+export async function discoverOverpass({ bboxes = defaultBboxes, limit = 5000 } = {}) {
   const records = [];
-  const partList = partitions(bbox);
+  const seen = new Set();
 
-  console.log(`[Discovery] Starting resilient Overpass discovery across ${partList.length} geographic partitions...`);
+  console.log(`[Discovery] Starting Overpass discovery across ${bboxes.length} metro areas; raw limit=${limit}`);
 
-  for (const part of partList) {
-    if (records.length >= limit) break;
+  for (const bbox of bboxes) {
+    for (const part of partitions(bbox)) {
+      if (records.length >= limit) break;
+      try {
+        const data = await fetchWithResilience(buildQuery(part));
+        for (const element of data.elements || []) {
+          if (records.length >= limit) break;
+          const osmKey = `${element.type}:${element.id}`;
+          if (seen.has(osmKey)) continue;
+          seen.add(osmKey);
 
-    const filter = categories.map((c) => `nwr["amenity"="${c}"](${part});nwr["shop"="${c}"](${part});nwr["craft"="${c}"](${part});`).join('');
-    const query = `[out:json][timeout:30];(${filter});out center tags;`;
+          const tags = element.tags || {};
+          const center = element.center || element;
+          const name = text(tags.name);
+          if (!name) continue;
 
-    try {
-      const data = await fetchWithResilience(query);
-      for (const element of data.elements || []) {
-        const tags = element.tags || {};
-        const center = element.center || element;
-        const name = text(tags.name);
-        if (!name) continue;
+          const website = text(tags.website || tags['contact:website'] || tags.url);
+          const phone = text(tags.phone || tags['contact:phone']);
+          const address = [
+            tags['addr:housenumber'],
+            tags['addr:street'],
+            tags['addr:city'],
+            tags['adr:state'],
+            tags['addr:postcode']
+          ].filter(Boolean).join(', ');
+          const category = text(tags.amenity || tags.shop || tags.craft || tags.office || tags.leisure || 'local_business');
 
-        const website = text(tags.website || tags['contact:website'] || tags.url);
-        const phone = text(tags.phone || tags['contact:phone']);
-        const address = [tags['addr:housenumber'], tags['addr:street'], tags['addr:city'], tags['addr:state'], tags['addr:postcode']].filter(Boolean).join(', ');
-
-        records.push({
-          name,
-          business: name,
-          category: text(tags.amenity || tags.shop || tags.craft || 'local_business'),
-          location: address || text(tags['addr:city'] || 'Houston, TX'),
-          address,
-          phone,
-          website,
-          social_url: text(tags['contact:facebook'] || tags['contact:instagram'] || tags['contact:twitter']),
-          latitude: center.lat,
-          longitude: center.lon,
-          source: 'openstreetmap-overpass',
-          source_evidence: {
-            element_type: element.type,
-            element_id: element.id,
-            bbox: part,
-            query: 'Overpass API'
-          },
-          discovered_at: new Date().toISOString()
-        });
-
-        if (records.length >= limit) break;
+          records.push({
+            name,
+            business: name,
+            category,
+            location: address || text(tags['addr:city'] || tags['addr:state'] || 'United States'),
+            address,
+            phone,
+            website,
+            social_url: text(tags['contact:facebook'] || tags['contact:instagram'] || tags['contact:twitter']),
+            latitude: center.lat,
+            longitude: center.lon,
+            source: 'openstreetmap-overpass',
+            source_evidence: {
+              element_type: element.type,
+              element_id: element.id,
+              bbox: part,
+              query: 'Overpass API'
+            },
+            discovered_at: new Date().toISOString()
+          });
+        }
+      } catch (error) {
+        console.error(`[Discovery] Partition ${part} skipped: ${error.message}`);
       }
-    } catch (partitionError) {
-      // Continue through smaller geographic partitions rather than kill the entire daily run
-      console.error(`[Partition Error] Partition ${part} skipped due to error: ${partitionError.message}. Continuing with remaining partitions.`);
     }
+    if (records.length >= limit) break;
   }
 
-  console.log(`[Discovery] Resilient Overpass discovery completed. Total unique records discovered: ${records.length}`);
+  console.log(`[Discovery] Completed with ${records.length} raw unique OSM records`);
   return records;
 }
