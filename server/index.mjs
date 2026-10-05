@@ -97,6 +97,26 @@ const server = http.createServer(async (req, res) => {
   if (url.pathname === '/api/v1/revenue' && req.method === 'GET') return json(res, 200, { data: revenue, totals: dashboard() });
   if (url.pathname === '/api/v1/products' && req.method === 'GET') return json(res, 200, { data: [...new Set(leads.flatMap((l) => l.product_fits.map((p) => p.product)))] });
   const fitMatch = url.pathname.match(/^\/api\/v1\/product-fit\/([^/]+)$/); if (fitMatch && req.method === 'GET') { const lead = findLead(fitMatch[1]); return lead ? json(res, 200, { data: lead.product_fits }) : notFound(res); }
+  if (url.pathname === '/api/v1/export/csv' && req.method === 'GET') {
+    const leadsList = repository ? await repository.listLeads() : leads;
+    const headers = ['ID', 'Business Name', 'Category', 'Location', 'Phone', 'Email', 'Website', 'Stage'];
+    const rows = [headers.join(',')];
+    for (const l of leadsList) {
+      const record = l.record || l;
+      rows.push([
+        record.id || record.uid || '',
+        `"${String(record.name || record.business || '').replace(/"/g, '""')}"`,
+        `"${String(record.category || '').replace(/"/g, '""')}"`,
+        `"${String(record.location || '').replace(/"/g, '""')}"`,
+        `"${String(record.phone || '').replace(/"/g, '""')}"`,
+        `"${String(record.email || '').replace(/"/g, '""')}"`,
+        `"${String(record.website || '').replace(/"/g, '""')}"`,
+        `"${String(record.lifecycle_stage || record.stage || '').replace(/"/g, '""')}"`
+      ].join(','));
+    }
+    res.writeHead(200, { 'Content-Type': 'text/csv; charset=utf-8', 'Content-Disposition': 'attachment; filename="production-leads-export.csv"' });
+    return res.end(rows.join('\n'));
+  }
   return notFound(res);
 });
 server.listen(port, '0.0.0.0', () => console.log(`CAP API listening on ${port}`));
