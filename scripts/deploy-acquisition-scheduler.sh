@@ -12,6 +12,15 @@ TASK_SG="sg-0653bfae5521b3400"
 SUBNETS=$(aws ec2 describe-subnets --region "$REGION" --filters Name=vpc-id,Values=vpc-02f0b750c4f333666 --query 'Subnets[?MapPublicIpOnLaunch==`true`].SubnetId' --output text | tr '\t' ',')
 LOG_GROUP="/ecs/aureum-cap-v01-api"
 
+echo "=== 0. Building and publishing current repository image ==="
+aws ecr get-login-password --region "$REGION" | docker login --username AWS --password-stdin "$ACCOUNT.dkr.ecr.$REGION.amazonaws.com"
+docker build --pull -t aureum-cap-v01-api:production .
+docker tag aureum-cap-v01-api:production "$IMAGE"
+docker push "$IMAGE"
+IMAGE_DIGEST=$(aws ecr describe-images --region "$REGION" --repository-name aureum-cap-v01-api --image-ids imageTag=production --query 'imageDetails[0].imageDigest' --output text)
+echo "Production image digest: $IMAGE_DIGEST"
+
+
 echo "=== 1. Setting up SNS Alert Topic & EventBridge Scheduler DLQ ==="
 SNS_TOPIC_ARN=$(aws sns create-topic --region "$REGION" --name "aureum-cap-v01-alerts" --query 'TopicArn' --output text 2>/dev/null || aws sns list-topics --region "$REGION" --query "Topics[?ends_with(TopicArn, ':aureum-cap-v01-alerts')].TopicArn | [0]" --output text)
 echo "SNS Alert Topic ARN: $SNS_TOPIC_ARN"
@@ -19,6 +28,7 @@ echo "SNS Alert Topic ARN: $SNS_TOPIC_ARN"
 DLQ_URL=$(aws sqs create-queue --region "$REGION" --queue-name "aureum-cap-v01-scheduler-dlq" --query 'QueueUrl' --output text 2>/dev/null || aws sqs get-queue-url --region "$REGION" --queue-name "aureum-cap-v01-scheduler-dlq" --query 'QueueUrl' --output text)
 DLQ_ARN=$(aws sqs get-queue-attributes --region "$REGION" --queue-url "$DLQ_URL" --attribute-names QueueArn --query 'Attributes.QueueArn' --output text)
 echo "Scheduler DLQ ARN: $DLQ_ARN"
+echo "Production image digest: $IMAGE_DIGEST"
 
 echo "=== 2. Registering Acquisition ECS Task Definition ==="
 RUNTIME_ARN=$(aws secretsmanager describe-secret --region "$REGION" --secret-id "$RUNTIME_SECRET_NAME" --query ARN --output text)
@@ -40,6 +50,7 @@ cat > /tmp/acquisition-task-definition.json <<TASK
       "command": ["npm", "run", "acquire"],
       "environment": [
         {"name": "CAP_DAILY_ACQUISITION_TARGET", "value": "1000"},
+        {"name": "CAP_DISCOVERY_RAW_LIMIT", "value": "5000"},
         {"name": "CAP_DISCOVERY_PROVIDER", "value": "overpass"}
       ],
       "secrets": [
@@ -137,8 +148,20 @@ echo "Immediate Task ARN: $TASK_ARN"
 echo "Waiting for task to stop..."
 aws ecs wait tasks-stopped --region "$REGION" --cluster "$CLUSTER" --tasks "$TASK_ARN"
 
-FINAL_STATUS=$(aws ecs describe-tasks --region "$REGION" --cluster "$CLUSTER" --tasks "$TASK_ARN" --query 'tasks[0].lastStatus' --output text)
+TASK_INFO=$(aws ecs describe-tasks --region "$REGION" --cluster "$CLUSTER" --tasks "$TASK_ARN" --output json)
+FINAL_STATUS=$(echo "$TASK_INFO" | jq -r '.tasks[0].lastStatus')
+EXIT_CODE=$(echo "$TASK_INFO" | jq -r '.tasks[0].containers[0].exitCode // -1')
+STOP_REASON=$(echo "$TASK_INFO" | jq -r '.tasks[0].stoppedReason // ""')
+TASK_ID="${TASK_ARN##*/}"
 echo "Task Final Status: $FINAL_STATUS"
+echo "Task Exit Code: $EXIT_CODE"
+echo "Task Stop Reason: $STOP_REASON"
+echo "=== Acquisition task logs ==="
+aws logs get-log-events --region "$REGION" --log-group-name "$LOG_GROUP" --log-stream-name "acquisition/acquisition/$TASK_ID" --limit 100 --query 'events[].message' --output text || true
+if [ "$EXIT_CODE" != "0" ]; then
+  echo "ERROR: acquisition task failed"
+  exit 1
+fi
 
 echo "=== 5. Verification & Metrics ==="
 echo "Acquisition task definition ARN/revision: $TASK_DEF_ARN"
