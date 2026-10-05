@@ -74,6 +74,26 @@ const server = http.createServer(async (req, res) => {
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   if (req.method === 'OPTIONS') { res.writeHead(204, { 'Access-Control-Allow-Headers': 'Content-Type, Cookie, X-Requested-With' }); return res.end(); }
   if (url.pathname === '/health' && req.method === 'GET') return json(res, 200, { ok: true, service: 'aureum-cap-v0-1', region: process.env.AWS_REGION || 'eu-north-1', send_enabled: process.env.CAP_SEND_ENABLED === 'true' });
+  if (url.pathname === '/export/csv' || url.pathname === '/api/v1/export/csv') {
+    const leadsList = repository ? await repository.listLeads() : leads;
+    const headers = ['ID', 'Business Name', 'Category', 'Location', 'Phone', 'Email', 'Website', 'Stage'];
+    const rows = [headers.join(',')];
+    for (const l of leadsList) {
+      const record = l.record || l;
+      rows.push([
+        record.id || record.uid || '',
+        `"${String(record.name || record.business || '').replace(/"/g, '""')}"`,
+        `"${String(record.category || '').replace(/"/g, '""')}"`,
+        `"${String(record.location || '').replace(/"/g, '""')}"`,
+        `"${String(record.phone || '').replace(/"/g, '""')}"`,
+        `"${String(record.email || '').replace(/"/g, '""')}"`,
+        `"${String(record.website || '').replace(/"/g, '""')}"`,
+        `"${String(record.lifecycle_stage || record.stage || '').replace(/"/g, '""')}"`
+      ].join(','));
+    }
+    res.writeHead(200, { 'Content-Type': 'text/csv; charset=utf-8', 'Content-Disposition': 'attachment; filename="production-leads-export.csv"' });
+    return res.end(rows.join('\n'));
+  }
   if (url.pathname === '/readiness' && req.method === 'GET') { const readiness = configuredReadiness(); const blocked = Object.entries(readiness).filter(([key, value]) => key !== 'send_gate' && !value).map(([key]) => key); return json(res, blocked.length ? 503 : 200, { ready: blocked.length === 0, readiness, blocked, policy: 'No live send is permitted without CAP_SEND_ENABLED=true, approved sender, suppression check, and human approval.' }); }
   if (url.pathname === '/api/v1/webhooks/sms/status' && req.method === 'POST') { const params = await formBody(req); if (!validTwilioWebhook(req, params)) return json(res, 403, { error: 'invalid_twilio_signature' }); const lead = leads.find((item) => item.sms_provider_id === params.MessageSid); if (lead) { lead.sms_status = params.MessageStatus || lead.sms_status; lead.lifecycle_stage = params.MessageStatus === 'delivered' ? 'DELIVERED' : params.MessageStatus === 'undelivered' || params.MessageStatus === 'failed' ? 'BOUNCED' : lead.lifecycle_stage; await persistLead(lead); } if (repository) await repository.saveEvent({ type: 'sms.status', entity_type: 'lead', entity_id: null, payload: params }); return json(res, 200, { ok: true }); }
   if (url.pathname === '/api/v1/webhooks/sms/inbound' && req.method === 'POST') { const params = await formBody(req); if (!validTwilioWebhook(req, params)) return json(res, 403, { error: 'invalid_twilio_signature' }); const lead = leads.find((item) => item.phone === params.From || item.sms_route?.phone === params.From); const text = String(params.Body || '').trim(); if (lead) { lead.response = { classification: /^(stop|unsubscribe|cancel|quit|end|revoke)$/i.test(text) ? 'OPT_OUT' : 'RECEIVED', body: text, received_at: new Date().toISOString() }; lead.lifecycle_stage = 'REPLIED'; if (lead.response.classification === 'OPT_OUT') { lead.sms_suppressed = true; lead.suppressed = true; suppressions.push({ phone: lead.phone, reason: 'recipient_opt_out', source: 'twilio', created_at: new Date().toISOString() }); } await persistLead(lead); } if (repository) await repository.saveEvent({ type: 'sms.inbound', entity_type: 'lead', entity_id: null, payload: params }); res.writeHead(200, { 'Content-Type': 'text/xml' }); return res.end('<Response></Response>'); }
@@ -97,26 +117,6 @@ const server = http.createServer(async (req, res) => {
   if (url.pathname === '/api/v1/revenue' && req.method === 'GET') return json(res, 200, { data: revenue, totals: dashboard() });
   if (url.pathname === '/api/v1/products' && req.method === 'GET') return json(res, 200, { data: [...new Set(leads.flatMap((l) => l.product_fits.map((p) => p.product)))] });
   const fitMatch = url.pathname.match(/^\/api\/v1\/product-fit\/([^/]+)$/); if (fitMatch && req.method === 'GET') { const lead = findLead(fitMatch[1]); return lead ? json(res, 200, { data: lead.product_fits }) : notFound(res); }
-  if (url.pathname === '/api/v1/export/csv' && req.method === 'GET') {
-    const leadsList = repository ? await repository.listLeads() : leads;
-    const headers = ['ID', 'Business Name', 'Category', 'Location', 'Phone', 'Email', 'Website', 'Stage'];
-    const rows = [headers.join(',')];
-    for (const l of leadsList) {
-      const record = l.record || l;
-      rows.push([
-        record.id || record.uid || '',
-        `"${String(record.name || record.business || '').replace(/"/g, '""')}"`,
-        `"${String(record.category || '').replace(/"/g, '""')}"`,
-        `"${String(record.location || '').replace(/"/g, '""')}"`,
-        `"${String(record.phone || '').replace(/"/g, '""')}"`,
-        `"${String(record.email || '').replace(/"/g, '""')}"`,
-        `"${String(record.website || '').replace(/"/g, '""')}"`,
-        `"${String(record.lifecycle_stage || record.stage || '').replace(/"/g, '""')}"`
-      ].join(','));
-    }
-    res.writeHead(200, { 'Content-Type': 'text/csv; charset=utf-8', 'Content-Disposition': 'attachment; filename="production-leads-export.csv"' });
-    return res.end(rows.join('\n'));
-  }
   return notFound(res);
 });
 server.listen(port, '0.0.0.0', () => console.log(`CAP API listening on ${port}`));
