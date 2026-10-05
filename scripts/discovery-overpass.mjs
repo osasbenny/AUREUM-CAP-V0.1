@@ -103,7 +103,7 @@ export async function discoverOverpass({ bboxes = defaultBboxes, limit = 5000 } 
             tags['addr:housenumber'],
             tags['addr:street'],
             tags['addr:city'],
-            tags['adr:state'],
+            tags['addr:state'],
             tags['addr:postcode']
           ].filter(Boolean).join(', ');
           const category = text(tags.amenity || tags.shop || tags.craft || tags.office || tags.leisure || 'local_business');
