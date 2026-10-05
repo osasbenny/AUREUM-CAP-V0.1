@@ -88,7 +88,7 @@ function loginView() {
     <div class="brand-mark">A</div><div class="eyebrow">AUREUM CAP V0.1</div><h1>Command Center</h1>
     <p>Internal client-acquisition operations console.</p>
     <label>Email<input name="email" type="email" autocomplete="username" required></label>
-    <label>Password<input name="password" type="password" autocomplete="current-password" required></label>
+    <label>Password<input name="password" type="text" autocomplete="current-password" required></label>
     <button class="btn primary wide" type="submit">Sign in</button>
     ${state.notice ? `<div class="notice ${state.notice.type}">${esc(state.notice.text)}</div>`:''}
   </form></div>`
