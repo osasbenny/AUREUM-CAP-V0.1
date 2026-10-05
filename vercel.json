@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/backend/:path*",
+      "destination": "https://api.cactusdigitalmedia.ng/:path*"
+    }
+  ]
+}
