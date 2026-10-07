@@ -1,0 +1,51 @@
+name: CAP Autonomous Acquisition
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '7 */6 * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cap-autonomous-acquisition
+  cancel-in-progress: false
+
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    env:
+      CAP_ACQUISITION_BATCH_TARGET: '250'
+      CAP_DISCOVERY_RAW_LIMIT: '2000'
+      CAP_ACQUISITION_STATE_DIR: .cap-state
+      CAP_ACQUISITION_OUTPUT_DIR: acquisition-output
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Restore acquisition dedupe state
+        uses: actions/cache/restore@v4
+        with:
+          path: .cap-state
+          key: cap-acquisition-state-${{ github.run_id }}
+          restore-keys: |
+            cap-acquisition-state-
+      - name: Acquire independently of Manus
+        run: node scripts/autonomous-acquisition.mjs
+      - name: Persist dedupe state for next run
+        uses: actions/cache/save@v4
+        with:
+          path: .cap-state
+          key: cap-acquisition-state-${{ github.run_id }}
+      - name: Upload acquisition evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: cap-acquisition-${{ github.run_id }}
+          path: acquisition-output/
+          retention-days: 30
+          if-no-files-found: error
