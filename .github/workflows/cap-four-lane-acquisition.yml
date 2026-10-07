@@ -1,0 +1,60 @@
+name: CAP Four-Lane Autonomous Acquisition
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/autonomous-acquisition-lane.mjs'
+      - '.github/workflows/cap-four-lane-acquisition.yml'
+  workflow_dispatch:
+  schedule:
+    - cron: '17 */6 * * *'
+
+permissions:
+  contents: read
+
+jobs:
+  acquire:
+    strategy:
+      fail-fast: false
+      matrix:
+        lane: [webdev, dating, hashnomads, books]
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    concurrency:
+      group: cap-acquisition-${{ matrix.lane }}
+      cancel-in-progress: false
+    env:
+      CAP_ACQUISITION_LANE: ${{ matrix.lane }}
+      CAP_ACQUISITION_BATCH_TARGET: '250'
+      CAP_DISCOVERY_RAW_LIMIT: '8000'
+      CAP_ACQUISITION_STATE_DIR: .cap-state/${{ matrix.lane }}
+      CAP_ACQUISITION_OUTPUT_DIR: acquisition-output/${{ matrix.lane }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Restore lane dedupe state
+        uses: actions/cache/restore@v4
+        with:
+          path: .cap-state/${{ matrix.lane }}
+          key: cap-${{ matrix.lane }}-state-${{ github.run_id }}
+          restore-keys: |
+            cap-${{ matrix.lane }}-state-
+      - name: Acquire raw prospects independently
+        run: node scripts/autonomous-acquisition-lane.mjs
+      - name: Persist lane dedupe state
+        uses: actions/cache/save@v4
+        with:
+          path: .cap-state/${{ matrix.lane }}
+          key: cap-${{ matrix.lane }}-state-${{ github.run_id }}
+      - name: Upload lane evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: cap-${{ matrix.lane }}-${{ github.run_id }}
+          path: acquisition-output/${{ matrix.lane }}/
+          retention-days: 30
+          if-no-files-found: error
