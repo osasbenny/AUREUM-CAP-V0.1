@@ -1,6 +1,11 @@
 name: CAP Autonomous Acquisition
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/autonomous-acquisition.mjs'
+      - '.github/workflows/cap-autonomous-acquisition.yml'
   workflow_dispatch:
   schedule:
     - cron: '7 */6 * * *'
