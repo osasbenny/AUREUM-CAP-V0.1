@@ -76,8 +76,14 @@ function hydrateLead(lead) {
 
 async function refreshLeads() {
   if (repository) {
-    const persisted = await repository.listLeads();
-    leads = persisted.map(hydrateLead);
+    try {
+      const persisted = await repository.listLeads();
+      if (persisted.length) leads = persisted.map(hydrateLead);
+      else leads = getLeads().map(hydrateLead);
+    } catch (error) {
+      console.error('DATABASE_REFRESH_FAILED', error.message);
+      leads = getLeads().map(hydrateLead);
+    }
   } else {
     leads = getLeads().map(hydrateLead);
   }
