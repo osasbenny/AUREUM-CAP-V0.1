@@ -11,6 +11,10 @@ const state = {
   queue: [],
   campaigns: [],
   revenue: [],
+  acquisitionRuns: [],
+  activeAcquisition: null,
+  conversations: [],
+  events: [],
   selected: new Set(),
   search: '',
   stage: 'ALL',
@@ -32,7 +36,7 @@ const when = v => v ? new Date(v).toLocaleString() : '—'
 const uid = l => l.uid || l.id
 const stageOf = l => l.lifecycle_stage || l.stage || 'IMPORTED'
 const presenceOf = l => l.internet_presence || l.website_presence || l.website_status || (l.website ? 'WEBSITE' : 'NO_WEB_PRESENCE')
-const highIntent = l => Boolean(l.high_intent || l.requested_information || l.rfi || /REQUEST|INTEREST|RFI/i.test(stageOf(l)))
+const highIntent = l => { const blob = JSON.stringify(l || {}); return Boolean(l.high_intent || l.requested_information || l.rfi || /REQUESTED_INFORMATION|HUMAN_FOLLOWUP|RFI|REQUEST(?:ED)?[ _-]?INFO|POSITIVE|INTEREST/i.test(`${stageOf(l)} ${blob}`)) }
 
 async function api(path, opts={}) {
   const res = await fetch(`${API}${path}`, {
@@ -68,9 +72,10 @@ async function refreshAll() {
   state.busy = true; render()
   const results = await Promise.allSettled([
     api('/api/v1/dashboard'), api('/readiness'), api('/api/v1/leads'), api('/api/v1/queue'),
-    api('/api/v1/campaigns'), api('/api/v1/revenue')
+    api('/api/v1/campaigns'), api('/api/v1/revenue'), api('/api/v1/acquisition/runs'),
+    api('/api/v1/conversations'), api('/api/v1/events')
   ])
-  const [dash, ready, leads, queue, campaigns, revenue] = results
+  const [dash, ready, leads, queue, campaigns, revenue, acquisitionRuns, conversations, events] = results
   if (dash.status === 'fulfilled') state.dashboard = dash.value || {}
   if (ready.status === 'fulfilled') state.readiness = ready.value
   else if (ready.reason?.payload) state.readiness = ready.reason.payload
@@ -78,6 +83,9 @@ async function refreshAll() {
   if (queue.status === 'fulfilled') state.queue = queue.value.data || []
   if (campaigns.status === 'fulfilled') state.campaigns = campaigns.value.data || []
   if (revenue.status === 'fulfilled') state.revenue = revenue.value.data || []
+  if (acquisitionRuns.status === 'fulfilled') { state.acquisitionRuns = acquisitionRuns.value.data || []; state.activeAcquisition = acquisitionRuns.value.active || null }
+  if (conversations.status === 'fulfilled') state.conversations = conversations.value.data || []
+  if (events.status === 'fulfilled') state.events = events.value.data || []
   const failed = results.filter(r => r.status === 'rejected' && r.reason?.status !== 503)
   if (failed.length) state.notice = {type:'error',text:`${failed.length} live data request${failed.length>1?'s':''} failed. Refresh to retry.`}
   state.refreshedAt = new Date(); state.busy = false; render()
@@ -88,7 +96,7 @@ function loginView() {
     <div class="brand-mark">A</div><div class="eyebrow">AUREUM CAP V0.1</div><h1>Command Center</h1>
     <p>Internal client-acquisition operations console.</p>
     <label>Email<input name="email" type="email" autocomplete="username" required></label>
-    <label>Password<input name="password" type="text" autocomplete="current-password" required></label>
+    <label>Password<div class="password-row"><input id="loginPassword" name="password" type="password" autocomplete="current-password" required><button class="btn password-toggle" type="button" data-action="toggle-password">Show</button></div></label>
     <button class="btn primary wide" type="submit">Sign in</button>
     ${state.notice ? `<div class="notice ${state.notice.type}">${esc(state.notice.text)}</div>`:''}
   </form></div>`
@@ -96,8 +104,8 @@ function loginView() {
 
 const nav = [
   ['overview','Overview','◫'],['prospects','Prospects','◎'],['intent','High Intent','◆'],['acquisition','Acquisition','↗'],
-  ['outreach','Outreach','✉'],['pipeline','Pipeline','⌁'],['jobs','Jobs','⚙'],['providers','Providers','◉'],
-  ['analytics','Analytics','▥'],['settings','Settings','⚙']
+  ['outreach','Outreach','✉'],['conversations','Conversations','◌'],['pipeline','Pipeline','⌁'],['jobs','Jobs','⚙'],['providers','Providers','◉'],
+  ['analytics','Analytics','▥'],['audit','Audit Log','≡'],['settings','Settings','⚙']
 ]
 
 function shell() {
@@ -118,7 +126,7 @@ function shell() {
   </div>`
 }
 
-function titleForView(){ return ({overview:'Command Center',prospects:'Prospects',intent:'High Intent',acquisition:'Acquisition',outreach:'Outreach',pipeline:'Pipeline',jobs:'Jobs',providers:'Providers',analytics:'Analytics',settings:'Settings'})[state.view] }
+function titleForView(){ return ({overview:'Command Center',prospects:'Prospects',intent:'High Intent',acquisition:'Acquisition',outreach:'Outreach',conversations:'Conversations',pipeline:'Pipeline',jobs:'Jobs',providers:'Providers',analytics:'Analytics',audit:'Audit Log',settings:'Settings'})[state.view] }
 
 function view(){
   if(state.view==='overview') return overview()
@@ -126,10 +134,12 @@ function view(){
   if(state.view==='intent') return prospects(true)
   if(state.view==='acquisition') return acquisition()
   if(state.view==='outreach') return outreach()
+  if(state.view==='conversations') return conversations()
   if(state.view==='pipeline') return pipeline()
   if(state.view==='jobs') return jobs()
   if(state.view==='providers') return providers()
   if(state.view==='analytics') return analytics()
+  if(state.view==='audit') return auditLog()
   return settings()
 }
 
@@ -165,7 +175,7 @@ function prospects(forceIntent=false){
   const stages=['ALL',...new Set(state.leads.map(stageOf).filter(Boolean))]
   const pres=['ALL',...new Set(state.leads.map(presenceOf).filter(Boolean))]
   return `<div class="toolbar"><div class="search"><span>⌕</span><input id="leadSearch" placeholder="Search business, category, location, email or phone" value="${esc(state.search)}"></div>
-  <select id="stageFilter">${stages.map(s=>`<option ${state.stage===s?'selected':''}>${esc(s)}</option>`).join('')}</select><select id="presenceFilter">${pres.map(s=>`<option ${state.presence===s?'selected':''}>${esc(s)}</option>`).join('')}</select><button class="btn" data-action="refresh">Refresh</button></div>
+  <select id="stageFilter">${stages.map(s=>`<option ${state.stage===s?'selected':''}>${esc(s)}</option>`).join('')}</select><select id="presenceFilter">${pres.map(s=>`<option ${state.presence===s?'selected':''}>${esc(s)}</option>`).join('')}</select><button class="btn" data-action="refresh">Refresh</button></div><div class="export-row"><button class="btn" data-action="export-all">Export all</button><button class="btn" data-action="export-email">Export email-ready</button><button class="btn" data-action="export-selected" ${state.selected.size?'':'disabled'}>Export selected</button></div>
   <div class="selection-bar ${state.selected.size?'show':''}"><b>${state.selected.size}</b> selected <button class="btn" data-action="bulk-approve">Approve selected</button><button class="btn danger" data-action="clear-selection">Clear</button></div>
   <section class="panel"><div class="panel-head"><div><span class="eyebrow">${forceIntent?'PRIORITY':'DATABASE'}</span><h3>${forceIntent?'High-intent prospects':'All prospects'}</h3><small>${fmt(arr.length)} matching records</small></div></div>${leadTable(slice,true)}
   <div class="pager"><button class="btn" data-action="prev-page" ${state.page<=1?'disabled':''}>Previous</button><span>Page ${state.page} of ${totalPages}</span><button class="btn" data-action="next-page" ${state.page>=totalPages?'disabled':''}>Next</button></div></section>`
@@ -178,15 +188,27 @@ function leadTable(leads,selectable=true){ if(!leads.length) return `<div class=
 function acquisition(){
   const noWeb=state.leads.filter(l=>/NO_WEB|SOCIAL_ONLY|DIRECTORY_ONLY/i.test(presenceOf(l))).length
   const weak=state.leads.filter(l=>/WEAK|OUTDATED/i.test(presenceOf(l))).length
-  return `<div class="hero compact"><div><div class="eyebrow">AUTONOMOUS ACQUISITION</div><h2>1,000 new unique prospects / day</h2><p>EventBridge → ECS Fargate → discovery → dedupe → classification → enrichment → qualification → PostgreSQL.</p></div><div class="hero-actions"><span class="status-dot green">Scheduler configured</span><button class="btn primary" data-action="acquisition-run" title="Requires a production acquisition control endpoint">Run acquisition now</button></div></div>
-  <div class="metric-grid four">${metric('Target','1,000','new unique / day')}${metric('No-web / social',fmt(noWeb),'priority website prospects')}${metric('Weak / outdated',fmt(weak),'upgrade opportunities')}${metric('Total database',fmt(state.leads.length),'current unique prospects')}</div>
-  <div class="two-col"><section class="panel"><div class="panel-head"><div><span class="eyebrow">PRESENCE MIX</span><h3>Digital presence classification</h3></div></div>${presenceBars()}</section><section class="panel"><div class="panel-head"><div><span class="eyebrow">RUN CONTROL</span><h3>Acquisition operations</h3></div></div><div class="control-list"><div><b>Discovery provider</b><span>Overpass / OpenStreetMap</span></div><div><b>Daily target</b><span>1,000 new unique</span></div><div><b>Deduplication</b><span>Domain · email · phone · company/location</span></div><div><b>Domain required</b><span>No</span></div><div><b>Hunter</b><span>Conditional enrichment only</span></div></div><p class="hint">“Run acquisition now” calls the production control endpoint when available. The daily scheduler remains independent.</p></section></div>`
+  const active=state.activeAcquisition
+  const today=new Date().toISOString().slice(0,10)
+  const todayRuns=state.acquisitionRuns.filter(r=>String(r.date_bucket||r.created_at||'').slice(0,10)===today)
+  const todayNew=todayRuns.reduce((n,r)=>n+Number(r.new_unique||0),0)
+  const status=active?.status||'IDLE'
+  return `<div class="hero compact"><div><div class="eyebrow">PRODUCTION ACQUISITION</div><h2>1,000 new unique prospects / day</h2><p>Manual and scheduled acquisition write to the central PostgreSQL lead store before enrichment and qualification.</p></div><div class="hero-actions"><span class="status-dot ${status==='RUNNING'?'green':''}">${esc(status)}</span><button class="btn primary" data-action="acquisition-run" ${status==='RUNNING'?'disabled':''}>${status==='RUNNING'?'Acquisition running…':'Run acquisition now'}</button></div></div>
+  <div class="metric-grid four">${metric('Target','1,000','new unique / day')}${metric('Acquired today',fmt(todayNew),'persisted run history')}${metric('No-web / social',fmt(noWeb),'priority website prospects')}${metric('Total database',fmt(state.leads.length),'PostgreSQL-backed prospects')}</div>
+  <div class="two-col"><section class="panel"><div class="panel-head"><div><span class="eyebrow">RUN HISTORY</span><h3>Acquisition runs</h3></div><button class="btn" data-action="refresh">Refresh</button></div>${acquisitionRunTable()}</section><section class="panel"><div class="panel-head"><div><span class="eyebrow">RUN CONTROL</span><h3>Acquisition operations</h3></div></div><div class="control-list"><div><b>Discovery provider</b><span>Overpass / OpenStreetMap</span></div><div><b>Daily target</b><span>1,000 new unique</span></div><div><b>Deduplication</b><span>Domain · email · phone · company/location</span></div><div><b>Domain required</b><span>No</span></div><div><b>Hunter/OpenAI</b><span>Queued downstream</span></div></div><p class="hint">Manual acquisition is admin-only. It starts the production acquisition process and never bypasses outreach approval gates.</p></section></div>
+  <section class="panel"><div class="panel-head"><div><span class="eyebrow">PRESENCE MIX</span><h3>Digital presence classification</h3></div></div>${presenceBars()}</section>`
 }
+
+function acquisitionRunTable(){ const rows=[...(state.activeAcquisition?[state.activeAcquisition]:[]),...state.acquisitionRuns].slice(0,30); if(!rows.length)return '<div class="empty">No acquisition run history yet.</div>'; return `<div class="table-wrap"><table><thead><tr><th>Run</th><th>Status/source</th><th>Discovered</th><th>Duplicates</th><th>New unique</th><th>Created</th></tr></thead><tbody>${rows.map(r=>`<tr><td><b>${esc(r.run_id||r.id||'run')}</b></td><td><span class="pill ${r.status==='FAILED'?'red':r.status==='RUNNING'?'amber':'green'}">${esc(r.status||r.source||'COMPLETED')}</span></td><td>${fmt(r.discovered)}</td><td>${fmt(r.duplicates)}</td><td>${fmt(r.new_unique)}</td><td>${when(r.started_at||r.created_at)}</td></tr>`).join('')}</tbody></table></div>` }
 
 function outreach(){ const d=state.dashboard; const pending=state.leads.filter(l=>l.approval_state==='PENDING'); const approved=state.leads.filter(l=>l.approval_state==='APPROVED');
  return `<div class="metric-grid four">${metric('Awaiting approval',fmt(pending.length),'operator review')}${metric('Approved',fmt(approved.length),'eligible after checks')}${metric('Queued',fmt(d.queued),'provider queue')}${metric('Sent',fmt(d.sent),'accepted outbound')}</div><section class="panel"><div class="panel-head"><div><span class="eyebrow">APPROVAL GATE</span><h3>Pending outreach decisions</h3></div></div>${leadTable(pending.slice(0,50),true)}</section>` }
 
-function pipeline(){ const columns=['IMPORTED','QUALIFIED','APPROVED','MESSAGE_READY','SENT','REPLIED','OPPORTUNITY','WON']; return `<div class="kanban">${columns.map(s=>{const ls=state.leads.filter(l=>stageOf(l)===s); return `<section class="kan-col"><header><b>${s}</b><span>${ls.length}</span></header>${ls.slice(0,12).map(l=>`<button class="kan-card" data-open-lead="${esc(uid(l))}"><b>${esc(l.name)}</b><span>${esc(l.category||'')}</span></button>`).join('')||'<div class="empty small">No records</div>'}</section>`}).join('')}</div>` }
+function conversations(){ const rows=state.conversations; return `<section class="panel"><div class="panel-head"><div><span class="eyebrow">INBOUND</span><h3>Conversations & replies</h3><small>${fmt(rows.length)} reply records</small></div><button class="btn" data-action="refresh">Refresh</button></div>${rows.length?`<div class="table-wrap"><table><thead><tr><th>Prospect</th><th>Contact</th><th>Stage</th><th>Response</th><th>Received</th></tr></thead><tbody>${rows.map(r=>`<tr><td><button class="lead-link" data-open-lead="${esc(r.lead_id)}"><b>${esc(r.name||'Unnamed')}</b></button></td><td>${esc(r.email||r.phone||'—')}</td><td><span class="pill purple">${esc(r.stage||'REPLIED')}</span></td><td>${esc(r.response?.body||r.response?.classification||'Reply recorded')}</td><td>${when(r.updated_at)}</td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">No inbound conversations have been recorded yet.</div>'}</section>` }
+
+function auditLog(){ const rows=state.events; return `<section class="panel"><div class="panel-head"><div><span class="eyebrow">ADMINISTRATION</span><h3>Audit log</h3><small>Persistent operator actions</small></div><button class="btn" data-action="refresh">Refresh</button></div>${rows.length?`<div class="table-wrap"><table><thead><tr><th>Event</th><th>Actor</th><th>Entity</th><th>Details</th><th>Time</th></tr></thead><tbody>${rows.slice(0,300).map(e=>`<tr><td><b>${esc(e.event_type||e.type)}</b></td><td>${esc(e.actor||'system')}</td><td>${esc([e.entity_type,e.entity_id].filter(Boolean).join(': ')||'—')}</td><td><span class="contact-cell">${esc(JSON.stringify(e.payload||{}))}</span></td><td>${when(e.occurred_at)}</td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">No persistent admin events have been recorded yet.</div>'}</section>` }
+
+function pipeline(){ const columns=['IMPORTED','QUALIFIED','REQUESTED_INFORMATION','HUMAN_FOLLOWUP','DISCOVERY','PROPOSAL','WON','LOST']; return `<div class="kanban">${columns.map(s=>{const ls=state.leads.filter(l=>stageOf(l)===s); return `<section class="kan-col"><header><b>${s}</b><span>${ls.length}</span></header>${ls.slice(0,12).map(l=>`<button class="kan-card" data-open-lead="${esc(uid(l))}"><b>${esc(l.name)}</b><span>${esc(l.category||'')}</span></button>`).join('')||'<div class="empty small">No records</div>'}</section>`}).join('')}</div>` }
 
 function jobs(){ const jobs=state.queue; return `<section class="panel"><div class="panel-head"><div><span class="eyebrow">WORKER QUEUE</span><h3>Operational jobs</h3><small>${fmt(jobs.length)} current records</small></div><button class="btn" data-action="refresh">Refresh</button></div>${jobs.length?`<div class="table-wrap"><table><thead><tr><th>Type</th><th>Lead</th><th>Status</th><th>Attempts</th><th>Provider</th><th>Created</th></tr></thead><tbody>${jobs.slice().reverse().slice(0,100).map(j=>`<tr><td><b>${esc(j.type)}</b></td><td>${esc(j.lead_id||'—')}</td><td><span class="pill ${/COMPLETE|SENT/i.test(j.status)?'green':/FAIL|DLQ/i.test(j.status)?'red':'amber'}">${esc(j.status||'QUEUED')}</span></td><td>${fmt(j.attempts)}</td><td>${esc(j.provider||'—')}</td><td>${when(j.created_at)}</td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">No active queue records.</div>'}</section>` }
 
@@ -197,7 +219,7 @@ function analytics(){ const d=state.dashboard; return `<div class="metric-grid f
 function settings(){ const c=state.campaigns[0]; return `<div class="two-col"><section class="panel"><div class="panel-head"><div><span class="eyebrow">CAMPAIGN CONTROL</span><h3>${esc(c?.name||'Primary campaign')}</h3></div><span class="pill ${c?.status==='ACTIVE'?'green':'amber'}">${esc(c?.status||'UNKNOWN')}</span></div>${c?`<div class="button-grid"><button class="btn" data-campaign="approve" data-id="${esc(c.id)}">Approve</button><button class="btn primary" data-campaign="start" data-id="${esc(c.id)}">Start</button><button class="btn" data-campaign="pause" data-id="${esc(c.id)}">Pause</button><button class="btn" data-campaign="resume" data-id="${esc(c.id)}">Resume</button><button class="btn danger" data-campaign="stop" data-id="${esc(c.id)}">Stop</button></div>`:'<div class="empty">No campaign returned by API.</div>'}</section><section class="panel"><div class="panel-head"><h3>Production gates</h3></div><div class="control-list"><div><b>Email send gate</b><span class="pill ${state.dashboard.send_enabled?'green':'red'}">${state.dashboard.send_enabled?'ENABLED':'DISABLED'}</span></div><div><b>SMS send gate</b><span class="pill ${state.dashboard.sms_send_enabled?'green':'red'}">${state.dashboard.sms_send_enabled?'ENABLED':'DISABLED'}</span></div><div><b>Daily email ceiling</b><span>250</span></div><div><b>Acquisition target</b><span>1,000</span></div></div><p class="hint">Secrets and provider credentials remain managed in AWS Secrets Manager, not this UI.</p></section></div>` }
 
 function readinessEntries(){ const r=state.readiness?.readiness || {}; return Object.entries(r).filter(([k])=>k!=='fallback_messages') }
-function providerList(limit=99){ const entries=readinessEntries().slice(0,limit); if(!entries.length)return '<div class="empty">Readiness data unavailable.</div>'; return `<div class="provider-list">${entries.map(([k,v])=>{const ok=typeof v==='boolean'?v:Boolean(v?.ready??v?.status==='READY'); const detail=typeof v==='object'?(v.message||v.status||v.reason||''):(v?'Ready':'Blocked'); return `<div><span><i class="health ${ok?'ok':'bad'}"></i>${esc(k.replaceAll('_',' '))}</span><b>${esc(detail|| (ok?'READY':'BLOCKED'))}</b></div>`}).join('')}</div>` }
+function providerList(limit=99){ const entries=readinessEntries().slice(0,limit); if(!entries.length)return '<div class="empty">Readiness data unavailable.</div>'; return `<div class="provider-list">${entries.map(([k,v])=>{const ok=typeof v==='boolean'?v:Boolean(v?.ready??['READY','ENABLED'].includes(v?.status)); const detail=typeof v==='object'?(v.message||v.status||v.reason||''):(v?'Ready':'Blocked'); return `<div><span><i class="health ${ok?'ok':'bad'}"></i>${esc(k.replaceAll('_',' '))}</span><b>${esc(detail|| (ok?'READY':'BLOCKED'))}</b></div>`}).join('')}</div>` }
 function providerCards(){ return readinessEntries().map(([k,v])=>{const ok=typeof v==='boolean'?v:Boolean(v?.ready??v?.status==='READY'); const detail=typeof v==='object'?(v.message||v.reason||v.status||''):(v?'Operational':'Unavailable');return `<article class="provider-card"><div><i class="health ${ok?'ok':'bad'}"></i><b>${esc(k.replaceAll('_',' '))}</b></div><strong>${ok?'READY':'ATTENTION'}</strong><p>${esc(detail)}</p></article>`}).join('')||'<div class="empty">Readiness data unavailable.</div>' }
 function groupCount(fn){ const m={}; state.leads.forEach(l=>{const k=fn(l)||'UNKNOWN';m[k]=(m[k]||0)+1}); return m }
 function bars(map){ const max=Math.max(1,...Object.values(map)); return `<div class="bars">${Object.entries(map).sort((a,b)=>b[1]-a[1]).slice(0,12).map(([k,v])=>`<div><span>${esc(k)}</span><div><i style="width:${v/max*100}%"></i></div><b>${v}</b></div>`).join('')}</div>` }
@@ -206,7 +228,7 @@ function presenceBars(){ return bars(groupCount(presenceOf)) }
 function categoryBars(){ return bars(state.dashboard.by_category || groupCount(l=>l.category||'Unknown')) }
 function jobMini(){ if(!state.queue.length)return '<div class="empty">No queued jobs.</div>'; return state.queue.slice().reverse().slice(0,7).map(j=>`<div class="row-line"><span><b>${esc(j.type)}</b><small>${esc(j.lead_id||'')}</small></span><span class="pill muted">${esc(j.status||'QUEUED')}</span></div>`).join('') }
 
-function drawer(){ const l=state.drawerLead; if(!l)return ''; const id=uid(l); return `<div class="drawer-backdrop" data-action="close-drawer"></div><aside class="drawer"><header><div><span class="eyebrow">PROSPECT DETAIL</span><h2>${esc(l.name)}</h2><p>${esc(l.location||'')}</p></div><button class="icon-btn" data-action="close-drawer">×</button></header><div class="drawer-body"><div class="detail-grid"><div><span>Stage</span><b>${esc(stageOf(l))}</b></div><div><span>Presence</span><b>${esc(presenceOf(l))}</b></div><div><span>Category</span><b>${esc(l.category||'—')}</b></div><div><span>Source</span><b>${esc(l.source||l.discovery_source||'—')}</b></div></div><section><h3>Contact</h3><p>Email: ${esc(l.email||'—')}<br>Phone: ${esc(l.phone||'—')}<br>Website: ${l.website?`<a href="${esc(l.website)}" target="_blank" rel="noreferrer">${esc(l.website)}</a>`:'—'}</p></section><section><h3>Qualification</h3><pre>${esc(JSON.stringify(l.openai_qualification||l.qualification||l.product_fits||{},null,2))}</pre></section><section><h3>Actions</h3><div class="button-grid"><button class="btn" data-lead-action="verify" data-id="${esc(id)}">Verify website</button><button class="btn" data-lead-action="prepare" data-id="${esc(id)}">Prepare email</button><button class="btn primary" data-lead-action="approve" data-id="${esc(id)}">Approve</button><button class="btn" data-lead-action="prepare-sms" data-id="${esc(id)}">Prepare SMS</button><button class="btn" data-lead-action="approve-sms" data-id="${esc(id)}">Approve SMS</button><button class="btn" data-lead-action="queue-sms" data-id="${esc(id)}">Queue SMS</button><button class="btn danger" data-lead-action="suppress" data-id="${esc(id)}">Suppress</button></div></section><section><h3>Lifecycle stage</h3><select id="drawerStage">${['IMPORTED','QUALIFIED','APPROVED','MESSAGE_READY','SENT','REPLIED','OPPORTUNITY','PROPOSAL','WON','LOST','SUPPRESSED'].map(s=>`<option ${stageOf(l)===s?'selected':''}>${s}</option>`).join('')}</select><button class="btn" data-action="save-stage" data-id="${esc(id)}">Save stage</button></section></div></aside>` }
+function drawer(){ const l=state.drawerLead; if(!l)return ''; const id=uid(l); return `<div class="drawer-backdrop" data-action="close-drawer"></div><aside class="drawer"><header><div><span class="eyebrow">PROSPECT DETAIL</span><h2>${esc(l.name)}</h2><p>${esc(l.location||'')}</p></div><button class="icon-btn" data-action="close-drawer">×</button></header><div class="drawer-body"><div class="detail-grid"><div><span>Stage</span><b>${esc(stageOf(l))}</b></div><div><span>Presence</span><b>${esc(presenceOf(l))}</b></div><div><span>Category</span><b>${esc(l.category||'—')}</b></div><div><span>Source</span><b>${esc(l.source||l.discovery_source||'—')}</b></div></div><section><h3>Contact</h3><p>Email: ${esc(l.email||'—')}<br>Phone: ${esc(l.phone||'—')}<br>Website: ${l.website?`<a href="${esc(l.website)}" target="_blank" rel="noreferrer">${esc(l.website)}</a>`:'—'}</p></section><section><h3>Qualification</h3><pre>${esc(JSON.stringify(l.openai_qualification||l.qualification||l.product_fits||{},null,2))}</pre></section><section><h3>Actions</h3><div class="button-grid"><button class="btn" data-lead-action="verify" data-id="${esc(id)}">Verify website</button><button class="btn" data-lead-action="prepare" data-id="${esc(id)}">Prepare email</button><button class="btn primary" data-lead-action="approve" data-id="${esc(id)}">Approve</button><button class="btn" data-lead-action="prepare-sms" data-id="${esc(id)}">Prepare SMS</button><button class="btn" data-lead-action="approve-sms" data-id="${esc(id)}">Approve SMS</button><button class="btn" data-lead-action="queue-sms" data-id="${esc(id)}">Queue SMS</button><button class="btn danger" data-lead-action="suppress" data-id="${esc(id)}">Suppress</button></div></section><section><h3>Lifecycle stage</h3><select id="drawerStage">${['IMPORTED','ACQUIRED','ENRICHED','QUALIFIED','APPROVED','MESSAGE_READY','SENT','REPLIED','REQUESTED_INFORMATION','HUMAN_FOLLOWUP','DISCOVERY','PROPOSAL','WON','LOST','SUPPRESSED'].map(s=>`<option ${stageOf(l)===s?'selected':''}>${s}</option>`).join('')}</select><button class="btn" data-action="save-stage" data-id="${esc(id)}">Save stage</button></section></div></aside>` }
 
 function render(){ app.innerHTML = state.user ? shell() : loginView(); bind() }
 
@@ -226,11 +248,13 @@ function bind(){
 
 async function login(e){ e.preventDefault(); const fd=new FormData(e.target); state.notice=null; try{const r=await api('/api/v1/auth/login',{method:'POST',body:{email:fd.get('email'),password:fd.get('password')}});state.user=r.user;await refreshAll()}catch(err){state.notice={type:'error',text:err.message};render()} }
 async function logout(){ try{await api('/api/v1/auth/logout',{method:'POST'})}catch{} state.user=null;state.leads=[];render() }
-async function leadAction(id,action){ try{state.busy=true;render();await api(`/api/v1/leads/${encodeURIComponent(id)}/${action}`,{method:'POST'});state.notice={type:'success',text:`${action} completed.`};state.drawerLead=null;await refreshAll()}catch(e){state.busy=false;state.notice={type:'error',text:e.message};render()} }
-async function campaignAction(id,action){ try{await api(`/api/v1/campaigns/${encodeURIComponent(id)}/${action}`,{method:'POST'});state.notice={type:'success',text:`Campaign ${action} completed.`};await refreshAll()}catch(e){state.notice={type:'error',text:e.message};render()} }
+async function leadAction(id,action){ if(['queue-sms','suppress'].includes(action)&&!confirm(`Confirm ${action.replaceAll('-',' ')} for this prospect?`))return; try{state.busy=true;render();await api(`/api/v1/leads/${encodeURIComponent(id)}/${action}`,{method:'POST'});state.notice={type:'success',text:`${action} completed.`};state.drawerLead=null;await refreshAll()}catch(e){state.busy=false;state.notice={type:'error',text:e.message};render()} }
+async function campaignAction(id,action){ if(['start','stop'].includes(action)&&!confirm(`Confirm campaign ${action}?`))return; try{await api(`/api/v1/campaigns/${encodeURIComponent(id)}/${action}`,{method:'POST'});state.notice={type:'success',text:`Campaign ${action} completed.`};await refreshAll()}catch(e){state.notice={type:'error',text:e.message};render()} }
 async function bulkApprove(){ if(!state.selected.size)return; try{const r=await api('/api/v1/approvals/bulk',{method:'POST',body:{ids:[...state.selected]}});state.notice={type:'success',text:`Approved ${r.approved?.length||0} prospects.`};state.selected.clear();await refreshAll()}catch(e){state.notice={type:'error',text:e.message};render()} }
 async function saveStage(id){const stage=document.querySelector('#drawerStage')?.value;if(!stage)return;try{await api(`/api/v1/leads/${encodeURIComponent(id)}`,{method:'PATCH',body:{lifecycle_stage:stage}});state.notice={type:'success',text:`Stage updated to ${stage}.`};state.drawerLead=null;await refreshAll()}catch(e){state.notice={type:'success',text:e.message};render()} }
-async function acquisitionRun(){ try{state.busy=true;render();await api('/api/v1/acquisition/run',{method:'POST'});state.notice={type:'success',text:'Acquisition run requested.'};await refreshAll()}catch(e){state.busy=false;state.notice={type:'error',text:e.status===404?'Manual acquisition endpoint is not yet exposed by the production API. Daily EventBridge scheduling is unaffected.':e.message};render()} }
-function handleAction(e){ const a=e.currentTarget.dataset.action,id=e.currentTarget.dataset.id;if(a==='refresh')refreshAll();if(a==='logout')logout();if(a==='dismiss'){state.notice=null;render()}if(a==='close-drawer'){state.drawerLead=null;render()}if(a==='bulk-approve')bulkApprove();if(a==='clear-selection'){state.selected.clear();render()}if(a==='prev-page'){state.page=Math.max(1,state.page-1);render()}if(a==='next-page'){state.page++;render()}if(a==='save-stage')saveStage(id);if(a==='acquisition-run')acquisitionRun() }
+async function acquisitionRun(){ if(!confirm('Start a production acquisition run for up to 1,000 new unique prospects?'))return; try{state.busy=true;render();const r=await api('/api/v1/acquisition/run',{method:'POST',body:{target:1000}});state.notice={type:'success',text:`Acquisition ${r.data?.run_id||''} started.`};await refreshAll()}catch(e){state.busy=false;state.notice={type:'error',text:e.message};render()} }
+function exportLeads(mode){ const qs=new URLSearchParams(); if(mode==='email')qs.set('email_only','true'); if(mode==='selected')qs.set('ids',[...state.selected].join(',')); const url=`${API}/api/v1/export/csv?${qs.toString()}`; window.open(url,'_blank','noopener') }
+function togglePassword(){ const el=document.querySelector('#loginPassword'); if(!el)return; const btn=document.querySelector('[data-action="toggle-password"]'); const show=el.type==='password'; el.type=show?'text':'password'; if(btn)btn.textContent=show?'Hide':'Show' }
+function handleAction(e){ const a=e.currentTarget.dataset.action,id=e.currentTarget.dataset.id;if(a==='refresh')refreshAll();if(a==='toggle-password')togglePassword();if(a==='export-all')exportLeads('all');if(a==='export-email')exportLeads('email');if(a==='export-selected')exportLeads('selected');if(a==='logout')logout();if(a==='dismiss'){state.notice=null;render()}if(a==='close-drawer'){state.drawerLead=null;render()}if(a==='bulk-approve')bulkApprove();if(a==='clear-selection'){state.selected.clear();render()}if(a==='prev-page'){state.page=Math.max(1,state.page-1);render()}if(a==='next-page'){state.page++;render()}if(a==='save-stage')saveStage(id);if(a==='acquisition-run')acquisitionRun() }
 
 bootstrap()
