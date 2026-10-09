@@ -19,9 +19,13 @@ Dating contains one senior-center organization and one operator-assigned B2B rec
 
 The latest pre-change acquisition run https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37913562993 produced 250 WebDev records (13 with sourced email), and zero net-new records in each specialized lane. A green run is not proof that numerical targets were reached.
 
-## Authentication configuration pending verification
+## Verified production authentication
 
-The browser was also signed out of GitHub repository settings, preventing repository-variable changes through that route. Google Cloud console access returned `Site Unavailable` in the task's browser. No connected Google Cloud administrative action or authenticated gcloud CLI was available. Sheets connector access worked independently. Therefore enabled API, service-account existence, WIF, impersonation, Sheet sharing and repository variables are **unverified**, and no long-lived key was generated.
+The user executed the Cloud Shell setup script. Repository variables were saved through authenticated GitHub settings and independently read back. Google Drive permission metadata independently confirmed Editor (`writer`) access for `aureum-cap-sheets@aureum-cap.iam.gserviceaccount.com` on the central Sheet.
+
+PR #1 was merged with user approval: https://github.com/osasbenny/AUREUM-CAP-V0.1/pull/1, merge commit `53ef7dcf99444dae2062bfff65c8a0fea7c2f644`. Production GitHub OIDC/service-account impersonation succeeded and the worker read/wrote the Sheets API successfully. No service-account key was generated. The Cloud console remains inaccessible to this task, so full administrative IAM policy introspection has not been independently performed.
+
+Successful historical replay: https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37931552146, attempts 1 and 2. Both verified all four lane totals with **0 inserted rows, 0 email updates and 0 retries**, using the service-account token. Valid historical rows stayed WebDev 2,264, Dating 2, HashNomads 1, Books 3. Qualification exclusions stayed 1,835; they are retained as audit evidence rather than imported.
 
 The executable setup script `scripts/setup-cap-sheets-gcp.sh` enables the required APIs and configures:
 
@@ -38,7 +42,7 @@ Run the script from an authenticated Cloud Shell after reviewing it:
 bash scripts/setup-cap-sheets-gcp.sh
 ```
 
-Grant the verified service account **Editor** access to the central spreadsheet. Then set these **repository variables**, not secrets:
+These **repository variables** and service-account Sheet **Editor** permission are configured and verified:
 
 ```text
 CAP_GCP_WORKLOAD_IDENTITY_PROVIDER=projects/295598149511/locations/global/workloadIdentityPools/cap-github/providers/cap-sheets
@@ -54,15 +58,15 @@ gh variable set CAP_GCP_SERVICE_ACCOUNT --repo osasbenny/AUREUM-CAP-V0.1 --body 
 gh variable set CAP_SHEETS_ID --repo osasbenny/AUREUM-CAP-V0.1 --body '1gdMmNR9P9Osm61ei-KpsdoXD84ncz9j0SGIMueuYobQ'
 ```
 
-These identifiers are proposed values, not proof that the resources were created.
+Production execution independently demonstrated that the configured federation provider and service account authenticate and have access to the Sheet.
 
 ## Architecture and durable replay
 
 Raw acquisition remains scheduled at `17 */6 * * *` UTC with matrix WebDev, Dating, HashNomads, Books and a target of 250 records per run per lane. Legacy WebDev remains manual with no schedule. Acquisition never calls Google APIs. The raw four-lane artifact retention increases to 90 days.
 
-`CAP Sheets Sync` is a separate workflow, triggered after completed acquisition and at `47 */6 * * *` UTC. Its archive job has GitHub Actions read and repository contents write, but no Google credentials or OIDC permission. It persists trusted main-branch acquisition artifact ZIPs and provenance/checksum manifests in `cap-acquisition-ledger/.cap-ledger/<artifact_id>/`. Only that workflow's sync job receives `id-token: write`. Google authentication failure cannot change an upstream acquisition result.
+`CAP Sheets Sync` is a separate workflow, triggered after completed acquisition, at `47 */6 * * *` UTC, and when its workflow/worker/archive code changes on main. Its archive job has GitHub Actions read and repository contents write, but no Google credentials or OIDC permission. It persists trusted main-branch acquisition artifact ZIPs and provenance/checksum manifests in `cap-acquisition-ledger/.cap-ledger/<artifact_id>/`. Only that workflow's sync job receives `id-token: write`. Google authentication failure cannot change an upstream acquisition result.
 
-The data branch now holds all 44 original ZIP archives and 44 provenance manifests. All 88 repository blob contents were independently checked against local originals, and all 44 ZIP checksums matched the GitHub artifact digests. The data branch is durable beyond artifact expiry. New archives are committed before any Sheets authentication. Failures report artifact IDs and can be recovered by manual dispatch of `CAP Sheets Sync`, which scans all available artifacts and replays the complete durable ledger. The branch is required and must not be deleted. New archival automation remains unverified until merge and execution on main.
+The data branch now holds all 44 original ZIP archives and 44 provenance manifests. All 88 repository blob contents were independently checked against local originals, and all 44 ZIP checksums matched the GitHub artifact digests. The data branch is durable beyond artifact expiry. New archives are committed before any Sheets authentication. Failures report artifact IDs and can be recovered by manual dispatch of `CAP Sheets Sync`, which scans all available artifacts and replays the complete durable ledger. The branch is required and must not be deleted. Production archive/materialization jobs succeeded on main. New artifacts become eligible for archival when their acquisition workflow run completes.
 
 The worker materializes only bounded JSON/CSV acquisition files after checking the archived ZIP's checksum. It never executes artifact contents or extracts paths outside the replay directory. JSON is preferred when the paired CSV exists, preserving richer evidence. CSV-only files lacking required provenance are rejected rather than embellished.
 
@@ -74,7 +78,7 @@ Deduplication uses acquisition IDs and stable OSM element IDs (or explicit manua
 
 Writes target the next verified empty row range instead of using the ambiguous append endpoint. Retrying a lost write response updates the same range, preventing duplicate appends. One GitHub workflow concurrency group serializes Sheet writers. Treat the ledger's acquisition columns as pipeline-owned: concurrent manual sorting/insertion during synchronization is not supported. Do not run an independent second synchronization writer.
 
-Headers are validated and unexpected schema changes fail the affected lane. HTTP 429/transient 5xx and transport failures use bounded exponential backoff (maximum 7 retries, 30 seconds per delay). Errors omit credentials and request bodies. Every batch is read back; separate lane failures are reported while other lanes continue. Reports include attempted, inserted, updated-email, skipped, excluded/failed and retried counts. OVERVIEW counts are recalculated from the actual Sheet readback. Authentication/archival failures are visible in Actions logs even when the worker cannot start. Reports use 90-day Actions artifacts; raw ledger remains durable.
+Headers are validated and unexpected schema changes fail the affected lane. HTTP 429/transient 5xx and transport failures use bounded exponential backoff (maximum 7 retries, 30 seconds per delay). Errors omit credentials and request bodies. Full-grid reads use batches of up to ten bounded 1,000-row ranges per API request, preserving row positions while avoiding quota exhaustion. Every written batch is read back; separate lane failures are reported while other lanes continue. Reports include attempted, inserted, updated-email, skipped, excluded/failed and retried counts. OVERVIEW counts are recalculated from the actual Sheet readback. Authentication/archival failures are visible in Actions logs even when the worker cannot start. Reports use 90-day Actions artifacts; raw ledger remains durable.
 
 Statuses are ACQUIRED plus EMAIL_DISCOVERY_REQUIRED or EMAIL_PRESENT. OUTREACH_COMPLETE is never inferred by this worker. Manual or sourced addresses are not consent. No Hunter, Zoey, OpenAI, SQS, scoring, email verification or marketing send is introduced into raw acquisition.
 
@@ -93,6 +97,10 @@ bash -n scripts/setup-cap-sheets-gcp.sh
 python3 -m py_compile scripts/archive-acquisition-artifacts.py scripts/materialize-cap-ledger.py
 ```
 
-15 Node tests and 3 Python tests passed locally. Tests cover routing, source/ID deduplication, idempotence, timestamp/email provenance preservation, authorization failures, bounded retries, uncertain writes, isolated failures, false-match exclusion, downstream-independent acquisition, ZIP checksum verification and path traversal rejection. Real historical replay against independently verified Sheet contents would insert 0 rows and update 0 email fields in all four lanes. This is not a WIF-authenticated production replay.
+16 Node tests and 3 Python tests passed locally and the deployed CI workflow passed. Tests cover routing, source/ID deduplication, idempotence, timestamp/email provenance preservation, authorization failures, bounded retries, uncertain writes, isolated failures, false-match exclusion, downstream-independent acquisition, ZIP checksum verification and path traversal rejection. Actual WIF-authenticated historical replay and its repeat both inserted 0 rows and updated 0 email fields in all four lanes.
 
-After tests pass, obtain user deployment approval before merging the pull request. Then dispatch `CAP Sheets Sync` on main, verify the WIF job, independently compare Sheet counts and evidence to archived outputs, dispatch a second time to confirm zero duplicates, and verify a scheduled four-lane acquisition run plus downstream sync. Production acceptance is not complete until those checks and cloud readbacks succeed.
+The first production attempt (run `37931097219`) hit a real Sheets 429 after seven bounded retries, with no duplicate inserts and an uploaded failure report. Commit `c06ce5c57dec3d395e42f7265f40456a5e51033a` batches the grid reads; the failed run was retried successfully using current main code. Deployment-trigger commit: `7e92640dad86033aa70d5df05caa5a584a371ba4`. Failed and successful attempt reports are retained in Actions artifacts.
+
+Post-merge acquisition run https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37930787256 has a successful WebDev job and real JSON/CSV artifact (`11616326180`): 8,000 source records discovered, 1,759 previously acquired sources rejected, 250 net-new records persisted, 9 sourced emails and 241 requiring email discovery. At this checkpoint Books, Dating and HashNomads jobs are still querying sources. Their yield and new-artifact automatic import remain unverified. The six-hour schedule is deployed; an actual scheduled post-deployment acquisition and downstream sync remain to be observed.
+
+The integration is deployed and historical production replay is verified. Full four-lane production acceptance remains pending the in-flight acquisition outputs and scheduled execution evidence. No acquisition target or outreach completion is inferred from a green workflow status.
