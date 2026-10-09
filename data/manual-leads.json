@@ -38,6 +38,26 @@
     "acquisition_date": "2026-10-09T00:00:00.000Z",
     "stage": "MESSAGE_READY",
     "outreach_status": "READY_FOR_PROVIDER",
-    "operator_instruction": "Proceed through Method B outbound outreach; email preferred. Do not use SMS unless separate consent/eligibility is confirmed."
+    "operator_instruction": "Approved for Method B email outreach and for HashNomads + Dating OS worker routing. Email preferred. Do not use SMS unless separate consent/eligibility is confirmed.",
+    "assigned_workers": [
+      "hashnomads",
+      "dating"
+    ],
+    "worker_approvals": {
+      "hashnomads": {
+        "approved": true,
+        "status": "READY_FOR_OUTBOUND",
+        "channel": "EMAIL"
+      },
+      "dating": {
+        "approved": true,
+        "status": "READY_FOR_OUTBOUND",
+        "channel": "EMAIL"
+      }
+    },
+    "cross_sell_context": {
+      "hashnomads": "Approved for HashNomads worker qualification/outbound.",
+      "dating": "Approved for Dating OS worker qualification/outbound as a B2B prospect; do not treat as a dating-profile/user lead."
+    }
   }
 ]
