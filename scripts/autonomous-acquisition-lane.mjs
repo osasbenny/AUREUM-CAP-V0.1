@@ -12,6 +12,7 @@ const stateDir=process.env.CAP_ACQUISITION_STATE_DIR||path.join(root,'.cap-state
 const outDir=process.env.CAP_ACQUISITION_OUTPUT_DIR||path.join(root,'acquisition-output',lane);
 const target=Math.max(1,Number(process.env.CAP_ACQUISITION_BATCH_TARGET||250));
 const rawLimit=Math.max(target,Number(process.env.CAP_DISCOVERY_RAW_LIMIT||target*8));
+const manualLeadsPath=path.join(root,'data','manual-leads.json');
 fs.mkdirSync(stateDir,{recursive:true}); fs.mkdirSync(outDir,{recursive:true});
 const statePath=path.join(stateDir,'dedupe.json'); let state={keys:{},runs:[]};
 try{state=JSON.parse(fs.readFileSync(statePath,'utf8'));}catch{} state.keys||={}; state.runs||=[];
@@ -33,13 +34,19 @@ const identity=(r)=>[
  r.source_evidence?.element_type&&r.source_evidence?.element_id&&'source:'+r.source_evidence.element_type+':'+r.source_evidence.element_id
 ].filter(Boolean);
 
-const discovered=await discoverOverpass({limit:rawLimit}); const candidates=discovered.filter(laneMatch);
+const discovered=await discoverOverpass({limit:rawLimit});
+let manualAssigned=[];
+try{
+  const manual=JSON.parse(fs.readFileSync(manualLeadsPath,'utf8'));
+  manualAssigned=manual.filter(r=>Array.isArray(r.assigned_workers)&&r.assigned_workers.map(x=>String(x).toLowerCase()).includes(lane));
+}catch{}
+const candidates=[...manualAssigned,...discovered.filter(laneMatch)];
 const accepted=[]; let duplicates=0; const now=new Date().toISOString();
 for(const r of candidates){const ids=identity(r); if(!ids.length)continue; if(ids.some(k=>state.keys[k])){duplicates++;continue;}
  const acquisition_id='acq-'+createHash('sha256').update(lane+'|'+ids.join('|')).digest('hex').slice(0,24);
  const lead={...r,acquisition_id,acquisition_lane:lane,acquisition_date:now,lifecycle_stage:'ACQUIRED',email_completion_status:r.email?'EMAIL_PRESENT':'EMAIL_DISCOVERY_REQUIRED'};
  accepted.push(lead); for(const k of ids)state.keys[k]={acquisition_id,first_seen:now}; if(accepted.length>=target)break;}
-const run={run_id:'run-'+lane+'-'+now.replace(/[:.]/g,'-'),lane,started_at:now,source:'openstreetmap-overpass',discovered:discovered.length,lane_candidates:candidates.length,duplicates_rejected:duplicates,net_new_persisted:accepted.length,email_present_at_acquisition:accepted.filter(x=>x.email).length,email_discovery_required:accepted.filter(x=>!x.email).length,target,shortfall:Math.max(0,target-accepted.length)};
+const run={run_id:'run-'+lane+'-'+now.replace(/[:.]/g,'-'),lane,started_at:now,source:'openstreetmap-overpass+manual-assignment',discovered:discovered.length,manual_assigned:manualAssigned.length,lane_candidates:candidates.length,duplicates_rejected:duplicates,net_new_persisted:accepted.length,email_present_at_acquisition:accepted.filter(x=>x.email).length,email_discovery_required:accepted.filter(x=>!x.email).length,target,shortfall:Math.max(0,target-accepted.length)};
 state.runs.push(run); state.runs=state.runs.slice(-200); fs.writeFileSync(statePath,JSON.stringify(state,null,2));
 const stamp=now.slice(0,10)+'T'+now.slice(11,19).replace(/:/g,''); const fields=['acquisition_id','acquisition_lane','name','category','location','website','phone','email','email_completion_status','source','acquisition_date'];
 const esc=v=>'"'+String(v??'').replaceAll('"','""')+'"';
