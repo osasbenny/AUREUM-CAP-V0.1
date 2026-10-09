@@ -55,7 +55,11 @@ async function fetchWithResilience(query) {
         const status = response.status;
         lastError = new Error(`overpass_http_${status}`);
         console.warn(`[Overpass] ${endpoint} returned ${status} on attempt ${attempt}/3`);
-        if (status === 406 || status === 429 || status >= 500) break;
+        if (status === 406) break;
+        if (status === 429 || status >= 500) {
+          if (attempt < 3) await new Promise(resolve => setTimeout(resolve, attempt * 2500));
+          continue;
+        }
         throw lastError;
       } catch (error) {
         lastError = error;
@@ -99,6 +103,7 @@ export async function discoverOverpass({ bboxes = defaultBboxes, limit = 5000 } 
 
           const website = text(tags.website || tags['contact:website'] || tags.url);
           const phone = text(tags.phone || tags['contact:phone']);
+          const email = text(tags.email || tags['contact:email']);
           const address = [
             tags['addr:housenumber'],
             tags['addr:street'],
@@ -115,6 +120,8 @@ export async function discoverOverpass({ bboxes = defaultBboxes, limit = 5000 } 
             location: address || text(tags['addr:city'] || tags['addr:state'] || 'United States'),
             address,
             phone,
+            email,
+            email_source: email ? `https://www.openstreetmap.org/${element.type}/${element.id}` : '',
             website,
             social_url: text(tags['contact:facebook'] || tags['contact:instagram'] || tags['contact:twitter']),
             latitude: center.lat,
