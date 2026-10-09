@@ -1,0 +1,107 @@
+name: CAP Sheets Sync
+on:
+  workflow_run:
+    workflows: [CAP Four-Lane Autonomous Acquisition, CAP Autonomous Acquisition]
+    types: [completed]
+    branches: [main]
+  schedule:
+    - cron: '47 */6 * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  archive:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+      actions: read
+    concurrency:
+      group: cap-acquisition-ledger
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          path: code
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: cap-acquisition-ledger
+          path: ledger
+      - name: Archive all available trusted raw outputs for durable replay
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 code/scripts/archive-acquisition-artifacts.py
+      - name: Commit evidence independently of Google Sheets
+        if: always()
+        working-directory: ledger
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .cap-ledger
+          if ! git diff --cached --quiet; then
+            git commit -m 'Archive CAP raw acquisition evidence'
+            git push origin HEAD:cap-acquisition-ledger
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cap-archive-report-${{ github.run_id }}
+          path: archive-report.json
+          if-no-files-found: warn
+          retention-days: 90
+  sync:
+    needs: archive
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    permissions:
+      contents: read
+      id-token: write
+    concurrency:
+      group: cap-central-sheets-sync
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: cap-acquisition-ledger
+          path: ledger
+          persist-credentials: false
+      - name: Materialize and verify inert replay files
+        run: python3 scripts/materialize-cap-ledger.py ledger/.cap-ledger replay-input
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check nonsecret configuration
+        env:
+          PROVIDER: ${{ vars.CAP_GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          ACCOUNT: ${{ vars.CAP_GCP_SERVICE_ACCOUNT }}
+          SHEET: ${{ vars.CAP_SHEETS_ID }}
+        run: test -n "$PROVIDER" && test -n "$ACCOUNT" && test -n "$SHEET"
+      - id: auth
+        uses: google-github-actions/auth@v3
+        with:
+          workload_identity_provider: ${{ vars.CAP_GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.CAP_GCP_SERVICE_ACCOUNT }}
+          project_id: aureum-cap
+          token_format: access_token
+          access_token_scopes: https://www.googleapis.com/auth/spreadsheets
+          create_credentials_file: false
+      - name: Synchronize and independently read back rows
+        env:
+          GOOGLE_ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
+          CAP_SHEETS_ID: ${{ vars.CAP_SHEETS_ID }}
+          CAP_SYNC_INPUT_DIR: replay-input
+        run: node scripts/sync-acquisition-to-sheets.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cap-sheets-report-${{ github.run_id }}
+          path: sync-report.json
+          if-no-files-found: warn
+          retention-days: 90
