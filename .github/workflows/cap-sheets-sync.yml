@@ -6,6 +6,7 @@ on:
       - ".github/workflows/cap-sheets-sync.yml"
       - "scripts/sync-acquisition-to-sheets.mjs"
       - "scripts/archive-acquisition-artifacts.py"
+      - "scripts/github_artifact_http.py"
       - "scripts/materialize-cap-ledger.py"
   workflow_run:
     workflows: [CAP Four-Lane Autonomous Acquisition, CAP Autonomous Acquisition]

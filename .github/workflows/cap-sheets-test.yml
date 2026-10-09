@@ -2,10 +2,10 @@ name: CAP Sheets Tests
 on:
   push:
     branches: [main, feature/google-sheets-sync]
-    paths: ['scripts/sync-acquisition-to-sheets.mjs', 'scripts/acquisition-qualification.mjs', 'scripts/discovery-overpass.mjs', 'scripts/autonomous-acquisition-lane.mjs', 'scripts/archive-acquisition-artifacts.py', 'scripts/materialize-cap-ledger.py', 'scripts/setup-cap-sheets-gcp.sh', 'tests/**', '.github/workflows/cap-sheets-*.yml']
+    paths: ['scripts/sync-acquisition-to-sheets.mjs', 'scripts/acquisition-qualification.mjs', 'scripts/discovery-overpass.mjs', 'scripts/autonomous-acquisition-lane.mjs', 'scripts/archive-acquisition-artifacts.py', 'scripts/github_artifact_http.py', 'scripts/materialize-cap-ledger.py', 'scripts/setup-cap-sheets-gcp.sh', 'tests/**', '.github/workflows/cap-sheets-*.yml']
   pull_request:
     branches: [main]
-    paths: ['scripts/sync-acquisition-to-sheets.mjs', 'scripts/acquisition-qualification.mjs', 'scripts/discovery-overpass.mjs', 'scripts/autonomous-acquisition-lane.mjs', 'scripts/archive-acquisition-artifacts.py', 'scripts/materialize-cap-ledger.py', 'scripts/setup-cap-sheets-gcp.sh', 'tests/**', '.github/workflows/cap-sheets-*.yml']
+    paths: ['scripts/sync-acquisition-to-sheets.mjs', 'scripts/acquisition-qualification.mjs', 'scripts/discovery-overpass.mjs', 'scripts/autonomous-acquisition-lane.mjs', 'scripts/archive-acquisition-artifacts.py', 'scripts/github_artifact_http.py', 'scripts/materialize-cap-ledger.py', 'scripts/setup-cap-sheets-gcp.sh', 'tests/**', '.github/workflows/cap-sheets-*.yml']
 permissions:
   contents: read
 jobs:
@@ -17,6 +17,6 @@ jobs:
         with:
           node-version: '22'
       - run: node --test tests/sheets-sync.test.mjs
-      - run: python3 -m unittest discover -s tests -p 'test_ledger.py'
+      - run: python3 -m unittest discover -s tests -p 'test_*.py'
       - run: bash -n scripts/setup-cap-sheets-gcp.sh
       - run: python3 -m py_compile scripts/archive-acquisition-artifacts.py scripts/materialize-cap-ledger.py

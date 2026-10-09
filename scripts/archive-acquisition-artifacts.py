@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Archive only raw evidence from known main-branch acquisition workflows. No cloud calls."""
 import hashlib, json, os, pathlib, re, urllib.request, zipfile, io, time
+from github_artifact_http import api_request
 TOKEN = os.environ['GH_TOKEN']
 REPO = os.environ.get('GITHUB_REPOSITORY', 'osasbenny/AUREUM-CAP-V0.1')
 ROOT = pathlib.Path(os.environ.get('CAP_LEDGER_DIR', 'ledger/.cap-ledger'))
@@ -8,19 +9,10 @@ WORKFLOWS = {'.github/workflows/cap-four-lane-acquisition.yml', '.github/workflo
 
 def request(route, binary=False):
     url = route if route.startswith('https://') else 'https://api.github.com/repos/' + REPO + route
-    for attempt in range(6):
-        try:
-            req = urllib.request.Request(url, headers={'Authorization': 'Bearer ' + TOKEN, 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28'})
-            with urllib.request.urlopen(req, timeout=60) as response:
-                body = response.read()
-            return body if binary else json.loads(body)
-        except Exception:
-            if attempt == 5:
-                raise RuntimeError('github_archive_request_failed') from None
-            time.sleep(min(30, 2 ** attempt))
+    return api_request(url, TOKEN, binary=binary)
 
 ROOT.mkdir(parents=True, exist_ok=True)
-report = {'archived': [], 'already_archived': [], 'expired': [], 'failed': []}
+report = {'archived': [], 'already_archived': [], 'expired': [], 'failed': [], 'failure_details': []}
 run_cache = {}
 page = 1
 while True:
@@ -57,8 +49,10 @@ while True:
             manifest = {'artifact_id': artifact['id'], 'artifact_name': artifact['name'], 'run_id': run_id, 'head_sha': run['head_sha'], 'workflow_path': run['path'], 'run_url': run['html_url'], 'created_at': artifact['created_at'], 'archive_sha256': hashlib.sha256(raw).hexdigest(), 'github_digest': artifact.get('digest')}
             (folder / 'manifest.json').write_text(json.dumps(manifest, indent=2))
             report['archived'].append(artifact['id'])
-        except Exception:
+        except Exception as error:
             report['failed'].append(artifact['id'])
+            reason = str(error) if isinstance(error, (RuntimeError, ValueError)) else type(error).__name__
+            report['failure_details'].append({'artifact_id': artifact['id'], 'reason': reason})
     page += 1
 pathlib.Path('archive-report.json').write_text(json.dumps(report, indent=2))
 print(json.dumps({k: len(v) for k, v in report.items()}))
