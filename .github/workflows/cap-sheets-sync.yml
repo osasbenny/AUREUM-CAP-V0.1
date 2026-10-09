@@ -1,5 +1,12 @@
 name: CAP Sheets Sync
 on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/cap-sheets-sync.yml"
+      - "scripts/sync-acquisition-to-sheets.mjs"
+      - "scripts/archive-acquisition-artifacts.py"
+      - "scripts/materialize-cap-ledger.py"
   workflow_run:
     workflows: [CAP Four-Lane Autonomous Acquisition, CAP Autonomous Acquisition]
     types: [completed]
