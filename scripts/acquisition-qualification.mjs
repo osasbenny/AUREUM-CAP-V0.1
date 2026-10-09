@@ -2,6 +2,7 @@ export function qualifies(r, lane) {
   if (lane === 'webdev') return true;
   // Explicit operator assignments are B2B routing, never proof of consumer consent.
   if (r.source === 'manual-client-entry' && r.assigned_workers?.includes(lane)) return true;
+  if (lane === 'books' && /^(books|stationery|school|college|university|library|kindergarten|educational_institution|publisher)$/.test(r.category || '')) return true;
   if (lane === 'books' && /^(restaurant|bar|cafe|fast_food|car_wash|car_repair|plumber|roofer|carpenter|fitness_centre)$/.test(r.category || '')) return false;
   if (lane === 'books' && ['beauty','hairdresser'].includes(r.category) && !/\b(school|college|academy)\b/i.test(r.name || '')) return false;
   if (lane === 'dating' && /senior|elderly|older_adults/i.test(r.source_evidence?.qualification_tags?.community_centre_for || '')) return true;

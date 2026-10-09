@@ -66,3 +66,6 @@ test('books excludes themed hospitality and hair salons but retains educational 
 test('specialized source queries acquire relevant organizations directly',async()=>{
  const {buildQuery}=await import('../scripts/discovery-overpass.mjs');assert.match(buildQuery('0,0,1,1','books'),/library/);assert.match(buildQuery('0,0,1,1','dating'),/community_centre:for/);assert.match(buildQuery('0,0,1,1','hashnomads'),/bitcoin/);assert.match(buildQuery('0,0,1,1','webdev'),/restaurant/);
 });
+test('educational source tags qualify organizations even when names do not contain audience keywords',()=>{
+ for(const category of ['kindergarten','educational_institution','library']) assert.equal(plan([input({name:'Bright Horizons',category},'books')]).rows.length,1);
+});

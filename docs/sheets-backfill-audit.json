@@ -483,5 +483,9 @@
       "created_at": "2026-10-07T03:17:09Z",
       "github_digest": "sha256:732b23c4671f3a8b1b26159585c367997ec1405548570b89d3e6e28aa547ab68"
     }
-  ]
+  ],
+  "durable_archive_commit": "a58a162ae70a37c4b0d25705c6cecba190790342",
+  "durable_archives_verified": 44,
+  "github_artifact_digests_matched": 44,
+  "repository_blob_contents_verified": 88
 }

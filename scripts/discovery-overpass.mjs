@@ -75,7 +75,7 @@ export const buildQuery = (bbox, lane = 'webdev') => {
  const specialized = {
   books: `nwr["amenity"~"^(school|college|university|library|kindergarten)$"](${bbox});nwr["shop"~"^(books|stationery)$"](${bbox});nwr["office"~"^(educational_institution|publisher)$"](${bbox});`,
   dating: `nwr["amenity"="community_centre"]["community_centre:for"~"senior|elderly|older_adults",i](${bbox});nwr["name"~"senior cent(er|re)|retirement community|senior social club|senior association|senior recreation",i](${bbox});`,
-  hashnomads: `nwr["name"~"bitcoin|cryptocurrency|blockchain|crypto|asic miner|mining hosting",i](${bbox});`
+  hashnomads: `nwr["office"]["name"~"bitcoin|cryptocurrency|blockchain|crypto|asic miner|mining hosting",i](${bbox});nwr["shop"]["name"~"bitcoin|cryptocurrency|blockchain|crypto|asic miner|mining hosting",i](${bbox});nwr["craft"]["name"~"bitcoin|cryptocurrency|blockchain|crypto|asic miner|mining hosting",i](${bbox});`
  };
  if(specialized[lane]) return `[out:json][timeout:45];(${specialized[lane]});out center tags qt;`;
  return `[out:json][timeout:45];(

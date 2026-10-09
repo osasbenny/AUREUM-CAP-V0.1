@@ -21,7 +21,7 @@ The latest pre-change acquisition run https://github.com/osasbenny/AUREUM-CAP-V0
 
 ## Authentication configuration pending verification
 
-Google Cloud console access returned `Site Unavailable` in the task's browser. No connected Google Cloud administrative action or authenticated gcloud CLI was available. Sheets connector access worked independently. Therefore enabled API, service-account existence, WIF, impersonation, Sheet sharing and repository variables are **unverified**, and no long-lived key was generated.
+The browser was also signed out of GitHub repository settings, preventing repository-variable changes through that route. Google Cloud console access returned `Site Unavailable` in the task's browser. No connected Google Cloud administrative action or authenticated gcloud CLI was available. Sheets connector access worked independently. Therefore enabled API, service-account existence, WIF, impersonation, Sheet sharing and repository variables are **unverified**, and no long-lived key was generated.
 
 The executable setup script `scripts/setup-cap-sheets-gcp.sh` enables the required APIs and configures:
 
@@ -62,7 +62,7 @@ Raw acquisition remains scheduled at `17 */6 * * *` UTC with matrix WebDev, Dati
 
 `CAP Sheets Sync` is a separate workflow, triggered after completed acquisition and at `47 */6 * * *` UTC. Its archive job has GitHub Actions read and repository contents write, but no Google credentials or OIDC permission. It persists trusted main-branch acquisition artifact ZIPs and provenance/checksum manifests in `cap-acquisition-ledger/.cap-ledger/<artifact_id>/`. Only that workflow's sync job receives `id-token: write`. Google authentication failure cannot change an upstream acquisition result.
 
-The data branch is durable beyond artifact expiry. New archives are committed before any Sheets authentication. Failures report artifact IDs and can be recovered by manual dispatch of `CAP Sheets Sync`, which scans all available artifacts and replays the complete durable ledger. The branch is required and must not be deleted. New archival automation remains unverified until merge and execution on main.
+The data branch now holds all 44 original ZIP archives and 44 provenance manifests. All 88 repository blob contents were independently checked against local originals, and all 44 ZIP checksums matched the GitHub artifact digests. The data branch is durable beyond artifact expiry. New archives are committed before any Sheets authentication. Failures report artifact IDs and can be recovered by manual dispatch of `CAP Sheets Sync`, which scans all available artifacts and replays the complete durable ledger. The branch is required and must not be deleted. New archival automation remains unverified until merge and execution on main.
 
 The worker materializes only bounded JSON/CSV acquisition files after checking the archived ZIP's checksum. It never executes artifact contents or extracts paths outside the replay directory. JSON is preferred when the paired CSV exists, preserving richer evidence. CSV-only files lacking required provenance are rejected rather than embellished.
 
@@ -93,6 +93,6 @@ bash -n scripts/setup-cap-sheets-gcp.sh
 python3 -m py_compile scripts/archive-acquisition-artifacts.py scripts/materialize-cap-ledger.py
 ```
 
-14 Node tests and 3 Python tests passed locally. Tests cover routing, source/ID deduplication, idempotence, timestamp/email provenance preservation, authorization failures, bounded retries, uncertain writes, isolated failures, false-match exclusion, downstream-independent acquisition, ZIP checksum verification and path traversal rejection. Real historical replay against independently verified Sheet contents would insert 0 rows and update 0 email fields in all four lanes. This is not a WIF-authenticated production replay.
+15 Node tests and 3 Python tests passed locally. Tests cover routing, source/ID deduplication, idempotence, timestamp/email provenance preservation, authorization failures, bounded retries, uncertain writes, isolated failures, false-match exclusion, downstream-independent acquisition, ZIP checksum verification and path traversal rejection. Real historical replay against independently verified Sheet contents would insert 0 rows and update 0 email fields in all four lanes. This is not a WIF-authenticated production replay.
 
 After tests pass, obtain user deployment approval before merging the pull request. Then dispatch `CAP Sheets Sync` on main, verify the WIF job, independently compare Sheet counts and evidence to archived outputs, dispatch a second time to confirm zero duplicates, and verify a scheduled four-lane acquisition run plus downstream sync. Production acceptance is not complete until those checks and cloud readbacks succeed.
