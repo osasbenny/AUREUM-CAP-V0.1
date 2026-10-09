@@ -20,10 +20,10 @@ try{state=JSON.parse(fs.readFileSync(statePath,'utf8'));}catch{} state.keys||={}
 const laneMatch=(r)=>{
  const s=[r.name,r.category,r.website,r.location].filter(Boolean).join(' ').toLowerCase();
  if(lane==='webdev') return true;
- if(lane==='hashnomads') return /(bitcoin|crypto|blockchain|mining|miner|asic|investment|trading|financial|fintech|computer|electronics|data center|hosting)/.test(s);
- if(lane==='books') return /(book|library|education|school|college|university|child|kids|family|parent|psychology|therapy|coach|business|entrepreneur|technology|computer|ai|art|stationery)/.test(s);
+ if(lane==='hashnomads') return /\b(bitcoin|cryptocurrency|blockchain|crypto|bitcoin mining|asic miner|mining hosting)\b/.test(s);
+ if(lane==='books') return /\b(bookshop|bookstore|books|library|publisher|publishing|school|college|university|education|childcare|preschool|psychology|therapy|coaching|entrepreneurship|technology|stationery)\b/.test(s);
  // Dating lane deliberately acquires opt-in/audience-source organizations, never private dating profiles.
- if(lane==='dating') return /(senior|retirement|community|social club|community centre|community center|adult education|library|recreation|event|association)/.test(s);
+ if(lane==='dating') return /\b(senior center|senior centre|retirement community|older adults|senior social club|senior association|senior recreation)\b/.test(s);
  return false;
 };
 const identity=(r)=>[
