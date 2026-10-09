@@ -19,6 +19,52 @@ export const INTERNET_PRESENCE = ['NO_WEB_PRESENCE', 'SOCIAL_ONLY', 'DIRECTORY_O
 export function classifyInternetPresence(lead = {}) { const explicit = String(lead.internet_presence || lead.internetPresence || '').toUpperCase(); if (INTERNET_PRESENCE.includes(explicit)) return explicit; if (!lead.website) { if (lead.social_url || lead.facebook || lead.instagram || lead.tiktok) return 'SOCIAL_ONLY'; if (lead.directory_url || lead.google_business_profile) return 'DIRECTORY_ONLY'; return 'NO_WEB_PRESENCE'; } const status = String(lead.website_status || lead.websiteStatus || '').toUpperCase(); if (/STRONG|MODERN/.test(status)) return 'STRONG_WEBSITE'; if (/FUNCTIONAL|ACTIVE|VERIFIED/.test(status)) return 'FUNCTIONAL_WEBSITE'; if (/OUTDATED/.test(status)) return 'OUTDATED_WEBSITE'; if (/ERROR|BROKEN|WEAK|UNKNOWN|UNVERIFIED/.test(status)) return 'WEAK_WEBSITE'; return 'WEAK_WEBSITE'; }
 export function scoreLead(lead) { const presence = classifyInternetPresence(lead); const opportunity = { NO_WEB_PRESENCE: 96, SOCIAL_ONLY: 91, DIRECTORY_ONLY: 88, WEAK_WEBSITE: 84, OUTDATED_WEBSITE: 82, FUNCTIONAL_WEBSITE: 55, STRONG_WEBSITE: 30 }[presence]; const text = normalizeKey(`${lead.name} ${lead.category} ${lead.location}`); const components = { company_fit: lead.category ? 75 : 0, buying_signal: /(houston|texas|usa|united states)/i.test(text) ? 80 : 40, website_opportunity: opportunity, decision_maker: 35, contact_quality: lead.phone || lead.email ? 70 : 20, location: /(houston|texas)/i.test(text) ? 90 : 45, business_size: 50 }; const weights = { company_fit: .25, buying_signal: .20, website_opportunity: .20, decision_maker: .15, contact_quality: .10, location: .05, business_size: .05 }; return { total: Math.round(Object.entries(components).reduce((sum, [key, value]) => sum + value * weights[key], 0) * 100) / 100, components, internet_presence: presence, version: 'deterministic-v0.3', evidence: ['business_metadata', `internet_presence:${presence}`, 'contact_presence', 'location_match'], scored_at: new Date().toISOString() }; }
 export function matchProducts(lead) { const category = normalizeKey(lead.category); const fits = []; const add = (product, score, evidence) => fits.push({ product, score, evidence }); if (/restaurant|food|bar|cafe/.test(category)) add('AuraPOS', 88, 'Restaurant/food business category'); if (/church|faith|religious/.test(category)) add('FaithConnect', 88, 'Church/faith organization category'); if (/freelancer|agency|consult/.test(category)) add('AuraReach', 84, 'Freelancer/agency category'); if (/startup|software|technology/.test(category)) add('Custom Software', 82, 'Technology/startup category'); add('Premium Website Development', lead.internet_presence === 'STRONG_WEBSITE' ? 34 : lead.website ? 64 : 82, lead.website ? 'Website opportunity requires audit' : 'No verified website supplied'); add('Business Automation', 58, 'General operational improvement hypothesis'); return fits.sort((a, b) => b.score - a.score); }
+export function laneMessage(lead, lane) {
+  const name = lead.name || lead.business || 'there';
+  const first = String(name).trim().split(/\s+/)[0] || 'there';
+  const business = lead.business && lead.business !== lead.name ? lead.business : null;
+  const label = String(lane || '').toLowerCase();
+  const configs = {
+    webdev: {
+      product: 'Premium Website Development',
+      subject: `${first} — quick idea for your online presence`,
+      idea: business
+        ? `I came across ${business} and had an idea for making its online presence more direct and conversion-focused.`
+        : `I came across your professional presence and had an idea for making it more direct and conversion-focused.`,
+      value: 'a focused website that gives prospects one clear place to understand the offer, see proof, and contact you directly'
+    },
+    books: {
+      product: 'Aureum Books',
+      subject: `${first} — something I thought might fit your audience`,
+      idea: 'I came across your work and thought one of our practical books may be relevant to the audience you serve.',
+      value: 'a simple reader offer with a direct storefront and clear value proposition'
+    },
+    dating: {
+      product: 'Dating OS',
+      subject: `${first} — a partnership idea around Dating OS`,
+      idea: 'I came across your professional profile and thought you could be a useful fit for a new relationship-platform growth initiative we are building.',
+      value: 'a partnership or referral angle around Dating OS, rather than treating you as an end-user dating profile'
+    },
+    hashnomads: {
+      product: 'HashNomads',
+      subject: `${first} — quick HashNomads idea`,
+      idea: 'I came across your profile and thought there may be a fit with HashNomads, our hosted Bitcoin-mining platform.',
+      value: 'a simple way to explore hosted mining without having to manage mining hardware at home'
+    }
+  };
+  const cfg = configs[label] || configs.webdev;
+  return {
+    provider: 'TEMPLATE/METHOD_B',
+    version: 'lane-method-b-v1',
+    lane: label,
+    product: cfg.product,
+    subject: cfg.subject,
+    body: `Hi ${first},\n\n${cfg.idea}\n\nThe idea is ${cfg.value}.\n\nIf it sounds relevant, I can send a short concept so you can see exactly what I mean.\n\nRegards,\nOsagie Bernard\nCactus Digital Media`,
+    approval_required: true,
+    evidence: ['manual/lane assignment', 'contact availability', `lane:${label}`]
+  };
+}
+
 export function fallbackMessage(lead, fit) { const business = lead.name || 'your business'; const product = fit?.product || 'a stronger digital operating system'; return { provider: 'TEMPLATE/FALLBACK', version: 'template-v0.3', subject: `A practical growth idea for ${business}`, body: `Hello,\n\nI’m reaching out because ${business} may be a strong fit for ${product}. We help growing businesses improve their digital customer journey and operational follow-through.\n\nIf this is relevant, would a short conversation next week be useful?\n\nRegards,\nAureum CAP`, approval_required: true, evidence: ['business name', 'category', `internet presence: ${classifyInternetPresence(lead)}`, 'deterministic product fit'] }; }
 export async function openaiResponses(input, schema) { if (!process.env.OPENAI_API_KEY) throw new Error('openai_not_configured'); const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY, baseURL: process.env.OPENAI_BASE_URL || process.env.OPENAI_API_BASE, timeout: timeoutMs, maxRetries: 0 }); const response = await retry(() => withTimeout(client.responses.create({ model: process.env.OPENAI_MODEL || 'gpt-5.6-luna', input, ...(schema ? { text: { format: { type: 'json_schema', name: schema.name, strict: true, schema: schema.schema } } } : {}) }))); return { id: response.id, model: response.model, output_text: response.output_text, usage: response.usage || null }; }
 export async function checkOpenAI() { return cached('openai', 30000, async () => { try { const r = await openaiResponses('Return the single word READY.', null); return { status: 'READY', reason: 'Authenticated Responses API operation succeeded', model: r.model, request_id: r.id }; } catch (error) { return { status: /credit|quota|429/i.test(error.message) ? 'DEGRADED' : 'BLOCKED', reason: String(error.message).slice(0, 180) }; } }); }
