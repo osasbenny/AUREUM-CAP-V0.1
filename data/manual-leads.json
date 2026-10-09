@@ -1,0 +1,39 @@
+[
+  {
+    "id": "manual-kathleen-furlong-20261009",
+    "name": "Kathleen Furlong",
+    "business": "Keller Williams Lakeside",
+    "category": "Real Estate / Realtor",
+    "industry": "Residential real estate",
+    "location": "45609 Village Blvd., Shelby Twp., MI 48315",
+    "phone": "+12489211754",
+    "alternate_phone": "+15865320500",
+    "email": "kathleenfurlong@kw.com",
+    "website": null,
+    "websiteStatus": "NO_STANDALONE_SITE_FOUND",
+    "emailStatus": "Supplied",
+    "source": "manual-client-entry",
+    "source_evidence": {
+      "note": "User-provided contact details; public web verification shows Kathleen Furlong as an active Keller Williams Lakeside real-estate agent in Michigan.",
+      "verified_public_profile": "Zillow / Homes.com",
+      "verified_date": "2026-10-09"
+    },
+    "lifecycle_stage": "MESSAGE_READY",
+    "approval_state": "PENDING",
+    "sms_approval_state": "PENDING",
+    "consent_status": "UNKNOWN",
+    "high_intent": false,
+    "warm_lead": true,
+    "prior_contact": false,
+    "outreach_method": "METHOD_B_ZOEY",
+    "offer": "Website / personal real-estate lead-generation site",
+    "observation": "Strong third-party visibility and recent transaction activity, but no clear standalone personal website surfaced in search.",
+    "message": {
+      "channel": "EMAIL",
+      "subject": "Kathleen — quick idea for your real estate presence",
+      "body": "Hi Kathleen,\\n\\nI came across your real estate presence while looking at agents in the Shelby Township area. You already have strong visibility across platforms like Zillow and Homes.com, but I couldn’t find a clear standalone personal website that brings your listings, reviews, contact information and lead capture into one place.\\n\\nI had an idea for a simple personal real-estate site that could give prospective buyers and sellers one direct place to see your current listings, learn about you, read client feedback and contact you without relying entirely on third-party portals.\\n\\nIf you’re open to it, I can put together a quick concept and show you what I have in mind.\\n\\nRegards,\\nOsagie Bernard\\nCactus Digital Media"
+    },
+    "acquisition_date": "2026-10-09T00:00:00.000Z",
+    "stage": "MESSAGE_READY"
+  }
+]
