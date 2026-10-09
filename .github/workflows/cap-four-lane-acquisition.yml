@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'scripts/autonomous-acquisition-lane.mjs'
+      - 'scripts/discovery-overpass.mjs'
       - '.github/workflows/cap-four-lane-acquisition.yml'
   workflow_dispatch:
   schedule:
