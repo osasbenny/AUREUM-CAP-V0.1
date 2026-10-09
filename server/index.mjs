@@ -4,7 +4,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawn } from 'node:child_process';
-import { scoreLead, matchProducts, fallbackMessage, verifyWebsite, isSuppressed, audit, PROVIDERS, uuid, checkOpenAI, checkHunter, checkSES, checkS3 } from './services.mjs';
+import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
+import { scoreLead, matchProducts, fallbackMessage, laneMessage, verifyWebsite, isSuppressed, audit, PROVIDERS, uuid, checkOpenAI, checkHunter, checkSES, checkS3 } from './services.mjs';
 import { routeSms, smsOpener, smsEligibility, sendTwilioSms, sendTermiiSms } from './sms.mjs';
 import { createRepository } from '../db/repository.mjs';
 
@@ -54,6 +55,46 @@ const suppressions = [];
 const queue = [];
 const revenue = [];
 let activeAcquisition = null;
+const sqs = new SQSClient({ region: process.env.AWS_REGION || 'eu-north-1' });
+const VALID_LANES = new Set(['webdev','books','dating','hashnomads']);
+function deterministicJobId(value) {
+  const hex = crypto.createHash('sha256').update(String(value)).digest('hex').slice(0, 32);
+  return `${hex.slice(0,8)}-${hex.slice(8,12)}-${hex.slice(12,16)}-${hex.slice(16,20)}-${hex.slice(20,32)}`;
+}
+async function queueLanePreparation(lead, lane, actor='operator') {
+  const normalizedLane = String(lane || '').toLowerCase();
+  if (!VALID_LANES.has(normalizedLane)) throw new Error(`unsupported_lane:${normalizedLane}`);
+  if (!repository) throw new Error('database_required');
+  if (!process.env.CAP_SQS_QUEUE_URL) throw new Error('CAP_SQS_QUEUE_URL_required');
+  const key = `lane-prepare:${lead.uid || lead.id}:${normalizedLane}:v1`;
+  const job = {
+    id: deterministicJobId(key),
+    type: 'LANE_PREPARE',
+    lead_id: String(lead.uid || lead.id),
+    lane: normalizedLane,
+    provider: 'cap-worker',
+    status: 'QUEUED',
+    attempts: 0,
+    idempotency_key: key,
+    created_at: new Date().toISOString()
+  };
+  lead.assigned_workers = [...new Set([...(lead.assigned_workers || []), normalizedLane])];
+  lead.worker_approvals = {
+    ...(lead.worker_approvals || {}),
+    [normalizedLane]: {
+      ...(lead.worker_approvals?.[normalizedLane] || {}),
+      approved: true,
+      status: 'QUEUED_FOR_PREPARATION',
+      channel: 'EMAIL',
+      queued_at: new Date().toISOString()
+    }
+  };
+  await repository.saveLead(lead);
+  await repository.enqueue(job);
+  await sqs.send(new SendMessageCommand({ QueueUrl: process.env.CAP_SQS_QUEUE_URL, MessageBody: JSON.stringify(job) }));
+  await recordAdminEvent(actor, 'lane.preparation.queued', 'lead', String(lead.uid || lead.id), { lane: normalizedLane, job_id: job.id });
+  return job;
+}
 
 function hydrateLead(lead) {
   const productFit = matchProducts(lead)[0]?.product;
@@ -238,6 +279,32 @@ const server = http.createServer(async (req, res) => {
     leads.push(lead);
     await recordAdminEvent(user.email, 'lead.created', 'lead', lead.uid, { source: lead.source, email: Boolean(lead.email), phone: Boolean(lead.phone), lifecycle_stage: lead.lifecycle_stage });
     return json(res, 201, { data: lead });
+  }
+  if (url.pathname === '/api/v1/lanes/route' && req.method === 'POST') {
+    const b = await body(req);
+    const requestedLanes = [...new Set((Array.isArray(b.lanes) ? b.lanes : []).map((x) => String(x).toLowerCase()))];
+    if (!requestedLanes.length || requestedLanes.some((x) => !VALID_LANES.has(x))) return json(res, 400, { error: 'invalid_lanes', valid: [...VALID_LANES] });
+    const ids = new Set((Array.isArray(b.ids) ? b.ids : []).map(String));
+    const emailReady = b.email_ready === true;
+    const selected = leads.filter((lead) => (!ids.size || ids.has(String(lead.uid || lead.id))) && (!emailReady || Boolean(String(lead.email || '').trim())) && !lead.suppressed);
+    if (b.dry_run === true) return json(res, 200, { dry_run: true, leads: selected.length, lanes: requestedLanes, jobs: selected.length * requestedLanes.length });
+    if (selected.length > 500) return json(res, 409, { error: 'batch_too_large', message: 'Route at most 500 leads per request.' });
+    const jobs = [];
+    for (const lead of selected) for (const lane of requestedLanes) jobs.push(await queueLanePreparation(lead, lane, user.email));
+    await refreshLeads();
+    await recordAdminEvent(user.email, 'lanes.bulk_routed', 'lead_batch', null, { lead_count: selected.length, lanes: requestedLanes, jobs: jobs.length, email_ready: emailReady });
+    return json(res, 202, { lead_count: selected.length, lanes: requestedLanes, jobs_queued: jobs.length, job_ids: jobs.map((j) => j.id) });
+  }
+  const laneRouteMatch = url.pathname.match(/^\/api\/v1\/leads\/([^/]+)\/route-workers$/);
+  if (laneRouteMatch && req.method === 'POST') {
+    const lead = findLead(laneRouteMatch[1]); if (!lead) return notFound(res);
+    const b = await body(req);
+    const requestedLanes = [...new Set((Array.isArray(b.lanes) ? b.lanes : []).map((x) => String(x).toLowerCase()))];
+    if (!requestedLanes.length || requestedLanes.some((x) => !VALID_LANES.has(x))) return json(res, 400, { error: 'invalid_lanes', valid: [...VALID_LANES] });
+    const jobs = [];
+    for (const lane of requestedLanes) jobs.push(await queueLanePreparation(lead, lane, user.email));
+    await refreshLeads();
+    return json(res, 202, { lead_id: lead.uid || lead.id, lanes: requestedLanes, jobs_queued: jobs.length, job_ids: jobs.map((j) => j.id) });
   }
   if (url.pathname === '/api/v1/leads' && req.method === 'GET') { const q = (url.searchParams.get('q') || '').toLowerCase(); const status = url.searchParams.get('status'); const result = leads.filter((l) => (!q || `${l.name} ${l.category} ${l.location}`.toLowerCase().includes(q)) && (!status || l.lifecycle_stage === status)); return json(res, 200, { data: result, total: result.length }); }
   const leadMatch = url.pathname.match(/^\/api\/v1\/leads\/([^/]+)$/); if (leadMatch && req.method === 'GET') { const lead = findLead(leadMatch[1]); return lead ? json(res, 200, { data: lead }) : notFound(res); }
