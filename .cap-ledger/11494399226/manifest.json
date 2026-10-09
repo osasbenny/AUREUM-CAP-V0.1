@@ -1,0 +1,11 @@
+{
+  "artifact_id": 11494399226,
+  "artifact_name": "cap-books-37643104989",
+  "run_id": 37643104989,
+  "head_sha": "efc6fc3e99bf0a597b5e2bfe1892486f1812b6b9",
+  "workflow_path": ".github/workflows/cap-four-lane-acquisition.yml",
+  "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37643104989",
+  "created_at": "2026-10-07T15:51:30Z",
+  "github_digest": "sha256:caacf87d8c3ddc02a3eabbbe3d5e98407ed6342ae12fe1a8c70301f4286314ce",
+  "archive_sha256": "caacf87d8c3ddc02a3eabbbe3d5e98407ed6342ae12fe1a8c70301f4286314ce"
+}

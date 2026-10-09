@@ -1,0 +1,11 @@
+{
+  "artifact_id": 11608150632,
+  "artifact_name": "cap-acquisition-37913497097",
+  "run_id": 37913497097,
+  "head_sha": "528a96b220586d44214b4a32707f363647f6fc12",
+  "workflow_path": ".github/workflows/cap-autonomous-acquisition.yml",
+  "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37913497097",
+  "created_at": "2026-10-09T09:50:15Z",
+  "github_digest": "sha256:e683599827c4059053149387c5ec4d4bfd0763b849f75ba2d87854065c0640f1",
+  "archive_sha256": "e683599827c4059053149387c5ec4d4bfd0763b849f75ba2d87854065c0640f1"
+}
