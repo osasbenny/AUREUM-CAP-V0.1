@@ -19,7 +19,7 @@
       "verified_date": "2026-10-09"
     },
     "lifecycle_stage": "MESSAGE_READY",
-    "approval_state": "PENDING",
+    "approval_state": "APPROVED",
     "sms_approval_state": "PENDING",
     "consent_status": "UNKNOWN",
     "high_intent": false,
@@ -31,9 +31,13 @@
     "message": {
       "channel": "EMAIL",
       "subject": "Kathleen — quick idea for your real estate presence",
-      "body": "Hi Kathleen,\\n\\nI came across your real estate presence while looking at agents in the Shelby Township area. You already have strong visibility across platforms like Zillow and Homes.com, but I couldn’t find a clear standalone personal website that brings your listings, reviews, contact information and lead capture into one place.\\n\\nI had an idea for a simple personal real-estate site that could give prospective buyers and sellers one direct place to see your current listings, learn about you, read client feedback and contact you without relying entirely on third-party portals.\\n\\nIf you’re open to it, I can put together a quick concept and show you what I have in mind.\\n\\nRegards,\\nOsagie Bernard\\nCactus Digital Media"
+      "body": "Hi Kathleen,\\n\\nI came across your real estate presence while looking at agents in the Shelby Township area. You already have strong visibility across platforms like Zillow and Homes.com, but I couldn’t find a clear standalone personal website that brings your listings, reviews, contact information and lead capture into one place.\\n\\nI had an idea for a simple personal real-estate site that could give prospective buyers and sellers one direct place to see your current listings, learn about you, read client feedback and contact you without relying entirely on third-party portals.\\n\\nIf you’re open to it, I can put together a quick concept and show you what I have in mind.\\n\\nRegards,\\nOsagie Bernard\\nCactus Digital Media",
+      "approved": true,
+      "approved_at": "2026-10-09T00:00:00.000Z"
     },
     "acquisition_date": "2026-10-09T00:00:00.000Z",
-    "stage": "MESSAGE_READY"
+    "stage": "MESSAGE_READY",
+    "outreach_status": "READY_FOR_PROVIDER",
+    "operator_instruction": "Proceed through Method B outbound outreach; email preferred. Do not use SMS unless separate consent/eligibility is confirmed."
   }
 ]
