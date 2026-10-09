@@ -1,0 +1,11 @@
+{
+  "artifact_id": 11618535330,
+  "artifact_name": "cap-dating-37930787256",
+  "run_id": 37930787256,
+  "head_sha": "53ef7dcf99444dae2062bfff65c8a0fea7c2f644",
+  "workflow_path": ".github/workflows/cap-four-lane-acquisition.yml",
+  "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37930787256",
+  "created_at": "2026-10-09T13:07:57Z",
+  "archive_sha256": "605013d0d21424559e3e706c6b3a6d442bb33020c70df98b387b09bbf2f2fdd8",
+  "github_digest": "sha256:605013d0d21424559e3e706c6b3a6d442bb33020c70df98b387b09bbf2f2fdd8"
+}
