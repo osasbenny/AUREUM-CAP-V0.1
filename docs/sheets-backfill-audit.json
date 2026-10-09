@@ -1,0 +1,487 @@
+{
+  "verified_at": "2026-10-09T10:24:59.792Z",
+  "spreadsheet_id": "1gdMmNR9P9Osm61ei-KpsdoXD84ncz9j0SGIMueuYobQ",
+  "raw_records": 6017,
+  "artifacts": 44,
+  "acquisition_runs": 17,
+  "counts": {
+    "webdev": {
+      "rows": 2264,
+      "unique_ids": 2264,
+      "unique_sources": 2264,
+      "email_present": 21
+    },
+    "dating": {
+      "rows": 2,
+      "unique_ids": 2,
+      "unique_sources": 2,
+      "email_present": 1
+    },
+    "hashnomads": {
+      "rows": 1,
+      "unique_ids": 1,
+      "unique_sources": 1,
+      "email_present": 1
+    },
+    "books": {
+      "rows": 3,
+      "unique_ids": 3,
+      "unique_sources": 3,
+      "email_present": 0
+    }
+  },
+  "duplicate_inputs": 1912,
+  "excluded_inputs": {
+    "dating": 18,
+    "hashnomads": 2,
+    "books": 1815
+  },
+  "all_values_readback_matched": true,
+  "repeat_replay": {
+    "inserted": 0,
+    "email_updates": 0
+  },
+  "production_wif_verified": false,
+  "source_artifacts": [
+    {
+      "artifact_id": 11609720343,
+      "artifact_name": "cap-hashnomads-37913562993",
+      "run_id": 37913562993,
+      "head_sha": "a5f934779358fa80105ace3d52507bde06dfd9f0",
+      "workflow_path": ".github/workflows/cap-four-lane-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37913562993",
+      "created_at": "2026-10-09T09:56:07Z",
+      "github_digest": "sha256:375b396d28f0b1ff3ef26a045dec9d1c0e95c18a29526cce8f3b7f65a6509c6f"
+    },
+    {
+      "artifact_id": 11608647037,
+      "artifact_name": "cap-books-37913562993",
+      "run_id": 37913562993,
+      "head_sha": "a5f934779358fa80105ace3d52507bde06dfd9f0",
+      "workflow_path": ".github/workflows/cap-four-lane-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37913562993",
+      "created_at": "2026-10-09T09:58:13Z",
+      "github_digest": "sha256:8fb3afd853c0511b44286cde235b6cf018fd96551ca74d915751769177563003"
+    },
+    {
+      "artifact_id": 11608631898,
+      "artifact_name": "cap-webdev-37913562993",
+      "run_id": 37913562993,
+      "head_sha": "a5f934779358fa80105ace3d52507bde06dfd9f0",
+      "workflow_path": ".github/workflows/cap-four-lane-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37913562993",
+      "created_at": "2026-10-09T09:57:30Z",
+      "github_digest": "sha256:30d623cc183c586cff2bfda7e8f4e74209d80af6806d2cc5e439e9482ce6dba5"
+    },
+    {
+      "artifact_id": 11608626583,
+      "artifact_name": "cap-dating-37913562993",
+      "run_id": 37913562993,
+      "head_sha": "a5f934779358fa80105ace3d52507bde06dfd9f0",
+      "workflow_path": ".github/workflows/cap-four-lane-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37913562993",
+      "created_at": "2026-10-09T09:55:16Z",
+      "github_digest": "sha256:caad5917bf505e5bd2731aed8c2b76fb80a7655bbaf559383546c6badbc0c8d4"
+    },
+    {
+      "artifact_id": 11609020008,
+      "artifact_name": "cap-dating-37913550253",
+      "run_id": 37913550253,
+      "head_sha": "331fa458a342ba55f0af3369cdf26e604c553fe2",
+      "workflow_path": ".github/workflows/cap-four-lane-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37913550253",
+      "created_at": "2026-10-09T09:52:22Z",
+      "github_digest": "sha256:6c3e45faa6cdafcd0b254b2a63a13a2f891f8088ee29386301e1779952525cec"
+    },
+    {
+      "artifact_id": 11608976049,
+      "artifact_name": "cap-books-37913550253",
+      "run_id": 37913550253,
+      "head_sha": "331fa458a342ba55f0af3369cdf26e604c553fe2",
+      "workflow_path": ".github/workflows/cap-four-lane-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37913550253",
+      "created_at": "2026-10-09T09:53:29Z",
+      "github_digest": "sha256:711f1673a45ac81eb08e1cb91cf49f85be848a877d74d9aae071150adde0b0a4"
+    },
+    {
+      "artifact_id": 11607777370,
+      "artifact_name": "cap-hashnomads-37913550253",
+      "run_id": 37913550253,
+      "head_sha": "331fa458a342ba55f0af3369cdf26e604c553fe2",
+      "workflow_path": ".github/workflows/cap-four-lane-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37913550253",
+      "created_at": "2026-10-09T09:52:06Z",
+      "github_digest": "sha256:368fe6a2d411a99a718c624da09c23d7b0a2c21c8e8556158fa30472cd100767"
+    },
+    {
+      "artifact_id": 11607429804,
+      "artifact_name": "cap-webdev-37913550253",
+      "run_id": 37913550253,
+      "head_sha": "331fa458a342ba55f0af3369cdf26e604c553fe2",
+      "workflow_path": ".github/workflows/cap-four-lane-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37913550253",
+      "created_at": "2026-10-09T09:52:13Z",
+      "github_digest": "sha256:af55b359a01d3f3c53334d859e071390ce1ba05af1c6717ef74264ce2fe477cb"
+    },
+    {
+      "artifact_id": 11608150632,
+      "artifact_name": "cap-acquisition-37913497097",
+      "run_id": 37913497097,
+      "head_sha": "528a96b220586d44214b4a32707f363647f6fc12",
+      "workflow_path": ".github/workflows/cap-autonomous-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37913497097",
+      "created_at": "2026-10-09T09:50:15Z",
+      "github_digest": "sha256:e683599827c4059053149387c5ec4d4bfd0763b849f75ba2d87854065c0640f1"
+    },
+    {
+      "artifact_id": 11599495156,
+      "artifact_name": "cap-hashnomads-37892045210",
+      "run_id": 37892045210,
+      "head_sha": "6d45f725f640c0982eec0adc00c6fe7fa5453673",
+      "workflow_path": ".github/workflows/cap-four-lane-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37892045210",
+      "created_at": "2026-10-09T06:13:28Z",
+      "github_digest": "sha256:acc2f118018f2de192ff896e6e26e8119ce64a4332a752fe1cda5c659589f483"
+    },
+    {
+      "artifact_id": 11598841359,
+      "artifact_name": "cap-webdev-37892045210",
+      "run_id": 37892045210,
+      "head_sha": "6d45f725f640c0982eec0adc00c6fe7fa5453673",
+      "workflow_path": ".github/workflows/cap-four-lane-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37892045210",
+      "created_at": "2026-10-09T06:11:15Z",
+      "github_digest": "sha256:ea90147468eb5304d6ca58a2779e3d0ac5eb46f3afc7e8835fcf97c311a5964c"
+    },
+    {
+      "artifact_id": 11598623809,
+      "artifact_name": "cap-books-37892045210",
+      "run_id": 37892045210,
+      "head_sha": "6d45f725f640c0982eec0adc00c6fe7fa5453673",
+      "workflow_path": ".github/workflows/cap-four-lane-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37892045210",
+      "created_at": "2026-10-09T06:11:16Z",
+      "github_digest": "sha256:e27c6f133950309b373ab91d03864e242a9c4ad659afbeee0ec305d4ce4175fd"
+    },
+    {
+      "artifact_id": 11597989258,
+      "artifact_name": "cap-dating-37892045210",
+      "run_id": 37892045210,
+      "head_sha": "6d45f725f640c0982eec0adc00c6fe7fa5453673",
+      "workflow_path": ".github/workflows/cap-four-lane-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37892045210",
+      "created_at": "2026-10-09T06:12:47Z",
+      "github_digest": "sha256:3bf18406560cc9ae191c6015ab589597fe2787914145d1944ddfa9e18276df21"
+    },
+    {
+      "artifact_id": 11597833675,
+      "artifact_name": "cap-acquisition-37890474566",
+      "run_id": 37890474566,
+      "head_sha": "6d45f725f640c0982eec0adc00c6fe7fa5453673",
+      "workflow_path": ".github/workflows/cap-autonomous-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37890474566",
+      "created_at": "2026-10-09T05:52:27Z",
+      "github_digest": "sha256:bdb1b78dfec0c44211710223929616dcfa980b9a12d807fc5799a9c7cadefbc9"
+    },
+    {
+      "artifact_id": 11590781708,
+      "artifact_name": "cap-dating-37871074334",
+      "run_id": 37871074334,
+      "head_sha": "aec0690fc1193f649be3a373aae294e2be4f04b7",
+      "workflow_path": ".github/workflows/cap-four-lane-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37871074334",
+      "created_at": "2026-10-09T01:46:38Z",
+      "github_digest": "sha256:171e2b9f4a48c8a70d01ef7ccdf47f5b03513053f6308096b1c7846774e4f78f"
+    },
+    {
+      "artifact_id": 11590462462,
+      "artifact_name": "cap-books-37871074334",
+      "run_id": 37871074334,
+      "head_sha": "aec0690fc1193f649be3a373aae294e2be4f04b7",
+      "workflow_path": ".github/workflows/cap-four-lane-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37871074334",
+      "created_at": "2026-10-09T01:46:09Z",
+      "github_digest": "sha256:6b1b95f31b89310ebbd339fa0d8538190d311583f74680d2b767bbedaabdd060"
+    },
+    {
+      "artifact_id": 11590377315,
+      "artifact_name": "cap-webdev-37871074334",
+      "run_id": 37871074334,
+      "head_sha": "aec0690fc1193f649be3a373aae294e2be4f04b7",
+      "workflow_path": ".github/workflows/cap-four-lane-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37871074334",
+      "created_at": "2026-10-09T01:44:40Z",
+      "github_digest": "sha256:086ec6f997495682d59772a8041b552dc0e4ec0d106a3f86b37459dc68d66eb2"
+    },
+    {
+      "artifact_id": 11590186773,
+      "artifact_name": "cap-hashnomads-37871074334",
+      "run_id": 37871074334,
+      "head_sha": "aec0690fc1193f649be3a373aae294e2be4f04b7",
+      "workflow_path": ".github/workflows/cap-four-lane-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37871074334",
+      "created_at": "2026-10-09T01:44:39Z",
+      "github_digest": "sha256:9e7dd3cc878db8a30dd467bdb1e7b8f552bc9a4f0faf41fcfbd9c1e6d3e32a75"
+    },
+    {
+      "artifact_id": 11585910304,
+      "artifact_name": "cap-webdev-37858958335",
+      "run_id": 37858958335,
+      "head_sha": "b8b77ee664671ea2661fe824b800b03bb5f78dfc",
+      "workflow_path": ".github/workflows/cap-four-lane-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37858958335",
+      "created_at": "2026-10-08T23:25:24Z",
+      "github_digest": "sha256:7b942a0ebca8b079d932bef7af9a59946ee54631cb0aba0dd831dd224a976455"
+    },
+    {
+      "artifact_id": 11585835701,
+      "artifact_name": "cap-dating-37858958335",
+      "run_id": 37858958335,
+      "head_sha": "b8b77ee664671ea2661fe824b800b03bb5f78dfc",
+      "workflow_path": ".github/workflows/cap-four-lane-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37858958335",
+      "created_at": "2026-10-08T23:25:16Z",
+      "github_digest": "sha256:a6d09a0a9239f72fa7393514dbef10034d61aa1cf80efa23c87523c5c15d1b0e"
+    },
+    {
+      "artifact_id": 11585546070,
+      "artifact_name": "cap-books-37858958335",
+      "run_id": 37858958335,
+      "head_sha": "b8b77ee664671ea2661fe824b800b03bb5f78dfc",
+      "workflow_path": ".github/workflows/cap-four-lane-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37858958335",
+      "created_at": "2026-10-08T23:24:36Z",
+      "github_digest": "sha256:975a907f6f2430e94648777801e6addced8e125b3e55c89a3e4e99006ec2ad1b"
+    },
+    {
+      "artifact_id": 11585540877,
+      "artifact_name": "cap-hashnomads-37858958335",
+      "run_id": 37858958335,
+      "head_sha": "b8b77ee664671ea2661fe824b800b03bb5f78dfc",
+      "workflow_path": ".github/workflows/cap-four-lane-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37858958335",
+      "created_at": "2026-10-08T23:22:47Z",
+      "github_digest": "sha256:6019f810c9a072f4af8fc23a9ba1ae745485b381891dd8652b74471367f0b590"
+    },
+    {
+      "artifact_id": 11584618587,
+      "artifact_name": "cap-acquisition-37858205034",
+      "run_id": 37858205034,
+      "head_sha": "b8b77ee664671ea2661fe824b800b03bb5f78dfc",
+      "workflow_path": ".github/workflows/cap-autonomous-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37858205034",
+      "created_at": "2026-10-08T23:14:09Z",
+      "github_digest": "sha256:38f20daba356a01a07d93fba77e3bd952362ebc909dc0326d0839fe0baac6fa7"
+    },
+    {
+      "artifact_id": 11554675571,
+      "artifact_name": "cap-books-37784821576",
+      "run_id": 37784821576,
+      "head_sha": "b8b77ee664671ea2661fe824b800b03bb5f78dfc",
+      "workflow_path": ".github/workflows/cap-four-lane-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37784821576",
+      "created_at": "2026-10-08T13:35:23Z",
+      "github_digest": "sha256:443edbbe29b92df9aaedbdc12a724732eccf6c1fb802ccd3411cc87d7f35ad1e"
+    },
+    {
+      "artifact_id": 11554091777,
+      "artifact_name": "cap-webdev-37784821576",
+      "run_id": 37784821576,
+      "head_sha": "b8b77ee664671ea2661fe824b800b03bb5f78dfc",
+      "workflow_path": ".github/workflows/cap-four-lane-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37784821576",
+      "created_at": "2026-10-08T13:34:29Z",
+      "github_digest": "sha256:e4fb0cb68449a4c1d922378ab740186c94e146b157d90d932de4c43c298c6891"
+    },
+    {
+      "artifact_id": 11553273554,
+      "artifact_name": "cap-dating-37784821576",
+      "run_id": 37784821576,
+      "head_sha": "b8b77ee664671ea2661fe824b800b03bb5f78dfc",
+      "workflow_path": ".github/workflows/cap-four-lane-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37784821576",
+      "created_at": "2026-10-08T13:33:20Z",
+      "github_digest": "sha256:9a55e8f10193ff5bf07ed84aeae7177ca4c0b20e36208a64f880866c53944e8e"
+    },
+    {
+      "artifact_id": 11553263812,
+      "artifact_name": "cap-hashnomads-37784821576",
+      "run_id": 37784821576,
+      "head_sha": "b8b77ee664671ea2661fe824b800b03bb5f78dfc",
+      "workflow_path": ".github/workflows/cap-four-lane-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37784821576",
+      "created_at": "2026-10-08T13:34:37Z",
+      "github_digest": "sha256:39ca4167a9dcb630eb3634fb23183d9d09e4b18b3cf132943ff0d37d49ee928e"
+    },
+    {
+      "artifact_id": 11553555113,
+      "artifact_name": "cap-acquisition-37782940168",
+      "run_id": 37782940168,
+      "head_sha": "b8b77ee664671ea2661fe824b800b03bb5f78dfc",
+      "workflow_path": ".github/workflows/cap-autonomous-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37782940168",
+      "created_at": "2026-10-08T13:16:34Z",
+      "github_digest": "sha256:7449e3b01036c10f91187b247a99733069a79809c1019a0c31fb8208b2b3772f"
+    },
+    {
+      "artifact_id": 11532135700,
+      "artifact_name": "cap-hashnomads-37735642657",
+      "run_id": 37735642657,
+      "head_sha": "efc6fc3e99bf0a597b5e2bfe1892486f1812b6b9",
+      "workflow_path": ".github/workflows/cap-four-lane-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37735642657",
+      "created_at": "2026-10-08T06:09:48Z",
+      "github_digest": "sha256:e689617e70f53ec9dd9a8a6d127b143c2fe4b9c2a410968cccb133778ee1b16c"
+    },
+    {
+      "artifact_id": 11532080527,
+      "artifact_name": "cap-books-37735642657",
+      "run_id": 37735642657,
+      "head_sha": "efc6fc3e99bf0a597b5e2bfe1892486f1812b6b9",
+      "workflow_path": ".github/workflows/cap-four-lane-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37735642657",
+      "created_at": "2026-10-08T06:06:49Z",
+      "github_digest": "sha256:0dbcca071fa48802991c260adacd50b6354698f31d09fa2f83a0e1b5b4afcc77"
+    },
+    {
+      "artifact_id": 11531543192,
+      "artifact_name": "cap-webdev-37735642657",
+      "run_id": 37735642657,
+      "head_sha": "efc6fc3e99bf0a597b5e2bfe1892486f1812b6b9",
+      "workflow_path": ".github/workflows/cap-four-lane-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37735642657",
+      "created_at": "2026-10-08T06:09:23Z",
+      "github_digest": "sha256:20a49917a44b9f4da251208d5e934cd6644ecdf8cd1425243640396a62269e61"
+    },
+    {
+      "artifact_id": 11531532827,
+      "artifact_name": "cap-dating-37735642657",
+      "run_id": 37735642657,
+      "head_sha": "efc6fc3e99bf0a597b5e2bfe1892486f1812b6b9",
+      "workflow_path": ".github/workflows/cap-four-lane-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37735642657",
+      "created_at": "2026-10-08T06:07:00Z",
+      "github_digest": "sha256:5ac20d41c45e0af3bb64c234d97d27bcc8dea5245b4d9f2e3868d272d90686e0"
+    },
+    {
+      "artifact_id": 11530044387,
+      "artifact_name": "cap-acquisition-37734014887",
+      "run_id": 37734014887,
+      "head_sha": "efc6fc3e99bf0a597b5e2bfe1892486f1812b6b9",
+      "workflow_path": ".github/workflows/cap-autonomous-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37734014887",
+      "created_at": "2026-10-08T05:47:01Z",
+      "github_digest": "sha256:063d4b5ba436a78c73e7efb2a7b515ff49f1a8fa56a12c9f455a6b26777987de"
+    },
+    {
+      "artifact_id": 11517620439,
+      "artifact_name": "cap-dating-37700218226",
+      "run_id": 37700218226,
+      "head_sha": "efc6fc3e99bf0a597b5e2bfe1892486f1812b6b9",
+      "workflow_path": ".github/workflows/cap-four-lane-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37700218226",
+      "created_at": "2026-10-07T23:07:58Z",
+      "github_digest": "sha256:9bead75afaab08aacb4def0264500966a3f595f55baa5a571a2a7fc24eed951f"
+    },
+    {
+      "artifact_id": 11517377562,
+      "artifact_name": "cap-webdev-37700218226",
+      "run_id": 37700218226,
+      "head_sha": "efc6fc3e99bf0a597b5e2bfe1892486f1812b6b9",
+      "workflow_path": ".github/workflows/cap-four-lane-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37700218226",
+      "created_at": "2026-10-07T23:07:28Z",
+      "github_digest": "sha256:799e8fe259d99b7e0e1869e5677f30a60f7623086214904b75b553d9f3973bea"
+    },
+    {
+      "artifact_id": 11517362739,
+      "artifact_name": "cap-books-37700218226",
+      "run_id": 37700218226,
+      "head_sha": "efc6fc3e99bf0a597b5e2bfe1892486f1812b6b9",
+      "workflow_path": ".github/workflows/cap-four-lane-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37700218226",
+      "created_at": "2026-10-07T23:08:01Z",
+      "github_digest": "sha256:e6f545597484c73fd61bcbc896bba1fdfe3b26abba6d4115c868f364c0423c33"
+    },
+    {
+      "artifact_id": 11517268322,
+      "artifact_name": "cap-hashnomads-37700218226",
+      "run_id": 37700218226,
+      "head_sha": "efc6fc3e99bf0a597b5e2bfe1892486f1812b6b9",
+      "workflow_path": ".github/workflows/cap-four-lane-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37700218226",
+      "created_at": "2026-10-07T23:10:35Z",
+      "github_digest": "sha256:297cd65109da4220ce138d16832f3e7f4cd6ade2503b2f2ecd5e494606111404"
+    },
+    {
+      "artifact_id": 11516363777,
+      "artifact_name": "cap-acquisition-37699542292",
+      "run_id": 37699542292,
+      "head_sha": "efc6fc3e99bf0a597b5e2bfe1892486f1812b6b9",
+      "workflow_path": ".github/workflows/cap-autonomous-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37699542292",
+      "created_at": "2026-10-07T22:59:27Z",
+      "github_digest": "sha256:72b368233522318d433a8d64ae69c2e9d64a6a9cccaa7f96b41567e6ebb99cb3"
+    },
+    {
+      "artifact_id": 11494856774,
+      "artifact_name": "cap-webdev-37643104989",
+      "run_id": 37643104989,
+      "head_sha": "efc6fc3e99bf0a597b5e2bfe1892486f1812b6b9",
+      "workflow_path": ".github/workflows/cap-four-lane-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37643104989",
+      "created_at": "2026-10-07T15:42:15Z",
+      "github_digest": "sha256:a562c47b3f3ac2bc27c8304571a7e2ed264259ec3616168d37ea304f28b7691e"
+    },
+    {
+      "artifact_id": 11494817031,
+      "artifact_name": "cap-dating-37643104989",
+      "run_id": 37643104989,
+      "head_sha": "efc6fc3e99bf0a597b5e2bfe1892486f1812b6b9",
+      "workflow_path": ".github/workflows/cap-four-lane-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37643104989",
+      "created_at": "2026-10-07T15:41:49Z",
+      "github_digest": "sha256:87b2828fe7264822cf6cc7ed473f0bfdfc88f26556596601420bfb5b2691a325"
+    },
+    {
+      "artifact_id": 11494399226,
+      "artifact_name": "cap-books-37643104989",
+      "run_id": 37643104989,
+      "head_sha": "efc6fc3e99bf0a597b5e2bfe1892486f1812b6b9",
+      "workflow_path": ".github/workflows/cap-four-lane-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37643104989",
+      "created_at": "2026-10-07T15:51:30Z",
+      "github_digest": "sha256:caacf87d8c3ddc02a3eabbbe3d5e98407ed6342ae12fe1a8c70301f4286314ce"
+    },
+    {
+      "artifact_id": 11492679844,
+      "artifact_name": "cap-hashnomads-37643104989",
+      "run_id": 37643104989,
+      "head_sha": "efc6fc3e99bf0a597b5e2bfe1892486f1812b6b9",
+      "workflow_path": ".github/workflows/cap-four-lane-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37643104989",
+      "created_at": "2026-10-07T15:28:42Z",
+      "github_digest": "sha256:c8b5bac1d9a852f6015483ef7f7ecac20f5f4f47a2dabfc6a1ce2524763f8fac"
+    },
+    {
+      "artifact_id": 11484766323,
+      "artifact_name": "cap-acquisition-37626160679",
+      "run_id": 37626160679,
+      "head_sha": "01ece99c37587adaaa806218de923f070472f449",
+      "workflow_path": ".github/workflows/cap-autonomous-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37626160679",
+      "created_at": "2026-10-07T13:15:44Z",
+      "github_digest": "sha256:97c27efe8d7ab59500fc8307a6061ffb08adcf6e23e33d6cdcdc26ad43f2b161"
+    },
+    {
+      "artifact_id": 11458394931,
+      "artifact_name": "cap-acquisition-37565600231",
+      "run_id": 37565600231,
+      "head_sha": "01ece99c37587adaaa806218de923f070472f449",
+      "workflow_path": ".github/workflows/cap-autonomous-acquisition.yml",
+      "run_url": "https://github.com/osasbenny/AUREUM-CAP-V0.1/actions/runs/37565600231",
+      "created_at": "2026-10-07T03:17:09Z",
+      "github_digest": "sha256:732b23c4671f3a8b1b26159585c367997ec1405548570b89d3e6e28aa547ab68"
+    }
+  ]
+}

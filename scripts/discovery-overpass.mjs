@@ -71,15 +71,23 @@ async function fetchWithResilience(query) {
   throw lastError || new Error('all_overpass_endpoints_failed');
 }
 
-const buildQuery = (bbox) => `[out:json][timeout:45];(
+export const buildQuery = (bbox, lane = 'webdev') => {
+ const specialized = {
+  books: `nwr["amenity"~"^(school|college|university|library|kindergarten)$"](${bbox});nwr["shop"~"^(books|stationery)$"](${bbox});nwr["office"~"^(educational_institution|publisher)$"](${bbox});`,
+  dating: `nwr["amenity"="community_centre"]["community_centre:for"~"senior|elderly|older_adults",i](${bbox});nwr["name"~"senior cent(er|re)|retirement community|senior social club|senior association|senior recreation",i](${bbox});`,
+  hashnomads: `nwr["name"~"bitcoin|cryptocurrency|blockchain|crypto|asic miner|mining hosting",i](${bbox});`
+ };
+ if(specialized[lane]) return `[out:json][timeout:45];(${specialized[lane]});out center tags qt;`;
+ return `[out:json][timeout:45];(
   nwr["amenity"~"^(restaurant|bar|cafe|fast_food|car_wash)$"](${bbox});
   nwr["shop"~"^(car_repair|beauty|hairdresser)$"](${bbox});
   nwr["craft"~"^(plumber|roofer|carpenter)$"](${bbox});
   nwr["office"~"^(estate_agent|lawyer|consulting)$"](${bbox});
   nwr["leisure"="fitness_centre"](${bbox});
 );out center tags qt;`;
+};
 
-export async function discoverOverpass({ bboxes = defaultBboxes, limit = 5000 } = {}) {
+export async function discoverOverpass({ bboxes = defaultBboxes, limit = 5000, lane = 'webdev' } = {}) {
   const records = [];
   const seen = new Set();
 
@@ -89,7 +97,7 @@ export async function discoverOverpass({ bboxes = defaultBboxes, limit = 5000 } 
     for (const part of partitions(bbox)) {
       if (records.length >= limit) break;
       try {
-        const data = await fetchWithResilience(buildQuery(part));
+        const data = await fetchWithResilience(buildQuery(part, lane));
         for (const element of data.elements || []) {
           if (records.length >= limit) break;
           const osmKey = `${element.type}:${element.id}`;
@@ -131,7 +139,9 @@ export async function discoverOverpass({ bboxes = defaultBboxes, limit = 5000 } 
               element_type: element.type,
               element_id: element.id,
               bbox: part,
-              query: 'Overpass API'
+              query: 'Overpass API',
+              discovery_lane: lane,
+              qualification_tags: { amenity: tags.amenity || '', shop: tags.shop || '', office: tags.office || '', community_centre_for: tags['community_centre:for'] || '' }
             },
             discovered_at: new Date().toISOString()
           });

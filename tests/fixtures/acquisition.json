@@ -1,0 +1,1 @@
+{"run":{"lane":"webdev","run_id":"fixture-run"},"records":[{"acquisition_id":"fixture-1","acquisition_date":"2026-10-01T01:00:00.000Z","name":"Fixture Business","source":"openstreetmap-overpass","source_evidence":{"element_type":"node","element_id":123},"lifecycle_stage":"ACQUIRED"}]}

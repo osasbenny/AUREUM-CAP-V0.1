@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
+import { qualifies } from './acquisition-qualification.mjs';
 import { discoverOverpass } from './discovery-overpass.mjs';
 import { normalizeDomain, normalizeEmail, normalizePhone, normalizeKey } from '../server/services.mjs';
 
@@ -17,15 +18,7 @@ fs.mkdirSync(stateDir,{recursive:true}); fs.mkdirSync(outDir,{recursive:true});
 const statePath=path.join(stateDir,'dedupe.json'); let state={keys:{},runs:[]};
 try{state=JSON.parse(fs.readFileSync(statePath,'utf8'));}catch{} state.keys||={}; state.runs||=[];
 
-const laneMatch=(r)=>{
- const s=[r.name,r.category,r.website,r.location].filter(Boolean).join(' ').toLowerCase();
- if(lane==='webdev') return true;
- if(lane==='hashnomads') return /\b(bitcoin|cryptocurrency|blockchain|crypto|bitcoin mining|asic miner|mining hosting)\b/.test(s);
- if(lane==='books') return /\b(bookshop|bookstore|books|library|publisher|publishing|school|college|university|education|childcare|preschool|psychology|therapy|coaching|entrepreneurship|technology|stationery)\b/.test(s);
- // Dating lane deliberately acquires opt-in/audience-source organizations, never private dating profiles.
- if(lane==='dating') return /\b(senior center|senior centre|retirement community|older adults|senior social club|senior association|senior recreation)\b/.test(s);
- return false;
-};
+const laneMatch = r => qualifies(r, lane);
 const identity=(r)=>[
  normalizeDomain(r.website||r.domain)&&'domain:'+normalizeDomain(r.website||r.domain),
  normalizeEmail(r.email)&&'email:'+normalizeEmail(r.email),
@@ -34,7 +27,7 @@ const identity=(r)=>[
  r.source_evidence?.element_type&&r.source_evidence?.element_id&&'source:'+r.source_evidence.element_type+':'+r.source_evidence.element_id
 ].filter(Boolean);
 
-const discovered=await discoverOverpass({limit:rawLimit});
+const discovered=await discoverOverpass({limit:rawLimit,lane});
 let manualAssigned=[];
 try{
   const manual=JSON.parse(fs.readFileSync(manualLeadsPath,'utf8'));

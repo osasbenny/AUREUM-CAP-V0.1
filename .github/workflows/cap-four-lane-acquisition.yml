@@ -6,6 +6,7 @@ on:
     paths:
       - 'scripts/autonomous-acquisition-lane.mjs'
       - 'scripts/discovery-overpass.mjs'
+      - 'scripts/acquisition-qualification.mjs'
       - '.github/workflows/cap-four-lane-acquisition.yml'
   workflow_dispatch:
   schedule:
@@ -57,5 +58,5 @@ jobs:
         with:
           name: cap-${{ matrix.lane }}-${{ github.run_id }}
           path: acquisition-output/${{ matrix.lane }}/
-          retention-days: 30
+          retention-days: 90
           if-no-files-found: error
