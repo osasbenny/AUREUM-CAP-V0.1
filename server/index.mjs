@@ -11,12 +11,14 @@ import { createRepository } from '../db/repository.mjs';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, '..');
 const leadsPath = path.join(repoRoot, 'data', 'leads.json');
+const manualLeadsPath = path.join(repoRoot, 'data', 'manual-leads.json');
 const port = Number(process.env.PORT || 8787);
 const sessions = new Map();
 function getLeads() {
   try {
     const rawLeads = JSON.parse(fs.readFileSync(leadsPath, 'utf8'));
-    return rawLeads.map((lead) => {
+    const manualLeads = fs.existsSync(manualLeadsPath) ? JSON.parse(fs.readFileSync(manualLeadsPath, 'utf8')) : [];
+    return [...rawLeads, ...manualLeads].map((lead) => {
       const productFit = matchProducts(lead)[0]?.product;
       return {
         ...lead,
@@ -216,6 +218,26 @@ const server = http.createServer(async (req, res) => {
       response: l.response || null, updated_at: l.response?.received_at || l.updated_at || l.acquisition_date || null
     }));
     return json(res, 200, { data });
+  }
+  if (url.pathname === '/api/v1/leads' && req.method === 'POST') {
+    const b = await body(req);
+    if (!b.name || (!b.email && !b.phone)) return json(res, 400, { error: 'invalid_lead', message: 'Name and at least one contact method are required.' });
+    const duplicate = leads.find((l) => (b.email && String(l.email||'').toLowerCase() === String(b.email).toLowerCase()) || (b.phone && String(l.phone||'').replace(/\D/g,'') === String(b.phone).replace(/\D/g,'')));
+    if (duplicate) return json(res, 409, { error: 'duplicate_lead', data: duplicate });
+    const lead = hydrateLead({
+      id: b.id || `manual-${uuid()}`,
+      ...b,
+      source: b.source || 'manual-command-center',
+      acquisition_date: b.acquisition_date || new Date().toISOString(),
+      lifecycle_stage: b.lifecycle_stage || 'IMPORTED',
+      approval_state: b.approval_state || 'PENDING',
+      sms_approval_state: b.sms_approval_state || 'PENDING',
+      consent_status: b.consent_status || 'UNKNOWN'
+    });
+    await persistLead(lead);
+    leads.push(lead);
+    await recordAdminEvent(user.email, 'lead.created', 'lead', lead.uid, { source: lead.source, email: Boolean(lead.email), phone: Boolean(lead.phone), lifecycle_stage: lead.lifecycle_stage });
+    return json(res, 201, { data: lead });
   }
   if (url.pathname === '/api/v1/leads' && req.method === 'GET') { const q = (url.searchParams.get('q') || '').toLowerCase(); const status = url.searchParams.get('status'); const result = leads.filter((l) => (!q || `${l.name} ${l.category} ${l.location}`.toLowerCase().includes(q)) && (!status || l.lifecycle_stage === status)); return json(res, 200, { data: result, total: result.length }); }
   const leadMatch = url.pathname.match(/^\/api\/v1\/leads\/([^/]+)$/); if (leadMatch && req.method === 'GET') { const lead = findLead(leadMatch[1]); return lead ? json(res, 200, { data: lead }) : notFound(res); }
