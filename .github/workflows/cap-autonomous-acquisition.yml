@@ -7,8 +7,6 @@ on:
       - 'scripts/autonomous-acquisition.mjs'
       - '.github/workflows/cap-autonomous-acquisition.yml'
   workflow_dispatch:
-  schedule:
-    - cron: '7 */6 * * *'
 
 permissions:
   contents: read
