@@ -127,10 +127,20 @@ export class SheetsClient {
   }
   async laneRows(sheet) {
     const rows=[];
-    for(let start=2;start<=sheet.gridProperties.rowCount;start+=1000) {
-      const end=Math.min(sheet.gridProperties.rowCount,start+999);
-      const part=await this.read(`${sheet.title}!A${start}:T${end}`);
-      for(let i=0;i<part.length;i++) rows[start-2+i]=part[i];
+    // Ten bounded ranges per request keep full-grid audits below Sheets quotas.
+    for(let base=2;base<=sheet.gridProperties.rowCount;base+=10000) {
+      const ranges=[];
+      for(let start=base;start<=sheet.gridProperties.rowCount && start<base+10000;start+=1000) {
+        ranges.push(`${sheet.title}!A${start}:T${Math.min(sheet.gridProperties.rowCount,start+999)}`);
+      }
+      const query=new URLSearchParams({valueRenderOption:'UNFORMATTED_VALUE'});
+      for(const range of ranges) query.append('ranges',range);
+      const result=await this.request('/values:batchGet?'+query);
+      if(result.valueRanges?.length!==ranges.length) throw Error('incomplete_readback');
+      for(let chunk=0;chunk<ranges.length;chunk++) {
+        const part=result.valueRanges[chunk].values || [];
+        for(let i=0;i<part.length;i++) rows[base-2+chunk*1000+i]=part[i];
+      }
     }
     return rows;
   }

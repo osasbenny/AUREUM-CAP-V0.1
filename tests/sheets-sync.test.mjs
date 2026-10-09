@@ -12,6 +12,18 @@ class FakeSheets {
  async laneRows(s){return this.data[s.title].slice(1);}
  async grow(){}
 }
+test('full-grid batch reads preserve row positions and bound quota usage',async()=>{
+ const requests=[];
+ const c=new SheetsClient('id','fixture-token',{fetchImpl:async url=>{
+  const ranges=new URL(url).searchParams.getAll('ranges');requests.push(ranges);
+  return {ok:true,json:async()=>({valueRanges:ranges.map(range=>({range,values:range.includes('A1002:')?[['after-empty-rows']]:range.includes('A2:')?[['first']]:[]}))})};
+ }});
+ const rows=await c.laneRows({title:'WEBDEV',gridProperties:{rowCount:10000}});
+ assert.equal(requests.length,1);assert.equal(requests[0].length,10);
+ assert.equal(rows[0][0],'first');assert.equal(rows[1000][0],'after-empty-rows');assert.equal(rows.length,1001);
+ const missing=new SheetsClient('id','fixture-token',{fetchImpl:async()=>({ok:true,json:async()=>({valueRanges:[]})})});
+ await assert.rejects(missing.laneRows({title:'BOOKS',gridProperties:{rowCount:100}}),/incomplete_readback/);
+});
 test('deduplicates legacy/four-lane IDs using stable OSM source',()=>{
  const p=plan([input(),input({acquisition_id:'other-run-id',name:'Changed name'})]);assert.equal(p.rows.length,1);assert.equal(p.skipped.length,1);
  assert.equal(plan([input()],p.rows.map(r=>r.values)).rows.length,0);
