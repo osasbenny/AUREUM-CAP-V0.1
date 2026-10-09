@@ -14,7 +14,6 @@ const repoRoot = path.resolve(__dirname, '..');
 const leadsPath = path.join(repoRoot, 'data', 'leads.json');
 const manualLeadsPath = path.join(repoRoot, 'data', 'manual-leads.json');
 const port = Number(process.env.PORT || 8787);
-const sessions = new Map();
 function getLeads() {
   try {
     const rawLeads = JSON.parse(fs.readFileSync(leadsPath, 'utf8'));
@@ -183,7 +182,26 @@ function runAcquisition({ target = 1000, actor = 'operator' } = {}) {
 
 function json(res, status, payload) { res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' }); res.end(JSON.stringify(payload)); }
 function parseCookies(req) { return Object.fromEntries((req.headers.cookie || '').split(';').filter(Boolean).map((p) => { const [k, ...v] = p.trim().split('='); return [k, decodeURIComponent(v.join('='))]; })); }
-function auth(req) { const token = parseCookies(req).cap_session; return token && sessions.get(token); }
+function sessionSecret() { return process.env.CAP_SESSION_SECRET || process.env.CAP_ADMIN_PASSWORD || ''; }
+function signSession(user, ttlSeconds = 60 * 60 * 24 * 7) {
+  const secret = sessionSecret(); if (!secret) throw new Error('session_secret_not_configured');
+  const payload = Buffer.from(JSON.stringify({ ...user, exp: Math.floor(Date.now()/1000) + ttlSeconds })).toString('base64url');
+  const sig = crypto.createHmac('sha256', secret).update(payload).digest('base64url');
+  return `${payload}.${sig}`;
+}
+function verifySession(token) {
+  try {
+    const secret = sessionSecret(); if (!secret || !token) return null;
+    const [payload, sig] = String(token).split('.'); if (!payload || !sig) return null;
+    const expected = crypto.createHmac('sha256', secret).update(payload).digest('base64url');
+    const a = Buffer.from(sig); const b = Buffer.from(expected);
+    if (a.length !== b.length || !crypto.timingSafeEqual(a,b)) return null;
+    const user = JSON.parse(Buffer.from(payload,'base64url').toString('utf8'));
+    if (!user.exp || user.exp < Math.floor(Date.now()/1000)) return null;
+    return { id:user.id, email:user.email, role:user.role, name:user.name };
+  } catch { return null; }
+}
+function auth(req) { return verifySession(parseCookies(req).cap_session); }
 function requireAuth(req, res) { const user = auth(req); if (!user) { json(res, 401, { error: 'unauthorized', message: 'Login required' }); return null; } return user; }
 async function body(req) { let raw = ''; for await (const chunk of req) raw += chunk; if (!raw) return {}; try { return JSON.parse(raw); } catch { return {}; } }
 async function formBody(req) { let raw = ''; for await (const chunk of req) raw += chunk; return Object.fromEntries(new URLSearchParams(raw)); }
@@ -236,9 +254,9 @@ const server = http.createServer(async (req, res) => {
   if (url.pathname === '/readiness' && req.method === 'GET') { const readiness = await configuredReadiness(); const blocked = Object.entries(readiness).filter(([key, value]) => !['send_gate','sms_send_gate'].includes(key) && !['READY','ENABLED'].includes(value?.status)).map(([key]) => key); return json(res, blocked.length ? 503 : 200, { ready: blocked.length === 0, readiness, blocked, policy: 'No live send is permitted without provider readiness, suppression checks, and human approval.' }); }
   if (url.pathname === '/api/v1/webhooks/sms/status' && req.method === 'POST') { const params = await formBody(req); if (!validTwilioWebhook(req, params)) return json(res, 403, { error: 'invalid_twilio_signature' }); const lead = leads.find((item) => item.sms_provider_id === params.MessageSid); if (lead) { lead.sms_status = params.MessageStatus || lead.sms_status; lead.lifecycle_stage = params.MessageStatus === 'delivered' ? 'DELIVERED' : params.MessageStatus === 'undelivered' || params.MessageStatus === 'failed' ? 'BOUNCED' : lead.lifecycle_stage; await persistLead(lead); } if (repository) await repository.saveEvent({ type: 'sms.status', entity_type: 'lead', entity_id: null, payload: params }); return json(res, 200, { ok: true }); }
   if (url.pathname === '/api/v1/webhooks/sms/inbound' && req.method === 'POST') { const params = await formBody(req); if (!validTwilioWebhook(req, params)) return json(res, 403, { error: 'invalid_twilio_signature' }); const lead = leads.find((item) => item.phone === params.From || item.sms_route?.phone === params.From); const text = String(params.Body || '').trim(); if (lead) { lead.response = { classification: /^(stop|unsubscribe|cancel|quit|end|revoke)$/i.test(text) ? 'OPT_OUT' : 'RECEIVED', body: text, received_at: new Date().toISOString() }; lead.lifecycle_stage = 'REPLIED'; if (lead.response.classification === 'OPT_OUT') { lead.sms_suppressed = true; lead.suppressed = true; suppressions.push({ phone: lead.phone, reason: 'recipient_opt_out', source: 'twilio', created_at: new Date().toISOString() }); } await persistLead(lead); } if (repository) await repository.saveEvent({ type: 'sms.inbound', entity_type: 'lead', entity_id: null, payload: params }); res.writeHead(200, { 'Content-Type': 'text/xml' }); return res.end('<Response></Response>'); }
-  if (url.pathname === '/api/v1/auth/login' && req.method === 'POST') { const b = await body(req); const email = String(b.email || ''); const expectedEmail = process.env.CAP_ADMIN_EMAIL; const expectedPassword = process.env.CAP_ADMIN_PASSWORD; if (!expectedEmail || !expectedPassword) return json(res, 503, { error: 'auth_not_configured', message: 'Production authentication is not configured.' }); if (email !== expectedEmail || b.password !== expectedPassword) return json(res, 401, { error: 'invalid_credentials' }); const token = uuid(); const user = { id: 'operator-1', email, role: 'admin', name: 'Aureum CAP Operator' }; sessions.set(token, user); const secure = process.env.NODE_ENV === 'production' ? '; Secure' : ''; res.setHeader('Set-Cookie', `cap_session=${encodeURIComponent(token)}; HttpOnly; SameSite=None${secure}; Path=/`); return json(res, 200, { user }); }
+  if (url.pathname === '/api/v1/auth/login' && req.method === 'POST') { const b = await body(req); const email = String(b.email || ''); const expectedEmail = process.env.CAP_ADMIN_EMAIL; const expectedPassword = process.env.CAP_ADMIN_PASSWORD; if (!expectedEmail || !expectedPassword) return json(res, 503, { error: 'auth_not_configured', message: 'Production authentication is not configured.' }); if (email !== expectedEmail || b.password !== expectedPassword) return json(res, 401, { error: 'invalid_credentials' }); const user = { id: 'operator-1', email, role: 'admin', name: 'Aureum CAP Operator' }; const token = signSession(user); const secure = process.env.NODE_ENV === 'production' ? '; Secure' : ''; res.setHeader('Set-Cookie', `cap_session=${encodeURIComponent(token)}; Max-Age=604800; HttpOnly; SameSite=None${secure}; Path=/`); return json(res, 200, { user }); }
   if (url.pathname === '/api/v1/auth/me' && req.method === 'GET') { const user = auth(req); return user ? json(res, 200, { user }) : json(res, 401, { error: 'unauthorized' }); }
-  if (url.pathname === '/api/v1/auth/logout' && req.method === 'POST') { const token = parseCookies(req).cap_session; sessions.delete(token); res.setHeader('Set-Cookie', 'cap_session=; Max-Age=0; HttpOnly; SameSite=Lax; Path=/'); return json(res, 200, { ok: true }); }
+  if (url.pathname === '/api/v1/auth/logout' && req.method === 'POST') { res.setHeader('Set-Cookie', 'cap_session=; Max-Age=0; HttpOnly; SameSite=Lax; Path=/'); return json(res, 200, { ok: true }); }
   if (url.pathname === '/api/v1/pilot/summary' && req.method === 'GET') return json(res, 200, { campaign: campaigns[0].name, total_leads: leads.length, ...dashboard(), mode: 'production-admin' });
   const user = requireAuth(req, res); if (!user) return;
   if (url.pathname === '/api/v1/dashboard' && req.method === 'GET') return json(res, 200, dashboard());
@@ -261,24 +279,34 @@ const server = http.createServer(async (req, res) => {
     return json(res, 200, { data });
   }
   if (url.pathname === '/api/v1/leads' && req.method === 'POST') {
-    const b = await body(req);
-    if (!b.name || (!b.email && !b.phone)) return json(res, 400, { error: 'invalid_lead', message: 'Name and at least one contact method are required.' });
-    const duplicate = leads.find((l) => (b.email && String(l.email||'').toLowerCase() === String(b.email).toLowerCase()) || (b.phone && String(l.phone||'').replace(/\D/g,'') === String(b.phone).replace(/\D/g,'')));
-    if (duplicate) return json(res, 409, { error: 'duplicate_lead', data: duplicate });
-    const lead = hydrateLead({
-      id: b.id || `manual-${uuid()}`,
-      ...b,
-      source: b.source || 'manual-command-center',
-      acquisition_date: b.acquisition_date || new Date().toISOString(),
-      lifecycle_stage: b.lifecycle_stage || 'IMPORTED',
-      approval_state: b.approval_state || 'PENDING',
-      sms_approval_state: b.sms_approval_state || 'PENDING',
-      consent_status: b.consent_status || 'UNKNOWN'
-    });
-    await persistLead(lead);
-    leads.push(lead);
-    await recordAdminEvent(user.email, 'lead.created', 'lead', lead.uid, { source: lead.source, email: Boolean(lead.email), phone: Boolean(lead.phone), lifecycle_stage: lead.lifecycle_stage });
-    return json(res, 201, { data: lead });
+    try {
+      const b = await body(req);
+      if (!b.name || (!b.email && !b.phone)) return json(res, 400, { error: 'invalid_lead', message: 'Name and at least one contact method are required.' });
+      const duplicate = leads.find((l) => (b.email && String(l.email||'').toLowerCase() === String(b.email).toLowerCase()) || (b.phone && String(l.phone||'').replace(/\D/g,'') === String(b.phone).replace(/\D/g,'')));
+      if (duplicate) {
+        Object.assign(duplicate, b, { uid: String(duplicate.uid || duplicate.id), id: duplicate.id || b.id });
+        await persistLead(duplicate);
+        await recordAdminEvent(user.email, 'lead.upserted', 'lead', duplicate.uid, { source: b.source || duplicate.source || 'manual-command-center' });
+        return json(res, 200, { data: duplicate, upserted: true });
+      }
+      const lead = hydrateLead({
+        id: b.id || `manual-${uuid()}`,
+        ...b,
+        source: b.source || 'manual-command-center',
+        acquisition_date: b.acquisition_date || new Date().toISOString(),
+        lifecycle_stage: b.lifecycle_stage || 'IMPORTED',
+        approval_state: b.approval_state || 'PENDING',
+        sms_approval_state: b.sms_approval_state || 'PENDING',
+        consent_status: b.consent_status || 'UNKNOWN'
+      });
+      await persistLead(lead);
+      leads.push(lead);
+      await recordAdminEvent(user.email, 'lead.created', 'lead', lead.uid, { source: lead.source, email: Boolean(lead.email), phone: Boolean(lead.phone), lifecycle_stage: lead.lifecycle_stage });
+      return json(res, 201, { data: lead });
+    } catch (error) {
+      console.error('LEAD_CREATE_FAILED', error);
+      return json(res, 500, { error: 'lead_create_failed', message: String(error.message || error).slice(0,240) });
+    }
   }
   if (url.pathname === '/api/v1/lanes/route' && req.method === 'POST') {
     const b = await body(req);
